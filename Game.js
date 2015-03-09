@@ -20,7 +20,36 @@ function Game()
      */
     var render = function()
     {
+        console.log("Rendering Game Content")
+        // Get context
+        var context = playArea.getContext("2d");
+
+        // Clears the playArea
+        context.clearRect(0, 0, playArea.width, playArea.height);
         
+        // Render Walls (Should I re-render this?)
+        renderWalls(context);
+        // Render Pacmans
+        renderPacmans(context);
+        // Render Remaining Game Objects
+        renderGameContent(context);
+        
+        console.log("Completed Rendering Game Content");
+    };
+    
+    var renderWalls = function(context){
+        console.log("Starting to Render Game Walls");
+        console.log("Completed Rendering Game Walls");
+    };
+    
+    var renderPacmans = function(context){
+        console.log("Starting to Render Pacmans");
+        console.log("Completed Rendering Pacmans");
+    };   
+    
+    var renderGameContent = function(context){
+        console.log("Starting to Render Remaining Objects");
+        console.log("Completed Rendering Remaining Objects");
     };
 
     /*
