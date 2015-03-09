@@ -10,7 +10,6 @@ function Game()
     var levelMap;
     var pacman;
     var FRAME_RATE = 35;
-    
     /*
      * public method: print
      * 
@@ -132,12 +131,15 @@ function Game()
      */
      var initGUI = function()
      {
-     	
+     	/*
      	while(document.readyState !== "complete") 
         {
             console.log("loading...");
-	};
+	};*/
      	
+        // test 
+        console.log("Check");
+
      	// Sets up the canvas element
         playArea = document.getElementById("playArea");
         playArea.height = levelMap.heightPx;
@@ -206,5 +208,10 @@ function Game()
 
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
-    }
-}
+    };
+};
+
+
+// Defined to run the class and to check the code
+var client = new Game();
+setTimeout(function() {client.start();}, 500);
