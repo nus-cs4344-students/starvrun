@@ -10,7 +10,7 @@ function Game()
     var levelMap;
     var pacman;
     var FRAME_RATE = 35;
-    var initFlag = true;
+    var initFlag = true; // To check if the game has just started
     /*
      * public method: print
      * 
@@ -204,16 +204,16 @@ function Game()
         switch(e.keyCode)
         {
             case 37: // Left 
-                    pacman.checkDirectionChange("left");
+                    pacman.directionWatcher.set("left");
                     break;
             case 38: // Up
-                    pacman.checkDirectionChange("up");
+                    pacman.directionWatcher.set("up");
                     break;
             case 39: // Right
-                    pacman.checkDirectionChange("right");
+                    pacman.directionWatcher.set("right");
                     break;
             case 40: // Down
-                    pacman.checkDirectionChange("down");
+                    pacman.directionWatcher.set("down");
                     break;
         }
 
