@@ -32,6 +32,14 @@ function Map() {
 		grids[x][y] = i;
 	}
 
+	this.tryEatAt = function (x,y) {
+		if ((grids[x][y] == Starvrun.PELLET) || (grids[x][y] == Starvrun.PoWERUP)) {
+			var res = grids[x][y];
+			eatAt(x,y);
+			return res;
+		}
+	}
+
 	this.eatAt = function(x,y) {
 		grids[x][y] = Starvrun.FREE;
 	}
