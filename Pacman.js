@@ -26,6 +26,18 @@
 	var down = new Direction("down",0.75,0.25,0,1);		// DOWN
 	var right = new Direction("right",0.25,1.75,1,0);	// 
 
+	// DirectionWatcher
+	function directionWatcher() {
+		this.dir = null;
+		this.set = function(dir) {
+			this.dir = dir;
+			
+		}
+		this.get = function() {
+			return this.dir;
+		}
+	}
+		
 
 	function Pacman() {
 
