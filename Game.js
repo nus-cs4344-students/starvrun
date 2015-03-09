@@ -11,7 +11,30 @@ function Game()
     var pacman;
     var FRAME_RATE = 35;
     
-    
+    /*
+     * public method: print
+     * 
+     * To print a message in log 
+     */
+     this.print = function(message)
+     {
+        console.log(message);
+     }
+
+     /*
+     * private method: showMessage(location, msg)
+     *
+     * Display a text message on the web page.  The 
+     * parameter location indicates the class ID of
+     * the HTML element, and msg indicates the message.
+     *
+     * The new message replaces any existing message
+     * being shown.
+     */
+    var showMessage = function(location, msg) {
+        document.getElementById(location).innerHTML = msg; 
+    } 
+
     /*
      * private method: render
      *
