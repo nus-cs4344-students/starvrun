@@ -10,6 +10,7 @@ function Game()
     var levelMap;
     var pacman;
     var FRAME_RATE = 35;
+    var initFlag = true;
     /*
      * public method: print
      * 
@@ -170,16 +171,16 @@ function Game()
         switch(e.keyCode)
         {
             case 37: // Left 
-                    pacman.setDirection(left);
+                    pacman.checkDirectionChange("left");
                     break;
             case 38: // Up
-                    pacman.setDirection(up);
+                    pacman.checkDirectionChange("up");
                     break;
             case 39: // Right
-                    pacman.setDirection(right);
+                    pacman.checkDirectionChange("right");
                     break;
             case 40: // Down
-                    pacman.setDirection(down);
+                    pacman.checkDirectionChange("down");
                     break;
         }
 
@@ -187,7 +188,14 @@ function Game()
 
     var gameLoop = function() 
     {
-        pacman.move();
+        if(initFlag==true)
+        {
+            pacman.start();
+            initFlag = false;
+        }    
+        else
+            pacman.move();
+        
         render();
     }
 
