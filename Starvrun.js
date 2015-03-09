@@ -18,7 +18,12 @@ var Starvrun = {
 	WALL: 0,
 	FREE: 1,
 	PELLET: 2,
-	POWERUP: 3
+	POWERUP: 3,
+        
+        BG_COLOUR : "white",
+        WALL_COLOUR : "black",
+        PELLET_COLOUR : "blue",
+        POWERUP_COLOUR : "red"
 };
 
 //global.Starvrun = Starvrun;
