@@ -3,14 +3,23 @@ function Map() {
 	var width = 0;
 	var height = 0;
 	var grids = [];
+	var frees = [];
+
+	this.getWidth = function() {
+		return width;
+	}
+
+	this.getHeight = function() {
+		return height;
+	}
 
 	//return width of the map in pixels
-	this.widthPx = function () {
+	this.getWidthPx = function () {
 		return width*Starvrun.GRID_SIZE;
 	}
 
 	//return height of the map in pixels
-	this.heightPx = function () {
+	this.getHeightPx = function () {
 		return height*Starvrun.GRID_SIZE;
 	}
 
@@ -32,6 +41,7 @@ function Map() {
 	this.setMapContent = function (x,y,i) {
 		grids[x][y] = i;
 	}
+
 
 	//input: x and y in grid
 	//try to eat a pellet in a grid coordinate, if a pellet/powerup is found, set it to free block
@@ -73,6 +83,8 @@ function Map() {
 			grids[width][height] = Starvrun.EMPTY;
 		} else if (c=='.') {
 			grids[width][height] = Starvrun.FREE;
+			var free = {x: width, y:width};
+			frees.push(free);
 		} else if (c=='#') {
 			grids[width][height] = Starvrun.WALL;
 		} else if (c=='\n') {
