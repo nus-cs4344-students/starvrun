@@ -200,7 +200,7 @@ function Game()
     {
         // Initialize game objects
         pacman = new Pacman();
-        
+        levelMap = new Map();
 		
         initGUI();
 
