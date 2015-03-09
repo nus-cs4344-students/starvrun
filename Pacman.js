@@ -208,7 +208,7 @@
 		this.move = function() {
 		
 			this.checkDirectionChange();
-			this.checkCollision();
+			this.checkCollisions();
 
 			if (!this.frozen) {
 				if (this.beastModeTimer > 0) {
