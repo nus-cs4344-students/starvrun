@@ -38,7 +38,7 @@
 				dir = right;
 			else 
 				dir = left;
-			
+
 			this.dir = dir;
 			
 		}
@@ -207,6 +207,9 @@
 			};
 		this.move = function() {
 		
+			this.checkDirectionChange();
+			this.checkCollision();
+
 			if (!this.frozen) {
 				if (this.beastModeTimer > 0) {
 					this.beastModeTimer--;
