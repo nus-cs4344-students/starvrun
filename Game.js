@@ -10,7 +10,6 @@ function Game()
     var levelMap;
     var pacman;
     var FRAME_RATE = 35;
-    var initFlag = true; // To check if the game has just started
     /*
      * public method: print
      * 
@@ -221,15 +220,7 @@ function Game()
 
     var gameLoop = function() 
     {
-        if(initFlag==true)
-        {
-            //pacman.start();
-            initFlag = false;
-        }    
-        else
-        {
-            //pacman.move();
-        }
+        pacman.move();
         
         render();
     }
