@@ -187,8 +187,7 @@ function Game()
 
     var gameLoop = function() 
     {
-        pacman.updatePosition();
-        
+        pacman.move();
         render();
     }
 
