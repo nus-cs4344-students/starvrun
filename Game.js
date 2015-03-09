@@ -11,7 +11,30 @@ function Game()
     var pacman;
     var FRAME_RATE = 35;
     
-    
+    /*
+     * public method: print
+     * 
+     * To print a message in log 
+     */
+     this.print = function(message)
+     {
+        console.log(message);
+     }
+
+     /*
+     * private method: showMessage(location, msg)
+     *
+     * Display a text message on the web page.  The 
+     * parameter location indicates the class ID of
+     * the HTML element, and msg indicates the message.
+     *
+     * The new message replaces any existing message
+     * being shown.
+     */
+    var showMessage = function(location, msg) {
+        document.getElementById(location).innerHTML = msg; 
+    } 
+
     /*
      * private method: render
      *
@@ -37,19 +60,69 @@ function Game()
         console.log("Completed Rendering Game Content");
     };
     
-    var renderWalls = function(context){
+    var renderWalls = function(context)
+    {
         console.log("Starting to Render Game Walls");
+        
+        
         console.log("Completed Rendering Game Walls");
     };
     
-    var renderPacmans = function(context){
+    var renderPacmans = function(context)
+    {
         console.log("Starting to Render Pacmans");
+        // For Single Pacman
+        renderPacman(context, pacman);
         console.log("Completed Rendering Pacmans");
     };   
     
-    var renderGameContent = function(context){
+    var renderPacman = function(context, pacman)
+    {
+        var colour = "#ffff00";
+        var radius = 10;
+        var posX = pacman.posX;
+        var posY = pacman.posY;
+        // Fixed For now, Check for Direction
+        var sAngle = 0.25 * Math.Pi;
+        var eAngle = 1.75 * Math.Pi;
+        
+        // Draw the Pacman
+        context.fillStyle = colour;
+        context.beginPath();
+        context.arc(posX, posY, radius, sAngle, eAngle, true);
+        context.closePath();
+        context.fill();
+    };
+    
+    var renderGameContent = function(context)
+    {
         console.log("Starting to Render Remaining Objects");
+        
+        var pelletRadius = 2; 
+        var powerUpRadius = 5;
+        var posX = 0;
+        var posY = 0;
+        
+        if("pellet")
+        {
+            renderRoundObj(context, posX, posY, pelletRadius);
+        }else if("Power Up")
+        {
+            renderRoundObj(context, posX, posY, powerUpRadius);   
+        }
         console.log("Completed Rendering Remaining Objects");
+    };
+    
+    var renderRoundObj= function(context, posX, posY, radius)
+    {
+        var colour = "#ffff00";
+        
+         // Draw the Pacman
+        context.fillStyle = colour;
+        context.beginPath();
+        context.arc(posX, posY, radius, 0, Math.Pi * 2, true);
+        context.closePath();
+        context.fill();
     };
 
     /*
