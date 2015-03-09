@@ -29,7 +29,16 @@
 	// DirectionWatcher
 	function directionWatcher() {
 		this.dir = null;
-		this.set = function(dir) {
+		this.set = function(directionString) {
+			if(directionString=="up")
+				dir = up;
+			else if(directionString=="down")
+				dir = down;
+			else if(directionString=="right")
+				dir = right;
+			else 
+				dir = left;
+			
 			this.dir = dir;
 			
 		}
