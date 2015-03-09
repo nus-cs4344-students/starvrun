@@ -42,39 +42,44 @@ function Game()
      */
     var render = function()
     {
-        console.log("Rendering Game Content")
         // Get context
         var context = playArea.getContext("2d");
 
-        // Clears the playArea
-        context.clearRect(0, 0, playArea.width, playArea.height);
         context.fillStyle = Starvrun.BG_COLOUR;
         context.fillRect(0, 0, playArea.width, playArea.height);
         
         // Render Walls (Should I re-render this?)
-        //renderWalls(context);
+        renderWalls(context);
         // Render Pacmans
         renderPacmans(context);
         // Render Remaining Game Objects
         renderGameContent(context);
         
-        console.log("Completed Rendering Game Content");
     }
     
     var renderWalls = function(context)
     {
-        console.log("Starting to Render Game Walls");
-        
-        
-        console.log("Completed Rendering Game Walls");
+        for(var i =0; i<levelMap.getWidthPx()/ Starvrun.GRID_SIZE; ++i)
+        {
+            for(var j=0; j<levelMap.getHeightPx()/ Starvrun.GRID_SIZE; ++j)
+            {
+                var obj = levelMap.getMapContent(i,j);
+                var posX = levelMap.gridToPx(i);
+                var posY = levelMap.gridToPx(j);
+                if(obj === Starvrun.WALL)
+                {                       
+                    renderWall(context,posX,posY);
+                }
+            }
+        }
     }
     
     var renderPacmans = function(context)
     {
-        console.log("Starting to Render Pacmans");
+        //console.log("Starting to Render Pacmans");
         // For Single Pacman
         renderPacman(context, pacman);
-        console.log("Completed Rendering Pacmans");
+        //console.log("Completed Rendering Pacmans");
     }
     
     var renderPacman = function(context, pacman)
@@ -97,7 +102,7 @@ function Game()
     
     var renderGameContent = function(context)
     {
-        console.log("Starting to Render Remaining Objects");
+        //console.log("Starting to Render Remaining Objects");
         
         for(var i =0; i<levelMap.getWidthPx()/ Starvrun.GRID_SIZE; ++i)
         {
@@ -115,10 +120,10 @@ function Game()
                         renderPowerUp(context,posX,posY);
                         break;
                     case Starvrun.WALL:
-                        renderWall(context,posX,posY);
                         break;
                     case Starvrun.FREE:
                     case Starvrun.EMPTY:
+                        clearBlock(context,posX,posY);
                         break; 
                     default :
                         console.log("Unhandled Case : " + obj);
@@ -126,7 +131,14 @@ function Game()
                 }                
             }
         }
-        console.log("Completed Rendering Remaining Objects");
+       // console.log("Completed Rendering Remaining Objects");
+    }
+    
+    var clearBlock = function(context,posX,posY)
+    {
+        var block = Starvrun.GRID_SIZE/2;
+        
+        context.clearRect(posX-block, posY-block, block*2, block*2);
     }
     
     var renderWall = function(context,posX,posY)   
@@ -240,7 +252,7 @@ function Game()
         initGUI();
         gameLoop();
         // Start drawing 
-        //setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
+        setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
 };
 
