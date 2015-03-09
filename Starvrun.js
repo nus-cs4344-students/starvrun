@@ -21,4 +21,4 @@ var Starvrun = {
 	POWERUP: 3
 };
 
-global.Starvrun = Starvrun;
+//global.Starvrun = Starvrun;
