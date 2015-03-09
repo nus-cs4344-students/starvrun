@@ -13,11 +13,11 @@ function Map() {
 	}
 
 	this.pxToGrid = function (pos) {
-		return floor(pos/32);
+		return floor(pos/Starvrun.GRID_SIZE);
 	}
 
 	this.gridToPx = function (pos){
-		return pos*32;
+		return pos*Starvrun.GRID_SIZE;
 	}
 	
 	this.getMapContentPx = function (x,y) {
