@@ -94,18 +94,25 @@ function Game()
 
         switch(e.keyCode)
         {
-            case 37: // Left
+            case 37: // Left 
+                    pacman.setDirection(left);
+                    break;
             case 38: // Up
+                    pacman.setDirection(up);
+                    break;
             case 39: // Right
+                    pacman.setDirection(right);
+                    break;
             case 40: // Down
+                    pacman.setDirection(down);
+                    break;
         }
 
     };
 
     var gameLoop = function() 
     {
-        // No Ball Here?
-        ball.updatePosition();
+        pacman.updatePosition();
         
         render();
     };

@@ -19,4 +19,6 @@ var Starvrun = {
 	FREE: 1,
 	PELLET: 2,
 	POWERUP: 3
-}
+};
+
+global.Starvrun = Starvrun;
