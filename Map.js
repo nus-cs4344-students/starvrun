@@ -13,7 +13,7 @@ function Map() {
 	}
 
 	this.pxToGrid = function (pos) {
-		return floor(pos/Starvrun.GRID_SIZE);
+		return Math.floor(pos/Starvrun.GRID_SIZE);
 	}
 
 	this.gridToPx = function (pos){
@@ -21,7 +21,7 @@ function Map() {
 	}
 	
 	this.getMapContentPx = function (x,y) {
-		return getMapContent(pxToGrid(x), pxToGrid(y));
+		return this.getMapContent(this.pxToGrid(x), this.pxToGrid(y));
 	}
 
 	this.getMapContent = function (x,y) {
@@ -34,6 +34,10 @@ function Map() {
 
 	this.eatAt = function(x,y) {
 		grids[x][y] = Starvrun.FREE;
+	}
+
+	this.canPassPx = function(x,y) {
+		return this.canPass(this.pxToGrid(x), this.pxToGrid(y));
 	}
 
 	this.canPass = function(x,y) {
