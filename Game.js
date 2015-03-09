@@ -49,9 +49,11 @@ function Game()
 
         // Clears the playArea
         context.clearRect(0, 0, playArea.width, playArea.height);
+        context.fillStyle = Starvrun.BG_COLOUR;
+        context.fillRect(0, 0, playArea.width, playArea.height);
         
         // Render Walls (Should I re-render this?)
-        renderWalls(context);
+        //renderWalls(context);
         // Render Pacmans
         renderPacmans(context);
         // Render Remaining Game Objects
@@ -78,7 +80,7 @@ function Game()
     
     var renderPacman = function(context, pacman)
     {
-        var colour = "#ffff00";
+        var colour = "yellow";
         var radius = 10;
         var posX = pacman.posX;
         var posY = pacman.posY;
@@ -98,26 +100,57 @@ function Game()
     {
         console.log("Starting to Render Remaining Objects");
         
-        var pelletRadius = 2; 
-        var powerUpRadius = 5;
-        var posX = 0;
-        var posY = 0;
-        
-        if("pellet")
+        for(var i =0; i<levelMap.getWidthPx()/ Starvrun.GRID_SIZE; ++i)
         {
-            renderRoundObj(context, posX, posY, pelletRadius);
-        }else if("Power Up")
-        {
-            renderRoundObj(context, posX, posY, powerUpRadius);   
+            for(var j=0; j<levelMap.getHeightPx()/ Starvrun.GRID_SIZE; ++j)
+            {
+                var obj = levelMap.getMapContent(i,j);
+                var posX = levelMap.gridToPx(i);
+                var posY = levelMap.gridToPx(j);
+                switch(obj)
+                {
+                    case Starvrun.PELLET:
+                        renderPellet(context,posX,posY);
+                        break;
+                    case Starvrun.POWERUP:
+                        renderPowerUp(context,posX,posY);
+                        break;
+                    case Starvrun.WALL:
+                        renderWall(context,posX,posY);
+                        break;
+                    case Starvrun.FREE:
+                    case Starvrun.EMPTY:
+                        break; 
+                    default :
+                        console.log("Unhandled Case : " + obj);
+                        break;  
+                }                
+            }
         }
         console.log("Completed Rendering Remaining Objects");
     }
     
-    var renderRoundObj= function(context, posX, posY, radius)
+    var renderWall = function(context,posX,posY)   
     {
-        var colour = "#ffff00";
-        
-         // Draw the Pacman
+        var colour = Starvrun.WALL_COLOUR;
+        var block = Starvrun.GRID_SIZE /2;
+        context.fillStyle = colour;
+        // Find a better way to write this
+        context.fillRect(posX-block,posY-block,block*2,block*2);
+    }
+    
+    var renderPellet = function(context,posX,posY){
+        var radius = 5;
+        renderRoundObj(context,posX,posY,radius, Starvrun.PELLET_COLOUR);
+    }
+    
+    var renderPowerUp = function(context,posX,posY){
+        var radius = 10;
+        renderRoundObj(context,posX,posY,radius,Starvrun.POWERUP_COLOUR);
+    }
+    
+    var renderRoundObj= function(context, posX, posY, radius, colour)
+    {
         context.fillStyle = colour;
         context.beginPath();
         context.arc(posX, posY, radius, 0, Math.PI * 2, true);
@@ -143,8 +176,8 @@ function Game()
 
      	// Sets up the canvas element
         playArea = document.getElementById("playArea");
-        playArea.height = levelMap.heightPx;
-        playArea.width = levelMap.widthPx;
+        playArea.height = levelMap.getHeightPx();
+        playArea.width = levelMap.getWidthPx();
 
         // Add event handlers
         document.addEventListener("keydown", function(e) {
@@ -190,11 +223,13 @@ function Game()
     {
         if(initFlag==true)
         {
-            pacman.start();
+            //pacman.start();
             initFlag = false;
         }    
         else
-            pacman.move();
+        {
+            //pacman.move();
+        }
         
         render();
     }
@@ -212,9 +247,9 @@ function Game()
         levelMap = new Map();
 		
         initGUI();
-
+        gameLoop();
         // Start drawing 
-        setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
+        //setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
 };
 
