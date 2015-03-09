@@ -58,7 +58,7 @@ function Game()
         renderGameContent(context);
         
         console.log("Completed Rendering Game Content");
-    };
+    }
     
     var renderWalls = function(context)
     {
@@ -66,7 +66,7 @@ function Game()
         
         
         console.log("Completed Rendering Game Walls");
-    };
+    }
     
     var renderPacmans = function(context)
     {
@@ -74,7 +74,7 @@ function Game()
         // For Single Pacman
         renderPacman(context, pacman);
         console.log("Completed Rendering Pacmans");
-    };   
+    }
     
     var renderPacman = function(context, pacman)
     {
@@ -83,8 +83,8 @@ function Game()
         var posX = pacman.posX;
         var posY = pacman.posY;
         // Fixed For now, Check for Direction
-        var sAngle = 0.25 * Math.Pi;
-        var eAngle = 1.75 * Math.Pi;
+        var sAngle = 0.25 * Math.PI;
+        var eAngle = 1.75 * Math.PI;
         
         // Draw the Pacman
         context.fillStyle = colour;
@@ -92,7 +92,7 @@ function Game()
         context.arc(posX, posY, radius, sAngle, eAngle, true);
         context.closePath();
         context.fill();
-    };
+    }
     
     var renderGameContent = function(context)
     {
@@ -111,7 +111,7 @@ function Game()
             renderRoundObj(context, posX, posY, powerUpRadius);   
         }
         console.log("Completed Rendering Remaining Objects");
-    };
+    }
     
     var renderRoundObj= function(context, posX, posY, radius)
     {
@@ -120,10 +120,10 @@ function Game()
          // Draw the Pacman
         context.fillStyle = colour;
         context.beginPath();
-        context.arc(posX, posY, radius, 0, Math.Pi * 2, true);
+        context.arc(posX, posY, radius, 0, Math.PI * 2, true);
         context.closePath();
         context.fill();
-    };
+    }
 
     /*
      * private method: initGUI
@@ -147,7 +147,7 @@ function Game()
         document.addEventListener("keydown", function(e) {
             onKeyPress(e);
             }, false);
-     };
+     }
 
     /*
      * private method: onKeyPress
@@ -181,14 +181,14 @@ function Game()
                     break;
         }
 
-    };
+    }
 
     var gameLoop = function() 
     {
         pacman.updatePosition();
         
         render();
-    };
+    }
 
     /*
      * priviledge method: start
@@ -200,11 +200,11 @@ function Game()
     {
         // Initialize game objects
         pacman = new Pacman();
-        
+        levelMap = new Map();
 		
         initGUI();
 
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
-    };
-};
+    }
+}
