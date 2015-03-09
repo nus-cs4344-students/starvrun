@@ -55,6 +55,9 @@ function Map() {
 	//input: x and y in grid
 	//return true if the map in grid coordinate x and y is passable, return false otherwise
 	this.canPass = function(x,y) {
+		if (grids[x][y]==undefined) {
+			return 0;
+		}
 		return grids[x][y] > 0;
 	}
 
