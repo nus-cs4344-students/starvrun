@@ -230,8 +230,10 @@ function Game()
 
     }
 
+    // Where the game starts to be played
     var gameLoop = function() 
     {
+        // Moves the pacman on the map always (from start to stop)
         pacman.move();
         
         render();
@@ -241,7 +243,8 @@ function Game()
      * priviledge method: start
      *
      * Create the objects, draws the GUI, and starts the rendering 
-     * loop.
+     * loop
+     * Starting game play by calling game loop
      */
     this.start = function() 
     {
