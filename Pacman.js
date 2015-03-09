@@ -1,4 +1,4 @@
-	function pacman() {
+	function Pacman() {
 		this.radius = 15;
 		this.posX = 0;
 		this.posY = 6*2*this.radius;

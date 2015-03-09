@@ -11,7 +11,30 @@ function Game()
     var pacman;
     var FRAME_RATE = 35;
     
-    
+    /*
+     * public method: print
+     * 
+     * To print a message in log 
+     */
+     this.print = function(message)
+     {
+        console.log(message);
+     }
+
+     /*
+     * private method: showMessage(location, msg)
+     *
+     * Display a text message on the web page.  The 
+     * parameter location indicates the class ID of
+     * the HTML element, and msg indicates the message.
+     *
+     * The new message replaces any existing message
+     * being shown.
+     */
+    var showMessage = function(location, msg) {
+        document.getElementById(location).innerHTML = msg; 
+    } 
+
     /*
      * private method: render
      *
@@ -94,18 +117,25 @@ function Game()
 
         switch(e.keyCode)
         {
-            case 37: // Left
+            case 37: // Left 
+                    pacman.setDirection(left);
+                    break;
             case 38: // Up
+                    pacman.setDirection(up);
+                    break;
             case 39: // Right
+                    pacman.setDirection(right);
+                    break;
             case 40: // Down
+                    pacman.setDirection(down);
+                    break;
         }
 
     };
 
     var gameLoop = function() 
     {
-        // No Ball Here?
-        ball.updatePosition();
+        pacman.updatePosition();
         
         render();
     };
