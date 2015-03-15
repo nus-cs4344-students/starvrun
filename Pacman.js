@@ -39,8 +39,8 @@
 
 		this.radius= 16;
 
-		this.posX = 16;
-		this.posY = 16;
+		this.posX = 48;
+		this.posY = 48;
 
 		this.stuckX = 0;
 		this.stuckY = 0;
@@ -76,11 +76,11 @@
 		this.beastMode = false;
 		this.beastModeTimer = 0;
 
-		this.map = new Map();
-		this.game = new Game();
+		var map = new Map();
+		var game = new Game();
 
-		var noOfGridX = map.levelMap.getWidthPx()/Starvrun.GRID_SIZE;
-		var noOfGridY = map.levelMap.getHeightPx()/Starvrun.GRID_SIZE;
+		var noOfGridX = map.getWidthPx()/Starvrun.GRID_SIZE;
+		var noOfGridY = map.getHeightPx()/Starvrun.GRID_SIZE;
 
 
 		//create a directionWatcher object
@@ -132,10 +132,10 @@
 						var x = this.getGridPosX()+this.directionWatcher.get().dirX;
 						var y = this.getGridPosY()+this.directionWatcher.get().dirY;
 						//boundary checking, ensure Pac can move across other side of map
-						if (x <= -1) x = map.getWidthPx/(this.radius*2)-1;
-						if (x >= map.getWidthPx/(this.radius*2)) x = 0;
-						if (y <= -1) y = map.getHeightPx/(this.radius*2)-1;
-						if (y >= map.getHeightPx/(this.radius*2)) y = 0;
+						if (x <= -1) x = map.getWidthPx()/(this.radius*2)-1;
+						if (x >= map.getWidthPx()/(this.radius*2)) x = 0;
+						if (y <= -1) y = map.getHeightPx()/(this.radius*2)-1;
+						if (y >= map.getHeightPx()/(this.radius*2)) y = 0;
 
 						//console.log("x: "+x);
 						//console.log("y: "+y);
@@ -168,7 +168,7 @@
 				if ((this.dirX == 1) && (gridAheadX < noOfGridX)) gridAheadX += 1;
 				if ((this.dirY == 1) && (gridAheadY < noOfGridY)) gridAheadY += 1;
 
-				var mapItemAhead = game.getMapContent(gridAheadX, gridAheadY);
+				var mapItemAhead = map.getMapContent(gridAheadX, gridAheadY);
 				
 				//check for pellet eating
 				if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
@@ -201,7 +201,7 @@
 				if ((mapItemAhead === Starvrun.WALL)) {
 					this.stuckX = this.dirX;
 					this.stuckY = this.dirY;
-					pacman.stop();
+					this.stop();
 					// get out of the wall
 					//4(which is also the speed) is the first step into the cell
 					if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 4;
@@ -306,5 +306,23 @@
 				//game.drawHearts(this.lives);
 			}
 		}
+                
+                this.render = function(context) {
+                    
+                    var colour = "yellow";
+                    var radius = this.width / 2;
+                    console.log("rendering at " + this.posX + " , " + this.posY);
+                    
+                    // Fixed For now, Check for Direction
+                    var sAngle = 0 * Math.PI;
+                    var eAngle = 2 * Math.PI;
+        
+                    // Draw the Pacman
+                    context.fillStyle = colour;
+                    context.beginPath();
+                    context.arc(this.posX, this.posY, radius, sAngle, eAngle, true);
+                    context.closePath();
+                    context.fill();
+                }
 
 	}

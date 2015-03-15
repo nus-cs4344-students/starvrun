@@ -44,16 +44,14 @@ function Game()
     {
         // Get context
         var context = playArea.getContext("2d");
-
-        context.fillStyle = Starvrun.BG_COLOUR;
-        context.fillRect(0, 0, playArea.width, playArea.height);
         
         // Render Walls (Should I re-render this?)
-        renderWalls(context);
+        //renderWalls(context);
+        renderGameContent(context);
         // Render Pacmans
         renderPacmans(context);
         // Render Remaining Game Objects
-        renderGameContent(context);
+        
         
     }
     
@@ -84,20 +82,7 @@ function Game()
     
     var renderPacman = function(context, pacman)
     {
-        var colour = "yellow";
-        var radius = 10;
-        var posX = pacman.posX;
-        var posY = pacman.posY;
-        // Fixed For now, Check for Direction
-        var sAngle = 0.25 * Math.PI;
-        var eAngle = 1.75 * Math.PI;
-        
-        // Draw the Pacman
-        context.fillStyle = colour;
-        context.beginPath();
-        context.arc(posX, posY, radius, sAngle, eAngle, true);
-        context.closePath();
-        context.fill();
+        pacman.render(context);
     }
     
     var renderGameContent = function(context)
@@ -189,6 +174,11 @@ function Game()
         playArea = document.getElementById("playArea");
         playArea.height = levelMap.getHeightPx();
         playArea.width = levelMap.getWidthPx();
+        var context = playArea.getContext("2d");
+        context.fillStyle = Starvrun.BG_COLOUR;
+        context.fillRect(0, 0, playArea.width, playArea.height);
+        renderWalls(context);
+        
 
         // Add event handlers
         document.addEventListener("keydown", function(e) {
@@ -253,7 +243,7 @@ function Game()
         levelMap = new Map();
 		
         initGUI();
-        gameLoop();
+        //gameLoop();
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
