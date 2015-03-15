@@ -33,6 +33,10 @@ function Game()
     var showMessage = function(location, msg) {
         document.getElementById(location).innerHTML = msg; 
     } 
+    
+    this.getMap = function(){
+        return levelMap;
+    }
 
     /*
      * private method: render
@@ -182,6 +186,7 @@ function Game()
 
         // Add event handlers
         document.addEventListener("keydown", function(e) {
+            console.log("KeyPressed "  + e );
             onKeyPress(e);
             }, false);
      }
@@ -205,16 +210,16 @@ function Game()
         switch(e.keyCode)
         {
             case 37: // Left 
-                    pacman.directionWatcher.set(left);
+                    pacman.directionWatcher.setLeft();
                     break;
             case 38: // Up
-                    pacman.directionWatcher.set(up);
+                    pacman.directionWatcher.setUp();
                     break;
             case 39: // Right
-                    pacman.directionWatcher.set(right);
+                    pacman.directionWatcher.setRight();
                     break;
             case 40: // Down
-                    pacman.directionWatcher.set(down);
+                    pacman.directionWatcher.setDown();
                     break;
         }
 
@@ -239,8 +244,9 @@ function Game()
     this.start = function() 
     {
         // Initialize game objects
-        pacman = new Pacman();
         levelMap = new Map();
+        pacman = new Pacman(this);
+
 		
         initGUI();
         //gameLoop();
