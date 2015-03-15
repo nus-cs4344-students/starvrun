@@ -22,7 +22,22 @@
 		this.dir = null;
 		this.set = function(dir) {
 			this.dir = dir;
+                        console.log(this.dir);
 		}
+                this.setUp = function(){
+                    
+                    this.set(up);
+                }
+                this.setDown = function(){
+                    this.set(down);                    
+                }
+                this.setLeft = function(){
+                    this.set(left);
+                }
+                this.setRight = function(){
+                    this.set(right);
+                }
+                
 		this.get = function() {
 			return this.dir;
 		}
@@ -32,7 +47,7 @@
 		return x >= min && x <= max;
 	}
 
-	function Pacman() {
+	function Pacman(game) {
 
 		this.width = 32;
 		this.height = 32;
@@ -64,8 +79,8 @@
 		this.curDirection = right;
 		this.dirX = this.curDirection.dirX; //1
 		this.dirY = this.curDirection.dirY; //0
-        this.sAngle = 0.25;
-        this.eAngle = 1.75;
+                this.sAngle = 0.25;
+                this.eAngle = 1.75;
 
 		this.lives = 3;
 
@@ -76,8 +91,10 @@
 		this.beastMode = false;
 		this.beastModeTimer = 0;
 
-		var map = new Map();
-		var game = new Game();
+                var game = game;
+                var map = game.getMap();
+		//var map = new Map();
+		//var game = new Game();
 
 		var noOfGridX = map.getWidthPx()/Starvrun.GRID_SIZE;
 		var noOfGridY = map.getHeightPx()/Starvrun.GRID_SIZE;
