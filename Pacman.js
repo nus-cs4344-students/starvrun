@@ -1,177 +1,148 @@
-	// used to play sounds during the game
-	var Sound = new Object();
-	Sound.play = function (sound) {
-		if (game.soundfx == 1) {
-			var audio = document.getElementById(sound);
-			(audio != null) ? audio.play() : console.log(sound+" not found");
-			}
-	}
-	
-	
-	// Direction object in Constructor notation
+	/*put in Game.js*/
+	// Direction Class
 	function Direction(name,angle1,angle2,dirX,dirY) {
 		this.name = name;
 		this.angle1 = angle1;
 		this.angle2 = angle2;
 		this.dirX = dirX;
 		this.dirY = dirY;
-		this.equals = function(dir) {
-			return  JSON.stringify(this) ==  JSON.stringify(dir);
-		}
 	}
-	
-	// Direction Objects
-	var up = new Direction("up",1.75,1.25,0,-1);		// UP
-	var left = new Direction("left",1.25,0.75,-1,0);	// LEFT
-	var down = new Direction("down",0.75,0.25,0,1);		// DOWN
-	var right = new Direction("right",0.25,1.75,1,0);	// 
+
+	// Direction Objects (with initialized value)
+	var right = new Direction("right", 0.25, 1.75, 1, 0);	// RIGHT
+	var down = new Direction("down", 0.75, 0.25, 0, 1);		// DOWN
+	var left = new Direction("left", 1.25, 0.75, -1, 0);	// LEFT
+	var up = new Direction("up", 1.75, 1.25, 0, -1);		// UP 
+
 
 	// DirectionWatcher
 	function directionWatcher() {
+		//this is the temp dir upon key pressed
+		//used to update curDirection
 		this.dir = null;
-		this.set = function(directionString) {
-			if(directionString=="up")
-				dir = up;
-			else if(directionString=="down")
-				dir = down;
-			else if(directionString=="right")
-				dir = right;
-			else 
-				dir = left;
-
+		this.set = function(dir) {
 			this.dir = dir;
-			
 		}
 		this.get = function() {
 			return this.dir;
 		}
 	}
-		
+
+	function between (x, min, max) {
+		return x >= min && x <= max;
+	}
 
 	function Pacman() {
 
-		this.radius = 15;
-		this.posX = 0;
-		this.posY = 6*2*this.radius;
-		this.speed = 5;
-		this.angle1 = 0.25;
-		this.angle2 = 1.75;
-		this.mouth = 1; /* Switches between 1 and -1, depending on mouth closing / opening */
-		this.dirX = right.dirX;
-		this.dirY = right.dirY;
-		this.lives = 3;
+		this.width = 32;
+		this.height = 32;
+
+		this.radius= 16;
+
+		this.posX = 16;
+		this.posY = 16;
+
 		this.stuckX = 0;
 		this.stuckY = 0;
-		this.frozen = false;		// used to play die Animation
-		this.freeze = function () {
-			this.frozen = true;
-		}
-		this.unfreeze = function() {
-			this.frozen = false;
-		}
-		this.getCenterX = function () {
-			return this.posX+this.radius;
-		}
-		this.getCenterY = function () {
-			return this.posY+this.radius;
-		}
-		this.directionWatcher = new directionWatcher();
-		
-		this.direction = right;
+
+		//multiple of 1 square grid px
+		this.speed = 4;
+
+        //mouth state(1/-1; use as multiplier for mouth angle)
+		this.mouth = 1;
+
+		//whether moving or stop state
+		//this.state = 1; 
+		//var MOVING = 1;
+		//var STOP = 0;
+
+		//should be in Game.js
+		var pelletCount;
+		var score;
+
+		//initialization for direction
+		this.curDirection = right;
+		this.dirX = this.curDirection.dirX; //1
+		this.dirY = this.curDirection.dirY; //0
+        this.sAngle = 0.25;
+        this.eAngle = 1.75;
+
+		this.lives = 3;
+
+		//when dead, hold the pacman on position
+		//used to play die animation
+		this.frozen = false;		
 		
 		this.beastMode = false;
 		this.beastModeTimer = 0;
-		
-		this.checkCollisions = function () {
-			
-			if ((this.stuckX == 0) && (this.stuckY == 0) && this.frozen == false) {
-				
-				// Get the Grid Position of Pac
-				var gridX = this.getGridPosX();
-				var gridY = this.getGridPosY();
-				var gridAheadX = gridX;
-				var gridAheadY = gridY;
-				
-				var field = game.getMapContent(gridX, gridY);
 
-				// get the field 1 ahead to check wall collisions
-				if ((this.dirX == 1) && (gridAheadX < 17)) gridAheadX += 1;
-				if ((this.dirY == 1) && (gridAheadY < 12)) gridAheadY += 1;
-				var fieldAhead = game.getMapContent(gridAheadX, gridAheadY);
+		this.map = new map();
+		this.game = new Game();
 
-				
-				/*	Check Pill Collision			*/
-				if ((field === "pill") || (field === "powerpill")) {
-					//console.log("Pill found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
-					if (
-						((this.dirX == 1) && (between(this.posX, game.toPixelPos(gridX)+this.radius-5, game.toPixelPos(gridX+1))))
-						|| ((this.dirX == -1) && (between(this.posX, game.toPixelPos(gridX), game.toPixelPos(gridX)+5)))
-						|| ((this.dirY == 1) && (between(this.posY, game.toPixelPos(gridY)+this.radius-5, game.toPixelPos(gridY+1))))
-						|| ((this.dirY == -1) && (between(this.posY, game.toPixelPos(gridY), game.toPixelPos(gridY)+5)))
-						|| (fieldAhead === "wall")
-						)
-						{	var s;
-							if (field === "powerpill") {
-								Sound.play("powerpill");
-								s = 50;
-								this.enableBeastMode();
-								game.startGhostFrightened();
-								}
-							else {
-								Sound.play("waka");
-								s = 10;
-								game.pillCount--;
-								}
-							game.map.posY[gridY].posX[gridX].type = "null";
-							game.score.add(s);
-						}
-				}
-				
-				/*	Check Wall Collision			*/
-				if ((fieldAhead === "wall") || (fieldAhead === "door")) {
-					this.stuckX = this.dirX;
-					this.stuckY = this.dirY;
-					pacman.stop();
-					// get out of the wall
-					if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 5;
-					if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 5;
-					if (this.stuckX == -1) this.posX += 5;
-					if (this.stuckY == -1) this.posY += 5;
-				}
-				
-			}
+		var noOfGridX = map.levelMap.getWidthPx()/Starvrun.GRID_SIZE;
+		var noOfGridY = map.levelMap.getHeightPx()/Starvrun.GRID_SIZE;
+
+
+		//create a directionWatcher object
+		this.directionWatcher = new directionWatcher();
+
+		this.getGridPosX = function() {
+			return (this.posX - (this.posX % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
 		}
+
+		this.getGridPosY = function() {
+			return (this.posY - (this.posY % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
+		}
+
+		this.inGrid = function() {
+			if((this.posX % (2*this.radius) === 16) && (this.posY % (2*this.radius) === 16)) return true;
+			return false;
+		}
+
+		this.enableBeastMode = function() {
+			this.beastMode = true;
+			//this.beastModeTimer = 240;
+		};
+
+		this.disableBeastMode = function() { 
+			this.beastMode = false; 
+		};
+
+		this.freeze = function () {
+			this.frozen = true;
+		}
+
+		this.unfreeze = function() {
+			this.frozen = false;
+		}
+
 		this.checkDirectionChange = function() {
 			if (this.directionWatcher.get() != null) {
-				//console.log("next Direction: "+directionWatcher.get().name);
 
 				if ((this.stuckX == 1) && this.directionWatcher.get() == right) this.directionWatcher.set(null);
 				else {
 					// reset stuck events
 					this.stuckX = 0;
 					this.stuckY = 0;
-					
 
 					// only allow direction changes inside the grid
 					if ((this.inGrid())) {
-						//console.log("changeDirection to "+directionWatcher.get().name);
 						
 						// check if possible to change direction without getting stuck
-						console.log("x: "+this.getGridPosX()+" + "+this.directionWatcher.get().dirX);
-						console.log("y: "+this.getGridPosY()+" + "+this.directionWatcher.get().dirY);
 						var x = this.getGridPosX()+this.directionWatcher.get().dirX;
 						var y = this.getGridPosY()+this.directionWatcher.get().dirY;
-						if (x <= -1) x = game.width/(this.radius*2)-1;
-						if (x >= game.width/(this.radius*2)) x = 0;
-						if (y <= -1) x = game.height/(this.radius*2)-1;
-						if (y >= game.heigth/(this.radius*2)) y = 0;
+						//boundary checking, ensure Pac can move across other side of map
+						if (x <= -1) x = map.getWidthPx/(this.radius*2)-1;
+						if (x >= map.getWidthPx/(this.radius*2)) x = 0;
+						if (y <= -1) y = map.getHeightPx/(this.radius*2)-1;
+						if (y >= map.getHeightPx/(this.radius*2)) y = 0;
 
-						console.log("x: "+x);
-						console.log("y: "+y);
-						var nextTile = game.map.posY[y].posX[x].type;
-						console.log("checkNextTile: "+nextTile);
+						//console.log("x: "+x);
+						//console.log("y: "+y);
+						var nextGrid = map.getMapContent(x,y);
+						//console.log("checkNextTile: "+nextTile);
 
-						if (nextTile != "wall") {
+						if (nextGrid != Starvrun.WALL) {
 							this.setDirection(this.directionWatcher.get());
 							this.directionWatcher.set(null);
 						}
@@ -179,52 +150,91 @@
 				}
 			}
 		}
-		this.setDirection = function(dir) {
-			if (!this.frozen) {
-				this.dirX = dir.dirX;
-				this.dirY = dir.dirY;
-				this.angle1 = dir.angle1;
-				this.angle2 = dir.angle2;
-				this.direction = dir;
+
+		this.checkCollision = function () {
+			
+			if ((this.stuckX == 0) && (this.stuckY == 0) && this.frozen == false) {
+				
+				//get current grid position of pac
+				var gridX = this.getGridPosX();
+				var gridY = this.getGridPosY();
+
+				var gridAheadX = gridX;
+				var gridAheadY = gridY;
+				
+				var mapItem = map.getMapContent(gridX, gridY);
+
+				// get 1 grid ahead for wall collision
+				if ((this.dirX == 1) && (gridAheadX < noOfGridX)) gridAheadX += 1;
+				if ((this.dirY == 1) && (gridAheadY < noOfGridY)) gridAheadY += 1;
+
+				var mapItemAhead = game.getMapContent(gridAheadX, gridAheadY);
+				
+				//check for pellet eating
+				if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
+					//console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
+					if (
+						((this.dirX == 1) && (between(this.posX, map.gridtoPx(gridX)+this.radius-4, map.gridtoPx(gridX+1))))
+						|| ((this.dirX == -1) && (between(this.posX, map.gridtoPx(gridX), map.gridtoPx(gridX)+4)))
+						|| ((this.dirY == 1) && (between(this.posY, map.gridtoPx(gridY)+this.radius-4, map.gridtoPx(gridY+1))))
+						|| ((this.dirY == -1) && (between(this.posY, map.gridtoPx(gridY), map.gridtoPx(gridY)+4)))
+						|| (mapItemAhead === Starvrun.WALL)
+						)
+						{	
+							var point;
+							if (mapItem === Starvrun.POWERUP) {
+								point = 50;
+								//this.enableBeastMode();
+								//game.startGhostFrightened();
+								}
+							else {
+								point = 10;
+								pelletCount--;
+								}
+							//clear the item on map
+							map.setMapContent(gridX, gridY, Starvrun.EMPTY);
+							//game.score.add(point);
+						}
+				}
+				
+				//check for wall
+				if ((mapItemAhead === Starvrun.WALL)) {
+					this.stuckX = this.dirX;
+					this.stuckY = this.dirY;
+					pacman.stop();
+					// get out of the wall
+					//4(which is also the speed) is the first step into the cell
+					if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 4;
+					if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 4;
+					if (this.stuckX == -1) this.posX += 4;
+					if (this.stuckY == -1) this.posY += 4;
+				}
+				
 			}
 		}
-		this.enableBeastMode = function() {
-			this.beastMode = true;
-			this.beastModeTimer = 240;
-			//console.log("Beast Mode activated!");
-			inky.dazzle();
-			pinky.dazzle();
-			blinky.dazzle();
-			clyde.dazzle();
-		};
-		this.disableBeastMode = function() { 
-			this.beastMode = false; 
-			//console.log("Beast Mode is over!");
-			inky.undazzle();
-			pinky.undazzle();
-			blinky.undazzle();
-			clyde.undazzle();
-			};
+
 		this.move = function() {
 		
 			this.checkDirectionChange();
-			this.checkCollisions();
+
+			this.checkCollision();
 
 			if (!this.frozen) {
 				if (this.beastModeTimer > 0) {
 					this.beastModeTimer--;
-					//console.log("Beast Mode: "+this.beastModeTimer);
-					}
-				if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
+				}
+
+				//if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
 				
 				this.posX += this.speed * this.dirX;
 				this.posY += this.speed * this.dirY;
 				
 				// Check if out of canvas
-				if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
-				if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
-				if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
-				if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
+				//boundary checking, ensure Pac can move across other side of map
+				if (this.posX >= map.getWidthPx-this.radius) this.posX = 4-this.radius;
+				if (this.posX <= 0-this.radius) this.posX = map.getWidthPx-4-this.radius;
+				if (this.posY >= map.getHeightPx-this.radius) this.posY = 4-this.radius;
+				if (this.posY <= 0-this.radius) this.posY = map.getHeightPx-4-this.radius;
 			}
 			else this.dieAnimation();
 		}
@@ -234,71 +244,67 @@
 			if (!this.frozen) {
 				if (this.dirX == this.dirY == 0) {
 				
-					this.angle1 -= this.mouth*0.07;
-					this.angle2 += this.mouth*0.07;
+					this.sAngle -= this.mouth*0.07;
+					this.eAngle += this.mouth*0.07;
 					
-					var limitMax1 = this.direction.angle1;
-					var limitMax2 = this.direction.angle2;
-					var limitMin1 = this.direction.angle1 - 0.21;
-					var limitMin2 = this.direction.angle2 + 0.21;
+					var limitMax1 = this.curDirection.sAngle;
+					var limitMax2 = this.curDirection.eAngle;
+					var limitMin1 = this.curDirection.sAngle - 0.21;
+					var limitMin2 = this.curDirection.eAngle + 0.21;
 						
-					if (this.angle1 < limitMin1 || this.angle2 > limitMin2)
+					if (this.sAngle < limitMin1 || this.eAngle > limitMin2)
 					{
 						this.mouth = -1;
 					}
-					if (this.angle1 >= limitMax1 || this.angle2 <= limitMax2)
+					if (this.sAngle >= limitMax1 || this.eAngle <= limitMax2)
 					{
 						this.mouth = 1;
 					}
 				}
 			}
 		}
+
+		this.setDirection = function(dir) {
+			if (!this.frozen) {
+				this.dirX = dir.dirX;
+				this.dirY = dir.dirY;
+				this.sAngle = dir.sAngle;
+				this.eAngle = dir.eAngle;
+				this.curDirection = dir;
+			}
+		}
+
 		this.stop = function() {
+			//this will make the pacman speed to 0
 			this.dirX = 0;
 			this.dirY = 0;
 		}
+		
 		this.reset = function() {
 			this.unfreeze();
-			this.posX = 0;
-			this.posY = 6*2*this.radius;
+			this.posX = 16;
+			this.posY = 16;
 			this.setDirection(right);
 			this.stop();
 			this.stuckX = 0;
 			this.stuckY = 0;
 			//console.log("reset pacman");
 		}
+
 		this.dieAnimation = function() {
-			this.angle1 += 0.05;
-			this.angle2 -= 0.05;
-			if (this.angle1 >= this.direction.angle1+0.7 || this.angle2 <= this.direction.angle2-0.7) {
-				this.dieFinal();
-				}
-		}
-		this.die = function() {
-			Sound.play("die");
 			this.freeze();
-			this.dieAnimation();
-			}
-		this.dieFinal = function() {
-			this.reset();
-			pinky.reset();
-			inky.reset();
-			blinky.reset();
-			clyde.reset();
-    		this.lives--;
-	        console.log("pacman died, "+this.lives+" lives left");
-	    	if (this.lives <= 0) {
-				var input = "<div id='highscore-form'><input type='text' id='playerName'/><span class='button' id='score-submit' onClick='addHighscore();'>save</span></div>";
-				game.showMessage("Game over","Total Score: "+game.score.score+input);
-				game.gameOver = true;
-				$('#playerName').focus();
+			this.sAngle += 0.05;
+			this.eAngle -= 0.05;
+			if (this.sAngle >= this.curDirection.sAngle+0.7 || this.eAngle <= this.curDirection.eAngle-0.7) {
+				this.reset();
+	    		this.lives--;
+		        //console.log("pacman died, "+this.lives+" lives left");
+		    	if (this.lives <= 0) {
+					//game.showMessage("Game over","Total Score: "+game.score.score+input);
+					//game.gameOver = true;
 				}
-			game.drawHearts(this.lives);
+				//game.drawHearts(this.lives);
+			}
 		}
-		this.getGridPosX = function() {
-			return (this.posX - (this.posX % 30))/30;
-		}
-		this.getGridPosY = function() {
-			return (this.posY - (this.posY % 30))/30;
-		}
+
 	}
