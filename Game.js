@@ -215,16 +215,16 @@ function Game()
         switch(e.keyCode)
         {
             case 37: // Left 
-                    pacman.directionWatcher.set("left");
+                    pacman.directionWatcher.set(left);
                     break;
             case 38: // Up
-                    pacman.directionWatcher.set("up");
+                    pacman.directionWatcher.set(up);
                     break;
             case 39: // Right
-                    pacman.directionWatcher.set("right");
+                    pacman.directionWatcher.set(right);
                     break;
             case 40: // Down
-                    pacman.directionWatcher.set("down");
+                    pacman.directionWatcher.set(down);
                     break;
         }
 
