@@ -76,7 +76,7 @@
 		this.beastMode = false;
 		this.beastModeTimer = 0;
 
-		this.map = new map();
+		this.map = new Map();
 		this.game = new Game();
 
 		var noOfGridX = map.levelMap.getWidthPx()/Starvrun.GRID_SIZE;
