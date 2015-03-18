@@ -81,6 +81,7 @@ function Game()
         //console.log("Starting to Render Pacmans");
         // For Single Pacman
         renderPacman(context, pacman);
+        renderPacman(context, pacman2);
         //console.log("Completed Rendering Pacmans");
     }
     
@@ -221,6 +222,19 @@ function Game()
             case 40: // Down
                     pacman.directionWatcher.setDown();
                     break;
+
+            case 65: // 'A' Left 
+                    pacman2.directionWatcher.setLeft();
+                    break;
+            case 87: // 'W' Up
+                    pacman2.directionWatcher.setUp();
+                    break;
+            case 68: // 'D' Right
+                    pacman2.directionWatcher.setRight();
+                    break;
+            case 83: // 'S' Down
+                    pacman2.directionWatcher.setDown();
+                    break;
         }
 
     }
@@ -230,8 +244,11 @@ function Game()
     {
         // Moves the pacman on the map always (from start to stop)
         pacman.move();
-        
         render();
+
+        pacman2.move();
+        render();
+
     }
 
     /*
@@ -246,8 +263,10 @@ function Game()
         // Initialize game objects
         levelMap = new Map();
         pacman = new Pacman(this);
+        pacman2 = new Pacman(this);
+		pacman.setPosition(48,48);
+        pacman2.setPosition(560,48);
 
-		
         initGUI();
         //gameLoop();
         // Start drawing 

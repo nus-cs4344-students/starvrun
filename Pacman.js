@@ -22,23 +22,21 @@
 		this.dir = null;
 		this.set = function(dir) {
 			this.dir = dir;
-                        console.log(this.dir);
+            console.log(this.dir);
 		}
-                this.setUp = function(){
-                    
-                    this.set(up);
-                }
-                this.setDown = function(){
-                    this.set(down);                    
-                }
-                this.setLeft = function(){
-                    this.set(left);
-                }
-                this.setRight = function(){
-                    this.set(right);
-                }
-                
-		this.get = function() {
+        this.setUp = function(){         
+            this.set(up);
+        }
+        this.setDown = function(){
+            this.set(down);                    
+        }
+       this.setLeft = function(){
+            this.set(left);
+        }
+       this.setRight = function(){
+                this.set(right);
+        }
+       this.get = function() {
 			return this.dir;
 		}
 	}
@@ -66,11 +64,6 @@
         //mouth state(1/-1; use as multiplier for mouth angle)
 		this.mouth = 1;
 
-		//whether moving or stop state
-		//this.state = 1; 
-		//var MOVING = 1;
-		//var STOP = 0;
-
 		//should be in Game.js
 		var pelletCount;
 		var score;
@@ -79,8 +72,8 @@
 		this.curDirection = right;
 		this.dirX = this.curDirection.dirX; //1
 		this.dirY = this.curDirection.dirY; //0
-                this.sAngle = 0.25;
-                this.eAngle = 1.75;
+        this.sAngle = 0.25;
+        this.eAngle = 1.75;
 
 		this.lives = 3;
 
@@ -91,17 +84,24 @@
 		this.beastMode = false;
 		this.beastModeTimer = 0;
 
-                var game = game;
-                var map = game.getMap();
-		//var map = new Map();
-		//var game = new Game();
+        var game = game;
+        var map = game.getMap();
 
 		var noOfGridX = map.getWidthPx()/Starvrun.GRID_SIZE;
 		var noOfGridY = map.getHeightPx()/Starvrun.GRID_SIZE;
 
-
 		//create a directionWatcher object
 		this.directionWatcher = new directionWatcher();
+
+		this.setPosition = function(x, y) {
+			this.posX = x;
+			this.posY = y;
+		}
+
+		this.getPosition = function(x, y) {
+			return this.posX;
+			return this.posY;
+		}
 
 		this.getGridPosX = function() {
 			return (this.posX - (this.posX % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
@@ -119,11 +119,11 @@
 		this.enableBeastMode = function() {
 			this.beastMode = true;
 			//this.beastModeTimer = 240;
-		};
+		}
 
 		this.disableBeastMode = function() { 
 			this.beastMode = false; 
-		};
+		}
 
 		this.freeze = function () {
 			this.frozen = true;
@@ -138,16 +138,14 @@
 
 				if ((this.stuckX == 1) && this.directionWatcher.get() == right) this.directionWatcher.set(null);
 				else {
-					// reset stuck events
 					this.stuckX = 0;
 					this.stuckY = 0;
 
-					// only allow direction changes inside the grid
 					if ((this.inGrid())) {
 						
 						// check if possible to change direction without getting stuck
-						var x = this.getGridPosX()+this.directionWatcher.get().dirX;
-						var y = this.getGridPosY()+this.directionWatcher.get().dirY;
+						var x = this.getGridPosX() + this.directionWatcher.get().dirX;
+						var y = this.getGridPosY() + this.directionWatcher.get().dirY;
 						//boundary checking, ensure Pac can move across other side of map
 						if (x <= -1) x = map.getWidthPx()/(this.radius*2)-1;
 						if (x >= map.getWidthPx()/(this.radius*2)) x = 0;
@@ -171,69 +169,69 @@
 		this.checkCollision = function () {
 			
 			if ((this.stuckX == 0) && (this.stuckY == 0) && this.frozen == false) {
-				
-				//get current grid position of pac
-				var gridX = this.getGridPosX();
-				var gridY = this.getGridPosY();
+				if(this.inGrid()){
+					//get current grid position of pac
+					var gridX = this.getGridPosX();
+					var gridY = this.getGridPosY();
 
-				var gridAheadX = gridX;
-				var gridAheadY = gridY;
-				
-				var mapItem = map.getMapContent(gridX, gridY);
+					var gridAheadX = gridX;
+					var gridAheadY = gridY;
+					
+					var mapItem = map.getMapContent(gridX, gridY);
 
-				// get 1 grid ahead for wall collision
-				if ((this.dirX == 1) && (gridAheadX < noOfGridX)) gridAheadX += 1;
-				if ((this.dirY == 1) && (gridAheadY < noOfGridY)) gridAheadY += 1;
+					// get 1 grid ahead for wall collision
+					if ((this.dirX == 1) && (gridAheadX < noOfGridX)) gridAheadX += 1;
+					if ((this.dirY == 1) && (gridAheadY < noOfGridY)) gridAheadY += 1;
+					if ((this.dirX == -1) && (gridAheadX >= 0)) gridAheadX -= 1;
+					if ((this.dirY == -1) && (gridAheadY >= 0)) gridAheadY -= 1;
 
-				var mapItemAhead = map.getMapContent(gridAheadX, gridAheadY);
-				
-				//check for pellet eating
-				if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
-					//console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
-					if (
-						((this.dirX == 1) && (between(this.posX, map.gridtoPx(gridX)+this.radius-4, map.gridtoPx(gridX+1))))
-						|| ((this.dirX == -1) && (between(this.posX, map.gridtoPx(gridX), map.gridtoPx(gridX)+4)))
-						|| ((this.dirY == 1) && (between(this.posY, map.gridtoPx(gridY)+this.radius-4, map.gridtoPx(gridY+1))))
-						|| ((this.dirY == -1) && (between(this.posY, map.gridtoPx(gridY), map.gridtoPx(gridY)+4)))
-						|| (mapItemAhead === Starvrun.WALL)
-						)
-						{	
-							var point;
-							if (mapItem === Starvrun.POWERUP) {
-								point = 50;
-								//this.enableBeastMode();
-								//game.startGhostFrightened();
-								}
-							else {
-								point = 10;
-								pelletCount--;
-								}
-							//clear the item on map
-							map.setMapContent(gridX, gridY, Starvrun.EMPTY);
-							//game.score.add(point);
-						}
+					var mapItemAhead = map.getMapContent(gridAheadX, gridAheadY);
+					
+					//check for pellet eating
+					if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
+						//console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
+						if (
+							((this.dirX == 1) && (between(this.posX, map.gridtoPx(gridX)+this.radius-4, map.gridtoPx(gridX+1))))
+							|| ((this.dirX == -1) && (between(this.posX, map.gridtoPx(gridX), map.gridtoPx(gridX)+4)))
+							|| ((this.dirY == 1) && (between(this.posY, map.gridtoPx(gridY)+this.radius-4, map.gridtoPx(gridY+1))))
+							|| ((this.dirY == -1) && (between(this.posY, map.gridtoPx(gridY), map.gridtoPx(gridY)+4)))
+							|| (mapItemAhead === Starvrun.WALL)
+							)
+							{	
+								var point;
+								if (mapItem === Starvrun.POWERUP) {
+									point = 50;
+									//this.enableBeastMode();
+									//game.startGhostFrightened();
+									}
+								else {
+									point = 10;
+									pelletCount--;
+									}
+								//clear the item on map
+								map.setMapContent(gridX, gridY, Starvrun.EMPTY);
+								//game.score.add(point);
+							}
+					}
+					
+					//check for wall
+					if ((mapItemAhead === Starvrun.WALL)) {
+						this.stuckX = this.dirX;
+						this.stuckY = this.dirY;
+						this.stop();
+						// get out of the wall
+						// 4(which is also the speed) is the first step into the cell
+						if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 4;
+						if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 4;
+					}
+					
 				}
-				
-				//check for wall
-				if ((mapItemAhead === Starvrun.WALL)) {
-					this.stuckX = this.dirX;
-					this.stuckY = this.dirY;
-					this.stop();
-					// get out of the wall
-					//4(which is also the speed) is the first step into the cell
-					if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 4;
-					if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 4;
-					if (this.stuckX == -1) this.posX += 4;
-					if (this.stuckY == -1) this.posY += 4;
-				}
-				
 			}
 		}
 
 		this.move = function() {
 		
 			this.checkDirectionChange();
-
 			this.checkCollision();
 
 			if (!this.frozen) {
@@ -254,6 +252,9 @@
 				if (this.posY <= 0-this.radius) this.posY = map.getHeightPx-4-this.radius;
 			}
 			else this.dieAnimation();
+
+			this.checkDirectionChange();
+			this.checkCollision();
 		}
 		
 		this.eat = function () {
@@ -299,8 +300,8 @@
 		
 		this.reset = function() {
 			this.unfreeze();
-			this.posX = 16;
-			this.posY = 16;
+			this.posX = 48;
+			this.posY = 48;
 			this.setDirection(right);
 			this.stop();
 			this.stuckX = 0;
