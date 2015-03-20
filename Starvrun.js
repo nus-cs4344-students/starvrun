@@ -3,6 +3,7 @@
   =====================================================*/
 var Starvrun = {
 	SERVER_NAME : "localhost",	// server name of Starvrun game
+        SERVER_IP : "0.0.0.0",
 	PORT : 4344,				// port of Starvrun game
 
 	FRAME_RATE : 30,			// frame rate of Starvrun game
