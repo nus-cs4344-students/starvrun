@@ -9,6 +9,7 @@ function Game()
     var playArea;
     var levelMap;
     var pacman;
+    var pacman2;
     var FRAME_RATE = 35;
     /*
      * public method: print
@@ -79,7 +80,6 @@ function Game()
     var renderPacmans = function(context)
     {
         //console.log("Starting to Render Pacmans");
-        // For Single Pacman
         renderPacman(context, pacman);
         renderPacman(context, pacman2);
         //console.log("Completed Rendering Pacmans");
@@ -264,11 +264,10 @@ function Game()
         levelMap = new Map();
         pacman = new Pacman(this);
         pacman2 = new Pacman(this);
-		pacman.setPosition(48,48);
+        pacman.setPosition(48,48);
         pacman2.setPosition(560,48);
 
         initGUI();
-        //gameLoop();
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
