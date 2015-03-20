@@ -29,7 +29,10 @@ function GameClient() {
     var initNetwork = function() {
         // Attempts to connect to game server
         try {
-            socket = new SockJS("http://" + Starvrun.SERVER_NAME + ":" + Starvrun.PORT + "/starvrun");
+            var url= "http://" + Starvrun.SERVER_NAME + ":" + Starvrun.PORT + "/starvrun";
+            console.log("Trying to connect to " + url);
+            socket = new SockJS(url);
+            console.log("connected");
             socket.onmessage = function (e) {
                 var message = JSON.parse(e.data);
                 switch (message.type) {
@@ -49,7 +52,7 @@ function GameClient() {
     
     var gameLoop = function(){
         // Game Loop Code
-        
+        setInterval()
     }
 
    this.start = function(){
@@ -58,3 +61,6 @@ function GameClient() {
     }
 
 }
+
+var client = new GameClient();
+client.start();
