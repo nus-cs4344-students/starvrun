@@ -2,8 +2,8 @@
 	// Direction Class
 	function Direction(name,angle1,angle2,dirX,dirY) {
 		this.name = name;
-		this.angle1 = angle1;
-		this.angle2 = angle2;
+		this.sAngle = angle1;
+		this.eAngle = angle2;
 		this.dirX = dirX;
 		this.dirY = dirY;
 	}
@@ -22,7 +22,7 @@
 		this.dir = null;
 		this.set = function(dir) {
 			this.dir = dir;
-            console.log(this.dir);
+            //console.log(this.dir);
 		}
         this.setUp = function(){         
             this.set(up);
@@ -158,6 +158,7 @@
 						//console.log("checkNextTile: "+nextTile);
 
 						if (nextGrid != Starvrun.WALL) {
+                                                        
 							this.setDirection(this.directionWatcher.get());
 							this.directionWatcher.set(null);
 						}
@@ -233,6 +234,7 @@
 		
 			this.checkDirectionChange();
 			this.checkCollision();
+                        this.eat();
 
 			if (!this.frozen) {
 				if (this.beastModeTimer > 0) {
@@ -255,6 +257,7 @@
 
 			this.checkDirectionChange();
 			this.checkCollision();
+                       
 		}
 		
 		this.eat = function () {
@@ -283,6 +286,7 @@
 		}
 
 		this.setDirection = function(dir) {
+                    console.log(dir);
 			if (!this.frozen) {
 				this.dirX = dir.dirX;
 				this.dirY = dir.dirY;
@@ -329,16 +333,17 @@
                     
                     var colour = "yellow";
                     var radius = this.width / 2;
-                    console.log("rendering at " + this.posX + " , " + this.posY);
+                    //console.log("rendering at " + this.posX + " , " + this.posY);
                     
                     // Fixed For now, Check for Direction
-                    var sAngle = 0 * Math.PI;
-                    var eAngle = 2 * Math.PI;
+                    var angle1 = this.sAngle * Math.PI;
+                    var angle2 = this.eAngle * Math.PI;
         
                     // Draw the Pacman
                     context.fillStyle = colour;
                     context.beginPath();
-                    context.arc(this.posX, this.posY, radius, sAngle, eAngle, true);
+                    context.arc(this.posX, this.posY, radius, angle1, angle2, false);
+                    context.lineTo(this.posX,this.posY);
                     context.closePath();
                     context.fill();
                 }

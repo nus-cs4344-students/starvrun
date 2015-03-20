@@ -187,7 +187,7 @@ function Game()
 
         // Add event handlers
         document.addEventListener("keydown", function(e) {
-            console.log("KeyPressed "  + e );
+            //console.log("KeyPressed "  + e );
             onKeyPress(e);
             }, false);
      }
