@@ -121,15 +121,18 @@ function Game()
                 switch(obj)
                 {
                     case Starvrun.PELLET:
+                        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
                         renderPellet(context,posX,posY);
                         break;
                     case Starvrun.POWERUP:
+                        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
                         renderPowerUp(context,posX,posY);
                         break;
-                    case Starvrun.WALL:
-                        break;
+                    
                     case Starvrun.FREE:
                         renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+                        break;
+                    case Starvrun.WALL:
                         break;
                     case Starvrun.EMPTY:
                         clearBlock(context,posX,posY);
@@ -334,7 +337,7 @@ function Game()
     // Check for both 1 colliding with 2 and 2 colliding with 1
     var checkCondition = function(pacman1, pacman2)
     {
-        if((pacman1.getPosX()==pacman2.getPosX())&&(pacman1.getPosY()==pacman2.getPosY()))
+        if((pacman1.getGridPosX()=== pacman2.getGridPosX())&&(pacman1.getGridPosY()=== pacman2.getGridPosY()))
             return true;
         else 
             return false;
