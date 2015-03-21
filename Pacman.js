@@ -65,8 +65,7 @@
 		this.mouth = 1;
 
 		//should be in Game.js
-		var pelletCount;
-		var score;
+		var score = 0;
 
 		//initialization for direction
 		this.curDirection = right;
@@ -193,28 +192,19 @@
 					//check for pellet eating
 					if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
 						console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
-						if (((this.dirX == 1) && (between(this.posX, map.gridToPx(gridX)+this.radius-4, map.gridToPx(gridX+1))))
-							|| ((this.dirX == -1) && (between(this.posX, map.gridToPx(gridX), map.gridToPx(gridX)+4)))
-							|| ((this.dirY == 1) && (between(this.posY, map.gridToPx(gridY)+this.radius-4, map.gridToPx(gridY+1))))
-							|| ((this.dirY == -1) && (between(this.posY, map.gridToPx(gridY), map.gridToPx(gridY)+4)))
-							|| (mapItemAhead === Starvrun.WALL)
-							)
-							{	
-								var point;
-								if (mapItem === Starvrun.POWERUP) {
-									point = 50;
-									//this.enableBeastMode();
-									}
-								else {
-									point = 10;
-									pelletCount--;	
-									}
-								//clear the item on map
-                                                                map.eatAt(gridX, gridY);
-								//game.score.add(point);
-							}
-
-					}
+						var point =0 ;
+                                                if (mapItem === Starvrun.POWERUP) {
+                                                    point = 50;
+                                                    //this.enableBeastMode();
+						}else {
+                                                    point = 10;
+						}
+						//clear the item on map
+                                                score += point;
+                                                map.eatAt(gridX, gridY);
+						//game.score.add(point);
+                                                console.log(score);
+                                        }
 
 					//check for wall
 					if ((mapItemAhead === Starvrun.WALL)) {
