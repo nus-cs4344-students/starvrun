@@ -196,12 +196,10 @@
 					//check for pellet eating
 					if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
 						//console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
-						var point =0 ;
+						var point = Starvrun.PELLET_SCORE;
                                                 if (mapItem === Starvrun.POWERUP) {
-                                                    point = 50;
+                                                    point = Starvrun.POWERUP_SCORE;
                                                     this.enableBeastMode();
-						}else {
-                                                    point = 10;
 						}
 						//clear the item on map
                                                 score += point;
