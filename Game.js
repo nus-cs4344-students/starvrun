@@ -8,11 +8,7 @@ function Game()
     /*Private Variables*/
     var playArea;
     var levelMap;
-<<<<<<< HEAD
-    this.pacman;
-=======
     var pacman1;
->>>>>>> origin/master
     var pacman2;
     var FRAME_RATE = 35;
     var numberOfPacman = 2;
@@ -282,18 +278,6 @@ function Game()
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
-
-    this.getInstance1 = function()
-    {
-        return pacman;
-    }
-
-    this.getInstance2 = function()
-    {
-        return pacman2;
-    }
-
-
 };
 
 

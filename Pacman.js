@@ -218,22 +218,7 @@
 							}
 
 					}
-					//console.log(game.getInstance1());
 
-					if(game.getInstance1().getGridPosY() === game.getInstance2().getGridPosY()){
-						console.log("HERE1\n" + this.getPosX() + this.posX);
-						if(game.getInstance1().getGridPosX() + 1 === game.getInstance2().getGridPosX()){
-							//console.log("HERE" + game.getInstance1.getGridPosX);
-						this.stuckX = this.dirX;
-						this.stuckY = this.dirY;
-						this.stop();
-						// get out of the wall
-						// 4(which is also the speed) is the first step into the cell
-						if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 4;
-						if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 4;
-						}
-					}
-					
 					//check for wall
 					if ((mapItemAhead === Starvrun.WALL)) {
 						this.stuckX = this.dirX;
