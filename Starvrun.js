@@ -21,9 +21,9 @@ var Starvrun = {
 	PELLET: 2,
 	POWERUP: 3,
         
-        BG_COLOUR : "white",
-        WALL_COLOUR : "black",
-        PELLET_COLOUR : "blue",
+        BG_COLOUR : "black",
+        WALL_COLOUR : "blue",
+        PELLET_COLOUR : "white",
         POWERUP_COLOUR : "red"
 };
 

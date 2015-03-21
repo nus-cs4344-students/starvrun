@@ -112,6 +112,8 @@ function Game()
                     case Starvrun.WALL:
                         break;
                     case Starvrun.FREE:
+                        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+                        break;
                     case Starvrun.EMPTY:
                         clearBlock(context,posX,posY);
                         break; 
@@ -127,17 +129,19 @@ function Game()
     var clearBlock = function(context,posX,posY)
     {
         var block = Starvrun.GRID_SIZE/2;
-        
         context.clearRect(posX-block, posY-block, block*2, block*2);
     }
     
-    var renderWall = function(context,posX,posY)   
-    {
-        var colour = Starvrun.WALL_COLOUR;
+    var renderBlock = function(context, posX,posY, colour){
         var block = Starvrun.GRID_SIZE /2;
         context.fillStyle = colour;
         // Find a better way to write this
         context.fillRect(posX-block,posY-block,block*2,block*2);
+    }
+    
+    var renderWall = function(context,posX,posY)   
+    {
+        renderBlock(context,posX,posY,Starvrun.WALL_COLOUR);
     }
     
     var renderPellet = function(context,posX,posY){
