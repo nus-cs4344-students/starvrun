@@ -98,9 +98,12 @@
 			this.posY = y;
 		}
 
-		this.getPosition = function(x, y) {
+		this.getPosX = function(x) {
 			return this.posX;
-			return this.posY;
+		}
+
+		this.getPosY = function(y) {
+			return this.posX;
 		}
 
 		this.getGridPosX = function() {
@@ -207,14 +210,15 @@
 									}
 								else {
 									point = 10;
-									pelletCount--;
+									pelletCount--;	
 									}
 								//clear the item on map
 								map.setMapContent(gridX, gridY, Starvrun.EMPTY);
 								//game.score.add(point);
 							}
+
 					}
-					
+
 					//check for wall
 					if ((mapItemAhead === Starvrun.WALL)) {
 						this.stuckX = this.dirX;
@@ -234,7 +238,7 @@
 		
 			this.checkDirectionChange();
 			this.checkCollision();
-                        this.eat();
+            this.eat();
 
 			if (!this.frozen) {
 				if (this.beastModeTimer > 0) {
@@ -253,11 +257,7 @@
 				if (this.posY >= map.getHeightPx-this.radius) this.posY = 4-this.radius;
 				if (this.posY <= 0-this.radius) this.posY = map.getHeightPx-4-this.radius;
 			}
-			else this.dieAnimation();
-
-			this.checkDirectionChange();
-			this.checkCollision();
-                       
+              
 		}
 		
 		this.eat = function () {
@@ -286,7 +286,7 @@
 		}
 
 		this.setDirection = function(dir) {
-                    console.log(dir);
+            console.log(dir);
 			if (!this.frozen) {
 				this.dirX = dir.dirX;
 				this.dirY = dir.dirY;
@@ -329,23 +329,23 @@
 			}
 		}
                 
-                this.render = function(context) {
-                    
-                    var colour = "yellow";
-                    var radius = this.width / 2;
-                    //console.log("rendering at " + this.posX + " , " + this.posY);
-                    
-                    // Fixed For now, Check for Direction
-                    var angle1 = this.sAngle * Math.PI;
-                    var angle2 = this.eAngle * Math.PI;
-        
-                    // Draw the Pacman
-                    context.fillStyle = colour;
-                    context.beginPath();
-                    context.arc(this.posX, this.posY, radius, angle1, angle2, false);
-                    context.lineTo(this.posX,this.posY);
-                    context.closePath();
-                    context.fill();
-                }
+        this.render = function(context) {
+            
+            var colour = "yellow";
+            var radius = this.width / 2;
+            //console.log("rendering at " + this.posX + " , " + this.posY);
+            
+            // Fixed For now, Check for Direction
+            var angle1 = this.sAngle * Math.PI;
+            var angle2 = this.eAngle * Math.PI;
+
+            // Draw the Pacman
+            context.fillStyle = colour;
+            context.beginPath();
+            context.arc(this.posX, this.posY, radius, angle1, angle2, false);
+            context.lineTo(this.posX,this.posY);
+            context.closePath();
+            context.fill();
+        }
 
 	}

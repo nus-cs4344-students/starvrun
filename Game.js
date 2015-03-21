@@ -8,9 +8,9 @@ function Game()
     /*Private Variables*/
     var playArea;
     var levelMap;
-    var pacman;
-    var pacman2;
+    var pacman = [];
     var FRAME_RATE = 35;
+    var numberOfPacman = 2;
     /*
      * public method: print
      * 
@@ -80,8 +80,8 @@ function Game()
     var renderPacmans = function(context)
     {
         //console.log("Starting to Render Pacmans");
-        renderPacman(context, pacman);
-        renderPacman(context, pacman2);
+        renderPacman(context, pacman[0]);
+        renderPacman(context, pacman[1]);
         //console.log("Completed Rendering Pacmans");
     }
     
@@ -112,6 +112,8 @@ function Game()
                     case Starvrun.WALL:
                         break;
                     case Starvrun.FREE:
+                        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+                        break;
                     case Starvrun.EMPTY:
                         clearBlock(context,posX,posY);
                         break; 
@@ -127,17 +129,19 @@ function Game()
     var clearBlock = function(context,posX,posY)
     {
         var block = Starvrun.GRID_SIZE/2;
-        
         context.clearRect(posX-block, posY-block, block*2, block*2);
     }
     
-    var renderWall = function(context,posX,posY)   
-    {
-        var colour = Starvrun.WALL_COLOUR;
+    var renderBlock = function(context, posX,posY, colour){
         var block = Starvrun.GRID_SIZE /2;
         context.fillStyle = colour;
         // Find a better way to write this
         context.fillRect(posX-block,posY-block,block*2,block*2);
+    }
+    
+    var renderWall = function(context,posX,posY)   
+    {
+        renderBlock(context,posX,posY,Starvrun.WALL_COLOUR);
     }
     
     var renderPellet = function(context,posX,posY){
@@ -211,29 +215,29 @@ function Game()
         switch(e.keyCode)
         {
             case 37: // Left 
-                    pacman.directionWatcher.setLeft();
+                    pacman[0].directionWatcher.setLeft();
                     break;
             case 38: // Up
-                    pacman.directionWatcher.setUp();
+                    pacman[0].directionWatcher.setUp();
                     break;
             case 39: // Right
-                    pacman.directionWatcher.setRight();
+                    pacman[0].directionWatcher.setRight();
                     break;
             case 40: // Down
-                    pacman.directionWatcher.setDown();
+                    pacman[0].directionWatcher.setDown();
                     break;
 
             case 65: // 'A' Left 
-                    pacman2.directionWatcher.setLeft();
+                    pacman[1].directionWatcher.setLeft();
                     break;
             case 87: // 'W' Up
-                    pacman2.directionWatcher.setUp();
+                    pacman[1].directionWatcher.setUp();
                     break;
             case 68: // 'D' Right
-                    pacman2.directionWatcher.setRight();
+                    pacman[1].directionWatcher.setRight();
                     break;
             case 83: // 'S' Down
-                    pacman2.directionWatcher.setDown();
+                    pacman[1].directionWatcher.setDown();
                     break;
         }
 
@@ -243,11 +247,13 @@ function Game()
     var gameLoop = function() 
     {
         // Moves the pacman on the map always (from start to stop)
-        pacman.move();
+        pacman[0].move();
         render();
 
-        pacman2.move();
+        pacman[1].move();
         render();
+
+        //checkCollision();
 
     }
 
@@ -262,10 +268,10 @@ function Game()
     {
         // Initialize game objects
         levelMap = new Map();
-        pacman = new Pacman(this);
-        pacman2 = new Pacman(this);
-        pacman.setPosition(48,48);
-        pacman2.setPosition(560,48);
+        pacman[0] = new Pacman(this);
+        pacman[1] = new Pacman(this);
+        pacman[0].setPosition(48,48);
+        pacman[1].setPosition(560,48);
 
         initGUI();
         // Start drawing 
