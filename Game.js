@@ -231,31 +231,32 @@ function Game()
 
         switch(e.keyCode)
         {
+            
             case 37: // Left 
-                    pacman[0].directionWatcher.setLeft();
+                    if(!pacman[0].stunned) pacman[0].directionWatcher.setLeft();
                     break;
             case 38: // Up
-                    pacman[0].directionWatcher.setUp();
+                    if(!pacman[0].stunned) pacman[0].directionWatcher.setUp();
                     break;
             case 39: // Right
-                    pacman[0].directionWatcher.setRight();
+                    if(!pacman[0].stunned) pacman[0].directionWatcher.setRight();
                     break;
             case 40: // Down
-                    pacman[0].directionWatcher.setDown();
+                    if(!pacman[0].stunned) pacman[0].directionWatcher.setDown();
                     break;
 
             case 65: // 'A' Left 
-                    pacman[1].directionWatcher.setLeft();
+                    if(!pacman[1].stunned) pacman[1].directionWatcher.setLeft();
                     break;
             case 87: // 'W' Up
-                    pacman[1].directionWatcher.setUp();
+                    if(!pacman[1].stunned) pacman[1].directionWatcher.setUp();
                     break;
             case 68: // 'D' Right
-                    pacman[1].directionWatcher.setRight();
+                    if(!pacman[1].stunned) pacman[1].directionWatcher.setRight();
                     break;
             case 83: // 'S' Down
-                    pacman[1].directionWatcher.setDown();
-                    break;
+                    if(!pacman[1].stunned) pacman[1].directionWatcher.setDown();
+                    break; 
             case 32: // 'Space'
                     //FOR TESTING ONLY!
                     levelMap.spawnPelletBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
