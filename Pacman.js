@@ -46,7 +46,7 @@
 	}
 
 	function Pacman(game) {
-
+                this.colour  = "yellow";
 		this.width = 32;
 		this.height = 32;
 
@@ -237,6 +237,7 @@
 		this.moveBack = function(){
 			this.dirX *= -1;
 			this.dirY *= -1;
+                        this.enableStunned();
 		
 		}
 		
@@ -255,7 +256,7 @@
                                 }
 
 				if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
-                                if ((this.stunnedTimer == 0) && this.stunned) this.disableStunned();
+                                if ((this.stunnedTimer == 0) && (this.stunned == true)) this.disableStunned();
 				
 				this.posX += this.speed * this.dirX;
 				this.posY += this.speed * this.dirY;
@@ -338,9 +339,13 @@
 			}
 		}
                 
+                this.setColor = function(color) {
+                    this.colour = color;
+                }
+                
         this.render = function(context) {
             
-            var colour = "yellow";
+            
             var radius = this.width / 4;
             //console.log("rendering at " + this.posX + " , " + this.posY);
             if(this.beastMode){ radius = this.width / 2;}
@@ -352,7 +357,7 @@
             var angle2 = this.eAngle * Math.PI;
 
             // Draw the Pacman
-            context.fillStyle = colour;
+            context.fillStyle = this.colour;
             context.beginPath();
             context.arc(this.posX, this.posY, radius, angle1, angle2, false);
             context.lineTo(this.posX,this.posY);
