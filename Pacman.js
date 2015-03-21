@@ -323,8 +323,8 @@
 		
 		this.reset = function() {
 			this.unfreeze();
-			this.posX = 48;
-			this.posY = 48;
+			this.posX = -32;
+			this.posY = -32;
 			this.setDirection(right);
 			this.stop();
 			this.stuckX = 0;
