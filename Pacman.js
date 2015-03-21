@@ -124,7 +124,7 @@
 
 		this.enableBeastMode = function() {
 			this.beastMode = true;
-			this.beastModeTimer = 240;
+			this.beastModeTimer = Starvrun.FRAME_RATE * Starvrun.BEAST_TIME; // 3seconds
 		}
 
 		this.disableBeastMode = function() { 
@@ -199,7 +199,7 @@
 						var point =0 ;
                                                 if (mapItem === Starvrun.POWERUP) {
                                                     point = 50;
-                                                    //this.enableBeastMode();
+                                                    this.enableBeastMode();
 						}else {
                                                     point = 10;
 						}
@@ -229,14 +229,14 @@
 		
 			this.checkDirectionChange();
 			this.checkCollision();
-            this.eat();
+                        this.eat();
 
 			if (!this.frozen) {
 				if (this.beastModeTimer > 0) {
 					this.beastModeTimer--;
 				}
 
-				//if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
+				if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
 				
 				this.posX += this.speed * this.dirX;
 				this.posY += this.speed * this.dirY;
@@ -323,8 +323,11 @@
         this.render = function(context) {
             
             var colour = "yellow";
-            var radius = this.width / 2;
+            var radius = this.width / 4;
             //console.log("rendering at " + this.posX + " , " + this.posY);
+            if(this.beastMode){ radius = this.width / 2;}
+            
+            
             
             // Fixed For now, Check for Direction
             var angle1 = this.sAngle * Math.PI;

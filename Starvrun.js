@@ -7,6 +7,7 @@ var Starvrun = {
 	PORT : 4344,				// port of Starvrun game
 
 	FRAME_RATE : 30,			// frame rate of Starvrun game
+        BEAST_TIME : 3,                         // time in seconds pacman in beast
 
 	GRID_SIZE : 32,				// a grid length in pixels
 
