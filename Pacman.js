@@ -103,7 +103,7 @@
 		}
 
 		this.getPosY = function(y) {
-			return this.posX;
+			return this.posY;
 		}
 
 		this.getGridPosX = function() {

@@ -253,7 +253,7 @@ function Game()
         pacman[1].move();
         render();
 
-        //checkCollision();
+        checkCollision(numberOfPacman);
 
     }
 
@@ -277,6 +277,21 @@ function Game()
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
+
+    var checkCollision = function(numberOfPacman)
+    {
+        var i, j;
+        for(i=0;i<numberOfPacman;i++)
+            for(j=i;j<numberOfPacman;j++)
+                if(i!=j)
+                {
+                    if((pacman[i].getPosX()==pacman[j].getPosX())&&(pacman[i].getPosY()==pacman[j].getPosY()))
+                    {
+                        pacman[i].checkPacmanCollision();
+                        pacman[j].checkPacmanCollision();
+                    }
+                }
+    }
 };
 
 
