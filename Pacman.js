@@ -82,6 +82,8 @@
 		
 		this.beastMode = false;
 		this.beastModeTimer = 0;
+                this.stunned = false;
+                this.stunnedTimer = 0;
 
         var game = game;
         var map = game.getMap();
@@ -126,6 +128,15 @@
 			this.beastMode = true;
 			this.beastModeTimer = Starvrun.FRAME_RATE * Starvrun.BEAST_TIME; // 3seconds
 		}
+                
+                this.enableStunned = function(){
+                    this.stunned = true;
+                    this.stunnedTimer = Starvrun.FRAME_RATE * 2;
+                }
+                
+                this.disableStunned = function(){
+                    this.stunned = false; 
+                }
 
 		this.disableBeastMode = function() { 
 			this.beastMode = false; 
@@ -209,7 +220,7 @@
                                         }
 
 					//check for wall
-					if ((mapItemAhead === Starvrun.WALL)) {
+					if ((mapItemAhead === Starvrun.WALL || mapItemAhead === Starvrun.EMPTY)) {
 						this.stuckX = this.dirX;
 						this.stuckY = this.dirY;
 						this.stop();
@@ -233,8 +244,12 @@
 				if (this.beastModeTimer > 0) {
 					this.beastModeTimer--;
 				}
+                                if(this.stunnedTimer > 0){
+                                    this.stunnedTimer --;
+                                }
 
 				if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
+                                if ((this.stunnedTimer == 0) && this.stunned) this.disableStunned();
 				
 				this.posX += this.speed * this.dirX;
 				this.posY += this.speed * this.dirY;
@@ -275,7 +290,6 @@
 		}
 
 		this.setDirection = function(dir) {
-            console.log(dir);
 			if (!this.frozen) {
 				this.dirX = dir.dirX;
 				this.dirY = dir.dirY;
