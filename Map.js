@@ -5,6 +5,7 @@ function Map() {
 	var height = 0;
 	var grids = [];
 	var pelletNumber = 0;
+	var powerupNumber = 0;
 
 	this.getWidth = function() {
 		return width;
@@ -60,7 +61,8 @@ function Map() {
 	//input: x and y in grid
 	//set the grid to free block
 	this.eatAt = function(x,y) {
-		pelletNumber--;
+		if (grids[x][y] = Starvrun.PELLET) pelletNumber--;
+		if (grids[x][y] = Starvrun.POWERUP) powerupNumber--;
 		grids[x][y] = Starvrun.FREE;
 	}
 
@@ -159,6 +161,20 @@ function Map() {
 		return path;
 	}
 
+	this.spawnPelletAndPowerupBetween = function(sx,sy,tx,ty) {
+		var path = bfs(sx,sy,tx,ty);
+		for (var i = 0; i < path.length; i++) {
+			var posX = path[i].x;
+			var posY = path[i].y;
+			if (i==Math.floor(path.length/2)) {
+				this.setPowerupAt(posX, posY);
+			} else {
+				this.setPelletAt(posX, posY);
+			}
+		}
+		return path;
+	}
+
 	//input: x and y in grid
 	//try to spawn a pellet in a grid coordinate, if free block is found, set to pellet
 	//return true if the pellet is spawned, return false otherwise 
@@ -178,6 +194,16 @@ function Map() {
 		if (grids[x][y] != Starvrun.PELLET) {
 			pelletNumber++;
 			grids[x][y] = Starvrun.PELLET;
+		}
+	}
+
+	//input: x and y in grid
+	//modify the content of the map in grid to pellet
+	//return none
+	this.setPowerupAt = function (x,y) {
+		if (grids[x][y] != Starvrun.POWERUP) {
+			powerupNumber++;
+			grids[x][y] = Starvrun.POWERUP;
 		}
 	}
 

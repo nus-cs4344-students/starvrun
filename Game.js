@@ -262,7 +262,7 @@ function Game()
                     break; 
             case 32: // 'Space'
                     //FOR TESTING ONLY!
-                    levelMap.spawnPelletBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
+                    levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
                     break;
         }
 
@@ -305,10 +305,10 @@ function Game()
         pacman[1].setPosition(560,48);
         pacman[1].setColor("yellow");
 
-        levelMap.spawnPelletBetween(1,1,17,1);
-        levelMap.spawnPelletBetween(1,1,1,19);
-        levelMap.spawnPelletBetween(1,19,17,19);
-        levelMap.spawnPelletBetween(17,1,17,19);
+        levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
+        levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
+        levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
+        levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
 
         initGUI();
         // Start drawing 
