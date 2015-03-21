@@ -192,10 +192,10 @@
 					if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
 						//console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
 						if (
-							((this.dirX == 1) && (between(this.posX, map.gridtoPx(gridX)+this.radius-4, map.gridtoPx(gridX+1))))
-							|| ((this.dirX == -1) && (between(this.posX, map.gridtoPx(gridX), map.gridtoPx(gridX)+4)))
-							|| ((this.dirY == 1) && (between(this.posY, map.gridtoPx(gridY)+this.radius-4, map.gridtoPx(gridY+1))))
-							|| ((this.dirY == -1) && (between(this.posY, map.gridtoPx(gridY), map.gridtoPx(gridY)+4)))
+							((this.dirX == 1) && (between(this.posX, map.gridToPx(gridX)+this.radius-4, map.gridToPx(gridX+1))))
+							|| ((this.dirX == -1) && (between(this.posX, map.gridToPx(gridX), map.gridToPx(gridX)+4)))
+							|| ((this.dirY == 1) && (between(this.posY, map.gridToPx(gridY)+this.radius-4, map.gridToPx(gridY+1))))
+							|| ((this.dirY == -1) && (between(this.posY, map.gridToPx(gridY), map.gridToPx(gridY)+4)))
 							|| (mapItemAhead === Starvrun.WALL)
 							)
 							{	
