@@ -80,8 +80,11 @@ function Game()
     var renderPacmans = function(context)
     {
         //console.log("Starting to Render Pacmans");
-        renderPacman(context, pacman[0]);
-        renderPacman(context, pacman[1]);
+        var i;
+        for(i=0;i<numberOfPacman;i++)
+        {
+            renderPacman(context, pacman[i]);    
+        }
         //console.log("Completed Rendering Pacmans");
     }
     
@@ -247,14 +250,15 @@ function Game()
     var gameLoop = function() 
     {
         // Moves the pacman on the map always (from start to stop)
-        pacman[0].move();
-        render();
+        var i;
+        for(i=0;i<numberOfPacman;i++)
+        {
+            pacman[i].move();
+            render();
+        }
 
-        pacman[1].move();
-        render();
-
+        // To check if the pacmans are colliding
         checkCollision(numberOfPacman);
-
     }
 
     /*
@@ -268,8 +272,12 @@ function Game()
     {
         // Initialize game objects
         levelMap = new Map();
-        pacman[0] = new Pacman(this);
-        pacman[1] = new Pacman(this);
+        var i;
+        for(i=0;i<numberOfPacman;i++)
+        {
+            pacman[i] = new Pacman(this);    
+        }
+        
         pacman[0].setPosition(48,48);
         pacman[1].setPosition(560,48);
 
