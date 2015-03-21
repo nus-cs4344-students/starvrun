@@ -298,7 +298,10 @@ function Game()
         
         pacman[0].setPosition(48,48);
         pacman[1].setPosition(560,48);
-
+        levelMap.spawnPelletBetween(1,1,17,1);
+        levelMap.spawnPelletBetween(1,1,1,19);
+        levelMap.spawnPelletBetween(1,19,17,19);
+        levelMap.spawnPelletBetween(17,1,17,19);
         initGUI();
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);

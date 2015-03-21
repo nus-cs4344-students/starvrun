@@ -4,6 +4,7 @@ function Map() {
 	var width = 0;
 	var height = 0;
 	var grids = [];
+	var pelletNumber = 0;
 
 	this.getWidth = function() {
 		return width;
@@ -59,6 +60,7 @@ function Map() {
 	//input: x and y in grid
 	//set the grid to free block
 	this.eatAt = function(x,y) {
+		pelletNumber--;
 		grids[x][y] = Starvrun.FREE;
 	}
 
@@ -173,7 +175,10 @@ function Map() {
 	//modify the content of the map in grid to pellet
 	//return none
 	this.setPelletAt = function (x,y) {
-		grids[x][y] = Starvrun.PELLET;
+		if (grids[x][y] != Starvrun.PELLET) {
+			pelletNumber++;
+			grids[x][y] = Starvrun.PELLET;
+		}
 	}
 
 	//dummy, later read from textfile
