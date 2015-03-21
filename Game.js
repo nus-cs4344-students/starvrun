@@ -239,6 +239,10 @@ function Game()
             case 83: // 'S' Down
                     pacman[1].directionWatcher.setDown();
                     break;
+            case 32: // 'Space'
+                    //FOR TESTING ONLY!
+                    levelMap.spawnPelletBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
+                    break;
         }
 
     }

@@ -1,9 +1,9 @@
 function Map() {
 	//Private variable
+	var self = this; 
 	var width = 0;
 	var height = 0;
 	var grids = [];
-	var frees = [];
 
 	this.getWidth = function() {
 		return width;
@@ -49,7 +49,7 @@ function Map() {
 	this.tryEatAt = function (x,y) {
 		if ((grids[x][y] == Starvrun.PELLET) || (grids[x][y] == Starvrun.POWERUP)) {
 			var res = grids[x][y];
-			eatAt(x,y);
+			this.eatAt(x,y);
 			return res;
 		} else {
 			return 0;
@@ -71,6 +71,111 @@ function Map() {
 		return grids[x][y] > 0;
 	}
 
+	function Queue() {
+		var q = [];
+		var start = 0;
+		this.empty = function() {
+			if (q.length <= start) return true;
+			return false;
+		}
+		this.pop = function () {
+			start++;
+			if (q[start-1]==undefined) {
+				start--; //revert
+				return q[start];
+			}
+			return q[start-1];
+		}
+		this.push = function (pos) {
+			q.push(pos);
+		}
+	}
+
+	var bfs = function(sx,sy,tx,ty) {
+		var prev = new Array(width);
+		for (var i = 0; i < width; i++) {
+    		prev[i] = new Array(height);
+			for (var j = 0; j < height; j++) {
+	    		prev[i][j] = -1;
+			}
+		}
+
+		var q = new Queue();
+		q.push({x:sx, y:sy});
+		while (!q.empty()) {
+			var cur = q.pop();
+
+			var next;
+			next = {x:cur.x-1, y:cur.y};
+			if ((prev[next.x][next.y] == -1) && (self.canPass(next.x, next.y))) {
+				prev[next.x][next.y] = {x:cur.x, y:cur.y};
+				if ((next.x==tx) && (next.y==ty)) break;
+				q.push({x:next.x, y:next.y});
+			}
+			next = {x:cur.x+1, y:cur.y};
+			if ((prev[next.x][next.y] == -1) && (self.canPass(next.x, next.y))) {
+				prev[next.x][next.y] = {x:cur.x, y:cur.y};
+				if ((next.x==tx) && (next.y==ty)) break;
+				q.push({x:next.x, y:next.y});
+			}
+			next = {x:cur.x, y:cur.y-1};
+			if ((prev[next.x][next.y] == -1) && (self.canPass(next.x, next.y))) {
+				prev[next.x][next.y] = {x:cur.x, y:cur.y};
+				if ((next.x==tx) && (next.y==ty)) break;
+				q.push({x:next.x, y:next.y});
+			}
+			next = {x:cur.x, y:cur.y+1};
+			if ((prev[next.x][next.y] == -1) && (self.canPass(next.x, next.y))) {
+				prev[next.x][next.y] = {x:cur.x, y:cur.y};
+				if ((next.x==tx) && (next.y==ty)) break;
+				q.push({x:next.x, y:next.y});
+			}
+
+		}
+
+		var trace = {x: tx, y: ty};
+		var path = [];
+		while ((prev[trace.x][trace.y]!=-1)  && ((prev[trace.x][trace.y].x != sx) || (prev[trace.x][trace.y].y != sy))) {
+			var dumX = prev[trace.x][trace.y].x;
+			var dumY = prev[trace.x][trace.y].y;
+			trace.x = dumX;
+			trace.y = dumY;
+			var newtrace = {x: trace.x, y: trace.y};
+			path.push(newtrace);
+		}
+		return path;
+
+	}
+
+	this.spawnPelletBetween = function(sx,sy,tx,ty) {
+		var path = bfs(sx,sy,tx,ty);
+		for (var i = 0; i < path.length; i++) {
+			var posX = path[i].x;
+			var posY = path[i].y;
+			this.setPelletAt(posX, posY);
+		}
+		return path;
+	}
+
+	//input: x and y in grid
+	//try to spawn a pellet in a grid coordinate, if free block is found, set to pellet
+	//return true if the pellet is spawned, return false otherwise 
+	this.trySetPelletAt = function (x,y) {
+		if (grids[x][y] == Starvrun.FREE) {
+			this.setPelletAt(x,y)
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	//input: x and y in grid
+	//modify the content of the map in grid to pellet
+	//return none
+	this.setPelletAt = function (x,y) {
+		grids[x][y] = Starvrun.PELLET;
+	}
+
 	//dummy, later read from textfile
 	var map0 = "###################\n#........#........#\n#.##.###.#.###.##.#\n#.................#\n#.##.#.#####.#.##.#\n#....#...#...#....#\n####.###.#.###.####\n   #.#.......#.#   \n   #.#.#####.#.#   \n   #...#####...#   \n   #.#.#####.#.#   \n   #.#.......#.#   \n####.#.#####.#.####\n#........#........#\n#.##.###.#.###.##.#\n#..#...........#..#\n##.#.#.#####.#.#.##\n#....#...#...#....#\n#.######.#.######.#\n#.................#\n###################";
 
@@ -83,8 +188,6 @@ function Map() {
 			grids[width][height] = Starvrun.EMPTY;
 		} else if (c=='.') {
 			grids[width][height] = Starvrun.FREE;
-			var free = {x: width, y:width};
-			frees.push(free);
 		} else if (c=='#') {
 			grids[width][height] = Starvrun.WALL;
 		} else if (c=='\n') {
