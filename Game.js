@@ -298,7 +298,9 @@ function Game()
         }
         
         pacman[0].setPosition(48,48);
+        pacman[0].setColor("red");
         pacman[1].setPosition(560,48);
+        pacman[1].setColor("yellow");
 
         initGUI();
         // Start drawing 
