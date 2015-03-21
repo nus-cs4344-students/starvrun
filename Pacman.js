@@ -271,6 +271,14 @@
 			}
               
 		}
+                
+                this.kill = function (){
+                    score += 100;
+                }
+                
+                this.died = function() {
+                    this.dieAnimation();
+                }
 		
 		this.eat = function () {
 		
@@ -315,8 +323,8 @@
 		
 		this.reset = function() {
 			this.unfreeze();
-			this.posX = 48;
-			this.posY = 48;
+			this.posX = -32;
+			this.posY = -32;
 			this.setDirection(right);
 			this.stop();
 			this.stuckX = 0;
@@ -338,6 +346,8 @@
 				}
 				//game.drawHearts(this.lives);
 			}
+                        this.reset();
+                        
 		}
                 
                 this.setColor = function(color) {
