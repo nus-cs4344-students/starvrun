@@ -304,6 +304,7 @@ function Game()
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
 
+    // To check if the pacmans are colliding
     var checkCollision = function(numberOfPacman)
     {
         var i, j;
@@ -311,13 +312,17 @@ function Game()
             for(j=i;j<numberOfPacman;j++)
                 if(i!=j)
                 {
-                    if((pacman[i].getPosX()==pacman[j].getPosX())&&(pacman[i].getPosY()==pacman[j].getPosY()))
-                    {
-                        pacman[i].pacmanCollisionAction();
-                        pacman[j].pacmanCollisionAction();
-                    }
+                    checkCondition(pacman[i], pacman[j]);
                 }
     }
+
+    // Condition if pacmans are colliding 
+    // Check for both 1 colliding with 2 and 2 colliding with 1
+    var checkCondition = function(pacman1, pacman2)
+    {
+
+    }
+
 };
 
 
