@@ -235,9 +235,9 @@
 		}
 
 		this.moveBack = function(){
+                        this.enableStunned();
 			this.dirX *= -1;
 			this.dirY *= -1;
-                        this.enableStunned();
 		
 		}
 		

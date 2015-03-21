@@ -334,7 +334,7 @@ function Game()
     // Check for both 1 colliding with 2 and 2 colliding with 1
     var checkCondition = function(pacman1, pacman2)
     {
-        if((pacman1.getPosX()==pacman2.getPosX())&&(pacman1.getPosY()==pacman2.getPosY()))
+        if((pacman1.getGridPosX()=== pacman2.getGridPosX())&&(pacman1.getGridPosY()=== pacman2.getGridPosY()))
             return true;
         else 
             return false;
