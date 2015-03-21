@@ -103,11 +103,11 @@
 			this.posY = y;
 		}
 
-		this.getPosX = function(x) {
+		this.getPosX = function() {
 			return this.posX;
 		}
 
-		this.getPosY = function(y) {
+		this.getPosY = function() {
 			return this.posY;
 		}
 
