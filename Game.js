@@ -121,15 +121,18 @@ function Game()
                 switch(obj)
                 {
                     case Starvrun.PELLET:
+                        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
                         renderPellet(context,posX,posY);
                         break;
                     case Starvrun.POWERUP:
+                        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
                         renderPowerUp(context,posX,posY);
                         break;
-                    case Starvrun.WALL:
-                        break;
+                    
                     case Starvrun.FREE:
                         renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+                        break;
+                    case Starvrun.WALL:
                         break;
                     case Starvrun.EMPTY:
                         clearBlock(context,posX,posY);
