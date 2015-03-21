@@ -287,8 +287,8 @@ function Game()
                 {
                     if((pacman[i].getPosX()==pacman[j].getPosX())&&(pacman[i].getPosY()==pacman[j].getPosY()))
                     {
-                        pacman[i].checkPacmanCollision();
-                        pacman[j].checkPacmanCollision();
+                        pacman[i].pacmanCollisionAction();
+                        pacman[j].pacmanCollisionAction();
                     }
                 }
     }
