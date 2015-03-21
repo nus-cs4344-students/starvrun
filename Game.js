@@ -8,9 +8,10 @@ function Game()
     /*Private Variables*/
     var playArea;
     var levelMap;
-    var pacman;
+    var pacman1;
     var pacman2;
     var FRAME_RATE = 35;
+    var numberOfPacman = 2;
     /*
      * public method: print
      * 
@@ -80,7 +81,7 @@ function Game()
     var renderPacmans = function(context)
     {
         //console.log("Starting to Render Pacmans");
-        renderPacman(context, pacman);
+        renderPacman(context, pacman1);
         renderPacman(context, pacman2);
         //console.log("Completed Rendering Pacmans");
     }
@@ -215,16 +216,16 @@ function Game()
         switch(e.keyCode)
         {
             case 37: // Left 
-                    pacman.directionWatcher.setLeft();
+                    pacman1.directionWatcher.setLeft();
                     break;
             case 38: // Up
-                    pacman.directionWatcher.setUp();
+                    pacman1.directionWatcher.setUp();
                     break;
             case 39: // Right
-                    pacman.directionWatcher.setRight();
+                    pacman1.directionWatcher.setRight();
                     break;
             case 40: // Down
-                    pacman.directionWatcher.setDown();
+                    pacman1.directionWatcher.setDown();
                     break;
 
             case 65: // 'A' Left 
@@ -247,11 +248,13 @@ function Game()
     var gameLoop = function() 
     {
         // Moves the pacman on the map always (from start to stop)
-        pacman.move();
+        pacman1.move();
         render();
 
         pacman2.move();
         render();
+
+        //checkCollision();
 
     }
 
@@ -266,9 +269,9 @@ function Game()
     {
         // Initialize game objects
         levelMap = new Map();
-        pacman = new Pacman(this);
+        pacman1 = new Pacman(this);
         pacman2 = new Pacman(this);
-        pacman.setPosition(48,48);
+        pacman1.setPosition(48,48);
         pacman2.setPosition(560,48);
 
         initGUI();
