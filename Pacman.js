@@ -98,9 +98,12 @@
 			this.posY = y;
 		}
 
-		this.getPosition = function(x, y) {
+		this.getPosX = function(x) {
 			return this.posX;
-			return this.posY;
+		}
+
+		this.getPosY = function(y) {
+			return this.posX;
 		}
 
 		this.getGridPosX = function() {
@@ -207,12 +210,28 @@
 									}
 								else {
 									point = 10;
-									pelletCount--;
+									pelletCount--;	
 									}
 								//clear the item on map
 								map.setMapContent(gridX, gridY, Starvrun.EMPTY);
 								//game.score.add(point);
 							}
+
+					}
+					//console.log(game.getInstance1());
+
+					if(game.getInstance1().getGridPosY() === game.getInstance2().getGridPosY()){
+						console.log("HERE1\n" + this.getPosX() + this.posX);
+						if(game.getInstance1().getGridPosX() + 1 === game.getInstance2().getGridPosX()){
+							//console.log("HERE" + game.getInstance1.getGridPosX);
+						this.stuckX = this.dirX;
+						this.stuckY = this.dirY;
+						this.stop();
+						// get out of the wall
+						// 4(which is also the speed) is the first step into the cell
+						if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 4;
+						if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 4;
+						}
 					}
 					
 					//check for wall
@@ -234,7 +253,7 @@
 		
 			this.checkDirectionChange();
 			this.checkCollision();
-                        this.eat();
+            this.eat();
 
 			if (!this.frozen) {
 				if (this.beastModeTimer > 0) {
@@ -253,11 +272,7 @@
 				if (this.posY >= map.getHeightPx-this.radius) this.posY = 4-this.radius;
 				if (this.posY <= 0-this.radius) this.posY = map.getHeightPx-4-this.radius;
 			}
-			else this.dieAnimation();
-
-			this.checkDirectionChange();
-			this.checkCollision();
-                       
+              
 		}
 		
 		this.eat = function () {
@@ -286,7 +301,7 @@
 		}
 
 		this.setDirection = function(dir) {
-                    console.log(dir);
+            console.log(dir);
 			if (!this.frozen) {
 				this.dirX = dir.dirX;
 				this.dirY = dir.dirY;
@@ -329,23 +344,23 @@
 			}
 		}
                 
-                this.render = function(context) {
-                    
-                    var colour = "yellow";
-                    var radius = this.width / 2;
-                    //console.log("rendering at " + this.posX + " , " + this.posY);
-                    
-                    // Fixed For now, Check for Direction
-                    var angle1 = this.sAngle * Math.PI;
-                    var angle2 = this.eAngle * Math.PI;
-        
-                    // Draw the Pacman
-                    context.fillStyle = colour;
-                    context.beginPath();
-                    context.arc(this.posX, this.posY, radius, angle1, angle2, false);
-                    context.lineTo(this.posX,this.posY);
-                    context.closePath();
-                    context.fill();
-                }
+        this.render = function(context) {
+            
+            var colour = "yellow";
+            var radius = this.width / 2;
+            //console.log("rendering at " + this.posX + " , " + this.posY);
+            
+            // Fixed For now, Check for Direction
+            var angle1 = this.sAngle * Math.PI;
+            var angle2 = this.eAngle * Math.PI;
+
+            // Draw the Pacman
+            context.fillStyle = colour;
+            context.beginPath();
+            context.arc(this.posX, this.posY, radius, angle1, angle2, false);
+            context.lineTo(this.posX,this.posY);
+            context.closePath();
+            context.fill();
+        }
 
 	}
