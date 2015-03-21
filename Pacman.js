@@ -234,6 +234,12 @@
 			}
 		}
 
+		this.moveBack = function(){
+			this.dirX *= -1;
+			this.dirY *= -1;
+		
+		}
+		
 		this.move = function() {
 		
 			this.checkDirectionChange();
