@@ -327,8 +327,19 @@ function Game()
                     console.log(condition);
                     if(condition)
                     {
-                        pacman[i].moveBack();
-                        pacman[j].moveBack();
+                        // Check If same State
+                        if(pacman[i].beastMode === pacman[j].beastMode){
+                            pacman[i].moveBack();
+                            pacman[j].moveBack();
+                        }else if(pacman[i].beastMode === true && pacman[j].beastMode == false){
+                            // pacman i eat pacman j
+                            pacman[i].kill();
+                            pacman[j].died();
+                        }else {
+                            // pacman j eat pacman i
+                            pacman[j].kill();
+                            pacman[i].died();
+                        }
                     }
                 }
     }
