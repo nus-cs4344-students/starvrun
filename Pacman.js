@@ -65,8 +65,7 @@
 		this.mouth = 1;
 
 		//should be in Game.js
-		var pelletCount;
-		var score;
+		var score = 0;
 
 		//initialization for direction
 		this.curDirection = right;
@@ -93,6 +92,10 @@
 		//create a directionWatcher object
 		this.directionWatcher = new directionWatcher();
 
+                this.getScore = function(){
+                    return score;
+                }
+                
 		this.setPosition = function(x, y) {
 			this.posX = x;
 			this.posY = y;
@@ -103,7 +106,7 @@
 		}
 
 		this.getPosY = function(y) {
-			return this.posX;
+			return this.posY;
 		}
 
 		this.getGridPosX = function() {
@@ -121,7 +124,7 @@
 
 		this.enableBeastMode = function() {
 			this.beastMode = true;
-			//this.beastModeTimer = 240;
+			this.beastModeTimer = Starvrun.FRAME_RATE * Starvrun.BEAST_TIME; // 3seconds
 		}
 
 		this.disableBeastMode = function() { 
@@ -190,34 +193,20 @@
 					if ((this.dirY == -1) && (gridAheadY >= 0)) gridAheadY -= 1;
 
 					var mapItemAhead = map.getMapContent(gridAheadX, gridAheadY);
-					
 					//check for pellet eating
 					if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
 						//console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
-						if (
-							((this.dirX == 1) && (between(this.posX, map.gridToPx(gridX)+this.radius-4, map.gridToPx(gridX+1))))
-							|| ((this.dirX == -1) && (between(this.posX, map.gridToPx(gridX), map.gridToPx(gridX)+4)))
-							|| ((this.dirY == 1) && (between(this.posY, map.gridToPx(gridY)+this.radius-4, map.gridToPx(gridY+1))))
-							|| ((this.dirY == -1) && (between(this.posY, map.gridToPx(gridY), map.gridToPx(gridY)+4)))
-							|| (mapItemAhead === Starvrun.WALL)
-							)
-							{	
-								var point;
-								if (mapItem === Starvrun.POWERUP) {
-									point = 50;
-									//this.enableBeastMode();
-									//game.startGhostFrightened();
-									}
-								else {
-									point = 10;
-									pelletCount--;	
-									}
-								//clear the item on map
-								map.setMapContent(gridX, gridY, Starvrun.EMPTY);
-								//game.score.add(point);
-							}
-
-					}
+						var point = Starvrun.PELLET_SCORE;
+                                                if (mapItem === Starvrun.POWERUP) {
+                                                    point = Starvrun.POWERUP_SCORE;
+                                                    this.enableBeastMode();
+						}
+						//clear the item on map
+                                                score += point;
+                                                map.eatAt(gridX, gridY);
+						//game.score.add(point);
+                                                //console.log(score);
+                                        }
 
 					//check for wall
 					if ((mapItemAhead === Starvrun.WALL)) {
@@ -238,14 +227,14 @@
 		
 			this.checkDirectionChange();
 			this.checkCollision();
-            this.eat();
+                        this.eat();
 
 			if (!this.frozen) {
 				if (this.beastModeTimer > 0) {
 					this.beastModeTimer--;
 				}
 
-				//if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
+				if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
 				
 				this.posX += this.speed * this.dirX;
 				this.posY += this.speed * this.dirY;
@@ -332,8 +321,11 @@
         this.render = function(context) {
             
             var colour = "yellow";
-            var radius = this.width / 2;
+            var radius = this.width / 4;
             //console.log("rendering at " + this.posX + " , " + this.posY);
+            if(this.beastMode){ radius = this.width / 2;}
+            
+            
             
             // Fixed For now, Check for Direction
             var angle1 = this.sAngle * Math.PI;

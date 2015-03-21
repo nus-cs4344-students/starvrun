@@ -56,7 +56,21 @@ function Game()
         // Render Pacmans
         renderPacmans(context);
         // Render Remaining Game Objects
+        renderScore();
         
+    }
+    
+    var renderScore = function(){
+         var sb = document.getElementById("scoreBoard"); 
+         var scores = "Scoreboard";
+         var i=0;
+         for(i=0;i<pacman.length; i++){
+             scores = scores + "\n";
+             scores = scores + (i+1) + ") " + pacman[i].getScore();
+         }
+         
+         sb.innerHTML = scores;
+
         
     }
     
@@ -80,8 +94,11 @@ function Game()
     var renderPacmans = function(context)
     {
         //console.log("Starting to Render Pacmans");
-        renderPacman(context, pacman[0]);
-        renderPacman(context, pacman[1]);
+        var i;
+        for(i=0;i<numberOfPacman;i++)
+        {
+            renderPacman(context, pacman[i]);    
+        }
         //console.log("Completed Rendering Pacmans");
     }
     
@@ -251,14 +268,15 @@ function Game()
     var gameLoop = function() 
     {
         // Moves the pacman on the map always (from start to stop)
-        pacman[0].move();
-        render();
+        var i;
+        for(i=0;i<numberOfPacman;i++)
+        {
+            pacman[i].move();
+            render();
+        }
 
-        pacman[1].move();
-        render();
-
-        //checkCollision();
-
+        // To check if the pacmans are colliding
+        checkCollision(numberOfPacman);
     }
 
     /*
@@ -272,8 +290,12 @@ function Game()
     {
         // Initialize game objects
         levelMap = new Map();
-        pacman[0] = new Pacman(this);
-        pacman[1] = new Pacman(this);
+        var i;
+        for(i=0;i<numberOfPacman;i++)
+        {
+            pacman[i] = new Pacman(this);    
+        }
+        
         pacman[0].setPosition(48,48);
         pacman[1].setPosition(560,48);
 
@@ -281,6 +303,21 @@ function Game()
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
+
+    var checkCollision = function(numberOfPacman)
+    {
+        var i, j;
+        for(i=0;i<numberOfPacman;i++)
+            for(j=i;j<numberOfPacman;j++)
+                if(i!=j)
+                {
+                    if((pacman[i].getPosX()==pacman[j].getPosX())&&(pacman[i].getPosY()==pacman[j].getPosY()))
+                    {
+                        pacman[i].pacmanCollisionAction();
+                        pacman[j].pacmanCollisionAction();
+                    }
+                }
+    }
 };
 
 
