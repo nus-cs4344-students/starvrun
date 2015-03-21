@@ -175,8 +175,9 @@
 						//console.log("checkNextTile: "+nextTile);
 
 						if (nextGrid != Starvrun.WALL) {
-                                                        
-							this.setDirection(this.directionWatcher.get());
+                            if (!this.stunned) {
+								this.setDirection(this.directionWatcher.get());
+							}
 							this.directionWatcher.set(null);
 						}
 					}
