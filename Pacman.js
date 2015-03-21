@@ -92,6 +92,10 @@
 		//create a directionWatcher object
 		this.directionWatcher = new directionWatcher();
 
+                this.getScore = function(){
+                    return score;
+                }
+                
 		this.setPosition = function(x, y) {
 			this.posX = x;
 			this.posY = y;
@@ -191,7 +195,7 @@
 					var mapItemAhead = map.getMapContent(gridAheadX, gridAheadY);
 					//check for pellet eating
 					if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
-						console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
+						//console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
 						var point =0 ;
                                                 if (mapItem === Starvrun.POWERUP) {
                                                     point = 50;
@@ -203,7 +207,7 @@
                                                 score += point;
                                                 map.eatAt(gridX, gridY);
 						//game.score.add(point);
-                                                console.log(score);
+                                                //console.log(score);
                                         }
 
 					//check for wall

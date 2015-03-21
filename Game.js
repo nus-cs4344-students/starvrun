@@ -56,7 +56,21 @@ function Game()
         // Render Pacmans
         renderPacmans(context);
         // Render Remaining Game Objects
+        renderScore();
         
+    }
+    
+    var renderScore = function(){
+         var sb = document.getElementById("scoreBoard"); 
+         var scores = "Scoreboard";
+         var i=0;
+         for(i=0;i<pacman.length; i++){
+             scores = scores + "\n";
+             scores = scores + (i+1) + ") " + pacman[i].getScore();
+         }
+         
+         sb.innerHTML = scores;
+
         
     }
     
