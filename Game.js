@@ -76,16 +76,14 @@ function Game()
     
     var renderWalls = function(context)
     {
-        for(var i =0; i<levelMap.getWidthPx()/ Starvrun.GRID_SIZE; ++i)
+        for(var i =0; i<levelMap.getWidth(); ++i)
         {
-            for(var j=0; j<levelMap.getHeightPx()/ Starvrun.GRID_SIZE; ++j)
+            for(var j=0; j<levelMap.getHeight(); ++j)
             {
                 var obj = levelMap.getMapContent(i,j);
-                var posX = levelMap.gridToPx(i);
-                var posY = levelMap.gridToPx(j);
                 if(obj === Starvrun.WALL)
                 {                       
-                    renderWall(context,posX,posY);
+                    renderWall(context,i,j);
                 }
             }
         }
@@ -159,9 +157,45 @@ function Game()
         context.fillRect(posX-block,posY-block,block*2,block*2);
     }
     
-    var renderWall = function(context,posX,posY)   
+    var renderWall = function(context,X,Y)   
     {
-        renderBlock(context,posX,posY,Starvrun.WALL_COLOUR);
+        //console.log("rendering wall at " + X + " , " + Y);
+        var posX =levelMap.gridToPx(X);
+        var posY = levelMap.gridToPx(Y);
+        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+        // Render a thin wall.. 
+        // Max posY and max posX
+        var maxX = levelMap.getWidth();
+        var maxY = levelMap.getHeight();
+        var north = -1;
+        var south = -1;
+        var west = -1;
+        var east = -1;
+        
+        if(Y !== maxY) south = levelMap.getMapContent(X,Y+1);
+        if(Y !== 0) north = levelMap.getMapContent(X,Y-1);
+        if(X !== maxX) east = levelMap.getMapContent(X+1,Y);
+        if(X !== 0) west = levelMap.getMapContent(X-1,Y);
+       //console.log("Map Content Retrieved");
+        
+        var width = Starvrun.WALL_WIDTH;        
+        context.fillStyle = Starvrun.WALL_COLOUR;
+        
+        context.fillRect(posX-width/2, posY-width/2, width,width);
+        
+        if(north === Starvrun.WALL){
+            context.fillRect(posX-width/2, posY-Starvrun.GRID_SIZE/2, width,Starvrun.GRID_SIZE/2);    
+        }
+        if(south === Starvrun.WALL){
+            context.fillRect(posX-width/2, posY, width, Starvrun.GRID_SIZE/2);    
+        }
+        if(west === Starvrun.WALL){
+            context.fillRect(posX-Starvrun.GRID_SIZE/2, posY-width/2, Starvrun.GRID_SIZE/2,width);    
+        }
+        if(east === Starvrun.WALL){
+            context.fillRect(posX, posY-width/2, Starvrun.GRID_SIZE/2,width);    
+        }
+        
     }
     
     var renderPellet = function(context,posX,posY){

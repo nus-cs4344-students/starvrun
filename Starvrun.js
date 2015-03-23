@@ -31,7 +31,9 @@ var Starvrun = {
         BG_COLOUR : "black",
         WALL_COLOUR : "blue",
         PELLET_COLOUR : "white",
-        POWERUP_COLOUR : "red"
+        POWERUP_COLOUR : "red",
+        
+        WALL_WIDTH : 8
 };
 
 //global.Starvrun = Starvrun;
