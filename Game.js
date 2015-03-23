@@ -51,7 +51,7 @@ function Game()
         var context = playArea.getContext("2d");
         
         // Render Walls (Should I re-render this?)
-        //renderWalls(context);
+        renderWalls(context);
         renderGameContent(context);
         // Render Pacmans
         renderPacmans(context);
@@ -131,6 +131,7 @@ function Game()
                         renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
                         break;
                     case Starvrun.WALL:
+                        
                         break;
                     case Starvrun.EMPTY:
                         clearBlock(context,posX,posY);

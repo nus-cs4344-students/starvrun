@@ -357,9 +357,9 @@
         this.render = function(context) {
             
             
-            var radius = this.width / 4;
+            var radius = this.width / 2;
             //console.log("rendering at " + this.posX + " , " + this.posY);
-            if(this.beastMode){ radius = this.width / 2;}
+            if(this.beastMode){ radius = this.width * 3/4;}
             
             
             
