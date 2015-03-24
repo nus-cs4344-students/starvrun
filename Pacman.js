@@ -17,28 +17,28 @@
 
 	// DirectionWatcher
 	function directionWatcher() {
-		//this is the temp dir upon key pressed
-		//used to update curDirection
-		this.dir = null;
-		this.set = function(dir) {
-			this.dir = dir;
-            //console.log(this.dir);
-		}
-        this.setUp = function(){         
-            this.set(up);
-        }
-        this.setDown = function(){
-            this.set(down);                    
-        }
-       this.setLeft = function(){
-            this.set(left);
-        }
-       this.setRight = function(){
+            //this is the temp dir upon key pressed
+            //used to update curDirection
+            this.dir = null;
+            this.set = function(dir) {
+                this.dir = dir;
+                
+            }
+            this.setUp = function(){         
+                this.set(up);
+            }
+            this.setDown = function(){
+                this.set(down);                    
+            }
+            this.setLeft = function(){
+                this.set(left);
+            }
+            this.setRight = function(){
                 this.set(right);
-        }
-       this.get = function() {
-			return this.dir;
-		}
+            }
+            this.get = function() {
+                return this.dir;
+            }
 	}
 
 	function between (x, min, max) {
@@ -46,334 +46,333 @@
 	}
 
 	function Pacman(game) {
-                this.colour  = "yellow";
-		this.width = 32;
-		this.height = 32;
+            // Public Variables
+            
+            this.directionWatcher = new directionWatcher();  // For KeyPress
+            // Private Variables
+            // Game Level States
+            var startX = -1;
+            var startY = -1;
+            			
+            var game = game;
+            var map = game.getMap();
+            
+            // Game Variables
+            var score = 0;
+            var lives = Starvrun.LIVES
+                    
+            var posX = 48; // IN PX
+            var posY = 48; // IN PX
+            
+            // POWER UP Stuff
+            var beastMode = false;
+            var beastMode_Timer = 0;
+            
+            // Collision Stuff
+            var stunned = false;
+            var stunned_Timer = 0;
+            
+            // Movement Variables
+            var speed = 4;
 
-		this.radius= 16;
-
-		this.posX = 48;
-		this.posY = 48;
-
-		this.stuckX = 0;
-		this.stuckY = 0;
-
-		//multiple of 1 square grid px
-		this.speed = 4;
-
-        //mouth state(1/-1; use as multiplier for mouth angle)
-		this.mouth = 1;
-
-		//should be in Game.js
-		var score = 0;
-
-		//initialization for direction
-		this.curDirection = right;
-		this.dirX = this.curDirection.dirX; //1
-		this.dirY = this.curDirection.dirY; //0
-        this.sAngle = 0.25;
-        this.eAngle = 1.75;
-
-		this.lives = 3;
-
-		//when dead, hold the pacman on position
-		//used to play die animation
-		this.frozen = false;		
-		
-		this.beastMode = false;
-		this.beastModeTimer = 0;
-                this.stunned = false;
-                this.stunnedTimer = 0;
-
-        var game = game;
-        var map = game.getMap();
-
-		var noOfGridX = map.getWidthPx()/Starvrun.GRID_SIZE;
-		var noOfGridY = map.getHeightPx()/Starvrun.GRID_SIZE;
-
-		//create a directionWatcher object
-		this.directionWatcher = new directionWatcher();
-
-                this.getScore = function(){
-                    return score;
-                }
-                
-		this.setPosition = function(x, y) {
-			this.posX = x;
-			this.posY = y;
-		}
-
-		this.getPosX = function() {
-			return this.posX;
-		}
-
-		this.getPosY = function() {
-			return this.posY;
-		}
-
-		this.getGridPosX = function() {
-			return (this.posX - (this.posX % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
-		}
-
-		this.getGridPosY = function() {
-			return (this.posY - (this.posY % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
-		}
-
-		this.inGrid = function() {
-			if((this.posX % (2*this.radius) === 16) && (this.posY % (2*this.radius) === 16)) return true;
-			return false;
-		}
-
-		this.enableBeastMode = function() {
-			this.beastMode = true;
-			this.beastModeTimer = Starvrun.FRAME_RATE * Starvrun.BEAST_TIME; // 3seconds
-		}
-                
-                this.enableStunned = function(){
-                    this.stunned = true;
-                    this.stunnedTimer = Starvrun.FRAME_RATE * 2;
-                }
-                
-                this.disableStunned = function(){
-                    this.stunned = false; 
-                }
-
-		this.disableBeastMode = function() { 
-			this.beastMode = false; 
-		}
-
-		this.freeze = function () {
-			this.frozen = true;
-		}
-
-		this.unfreeze = function() {
-			this.frozen = false;
-		}
-
-		this.checkDirectionChange = function() {
-			if (this.directionWatcher.get() != null) {
-
-				if ((this.stuckX == 1) && this.directionWatcher.get() == right) this.directionWatcher.set(null);
-				else {
-					this.stuckX = 0;
-					this.stuckY = 0;
-
-					if ((this.inGrid())) {
-						
-						// check if possible to change direction without getting stuck
-						var x = this.getGridPosX() + this.directionWatcher.get().dirX;
-						var y = this.getGridPosY() + this.directionWatcher.get().dirY;
-						//boundary checking, ensure Pac can move across other side of map
-						if (x <= -1) x = map.getWidthPx()/(this.radius*2)-1;
-						if (x >= map.getWidthPx()/(this.radius*2)) x = 0;
-						if (y <= -1) y = map.getHeightPx()/(this.radius*2)-1;
-						if (y >= map.getHeightPx()/(this.radius*2)) y = 0;
-
-						//console.log("x: "+x);
-						//console.log("y: "+y);
-						var nextGrid = map.getMapContent(x,y);
-						//console.log("checkNextTile: "+nextTile);
-
-						if (nextGrid != Starvrun.WALL) {
-                            if (!this.stunned) {
-								this.setDirection(this.directionWatcher.get());
-							}
-							this.directionWatcher.set(null);
-						}
-					}
-				}
-			}
-		}
-
-		this.checkCollision = function () {
-			
-			if ((this.stuckX == 0) && (this.stuckY == 0) && this.frozen == false) {
-				if(this.inGrid()){
-					//get current grid position of pac
-					var gridX = this.getGridPosX();
-					var gridY = this.getGridPosY();
-
-					var gridAheadX = gridX;
-					var gridAheadY = gridY;
-					
-					var mapItem = map.getMapContent(gridX, gridY);
-
-					// get 1 grid ahead for wall collision
-					if ((this.dirX == 1) && (gridAheadX < noOfGridX)) gridAheadX += 1;
-					if ((this.dirY == 1) && (gridAheadY < noOfGridY)) gridAheadY += 1;
-					if ((this.dirX == -1) && (gridAheadX >= 0)) gridAheadX -= 1;
-					if ((this.dirY == -1) && (gridAheadY >= 0)) gridAheadY -= 1;
-
-					var mapItemAhead = map.getMapContent(gridAheadX, gridAheadY);
-					//check for pellet eating
-					if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
-						//console.log("Pellet found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
-						var point = Starvrun.PELLET_SCORE;
-                                                if (mapItem === Starvrun.POWERUP) {
-                                                    point = Starvrun.POWERUP_SCORE;
-                                                    this.enableBeastMode();
-						}
-						//clear the item on map
-                                                score += point;
-                                                map.eatAt(gridX, gridY);
-						//game.score.add(point);
-                                                //console.log(score);
-                                        }
-
-					//check for wall
-					if ((mapItemAhead === Starvrun.WALL || mapItemAhead === Starvrun.EMPTY)) {
-						this.stuckX = this.dirX;
-						this.stuckY = this.dirY;
-						this.stop();
-						// get out of the wall
-						// 4(which is also the speed) is the first step into the cell
-						if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 4;
-						if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 4;
-					}
-					
-				}
-			}
-		}
-
-		this.moveBack = function(){
-                        this.enableStunned();
-			this.dirX *= -1;
-			this.dirY *= -1;
-		
-		}
-		
-		this.move = function() {
-		
-			this.checkDirectionChange();
-			this.checkCollision();
-                        this.eat();
-
-			if (!this.frozen) {
-				if (this.beastModeTimer > 0) {
-					this.beastModeTimer--;
-				}
-                                if(this.stunnedTimer > 0){
-                                    this.stunnedTimer --;
-                                }
-
-				if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
-                                if ((this.stunnedTimer == 0) && (this.stunned == true)) this.disableStunned();
-				
-				this.posX += this.speed * this.dirX;
-				this.posY += this.speed * this.dirY;
-				
-				// Check if out of canvas
-				//boundary checking, ensure Pac can move across other side of map
-				if (this.posX >= map.getWidthPx-this.radius) this.posX = 4-this.radius;
-				if (this.posX <= 0-this.radius) this.posX = map.getWidthPx-4-this.radius;
-				if (this.posY >= map.getHeightPx-this.radius) this.posY = 4-this.radius;
-				if (this.posY <= 0-this.radius) this.posY = map.getHeightPx-4-this.radius;
-			}
-              
-		}
-                
-                this.kill = function (){
-                    score += 100;
-                }
-                
-                this.died = function() {
-                    this.dieAnimation();
-                }
-		
-		this.eat = function () {
-		
-			if (!this.frozen) {
-				if (this.dirX == this.dirY == 0) {
-				
-					this.sAngle -= this.mouth*0.07;
-					this.eAngle += this.mouth*0.07;
-					
-					var limitMax1 = this.curDirection.sAngle;
-					var limitMax2 = this.curDirection.eAngle;
-					var limitMin1 = this.curDirection.sAngle - 0.21;
-					var limitMin2 = this.curDirection.eAngle + 0.21;
-						
-					if (this.sAngle < limitMin1 || this.eAngle > limitMin2)
-					{
-						this.mouth = -1;
-					}
-					if (this.sAngle >= limitMax1 || this.eAngle <= limitMax2)
-					{
-						this.mouth = 1;
-					}
-				}
-			}
-		}
-
-		this.setDirection = function(dir) {
-			if (!this.frozen) {
-				this.dirX = dir.dirX;
-				this.dirY = dir.dirY;
-				this.sAngle = dir.sAngle;
-				this.eAngle = dir.eAngle;
-				this.curDirection = dir;
-			}
-		}
-
-		this.stop = function() {
-			//this will make the pacman speed to 0
-			this.dirX = 0;
-			this.dirY = 0;
-		}
-		
-		this.reset = function() {
-			this.unfreeze();
-			this.posX = -32;
-			this.posY = -32;
-			this.setDirection(right);
-			this.stop();
-			this.stuckX = 0;
-			this.stuckY = 0;
-			//console.log("reset pacman");
-		}
-
-		this.dieAnimation = function() {
-			this.freeze();
-			this.sAngle += 0.05;
-			this.eAngle -= 0.05;
-			if (this.sAngle >= this.curDirection.sAngle+0.7 || this.eAngle <= this.curDirection.eAngle-0.7) {
-				this.reset();
-	    		this.lives--;
-		        //console.log("pacman died, "+this.lives+" lives left");
-		    	if (this.lives <= 0) {
-					//game.showMessage("Game over","Total Score: "+game.score.score+input);
-					//game.gameOver = true;
-				}
-				//game.drawHearts(this.lives);
-			}
-                        this.reset();
+            var curDirection = right;
+            var dirX = curDirection.dirX;
+            var dirY = curDirection.dirY;
                         
+            var stuckX = 0;
+            var stuckY = 0; // >? What are these used for?
+                
+            //Rendering Constants
+            var COLOR = "yellow";
+            var WIDTH = Starvrun.GRID_SIZE;
+            
+            //Rendering Variables 
+            var mouthOpen = 1; // Mouth Opening if >0 Mouth closing <0
+            var sAngle = curDirection.sAngle;
+            var eAngle = curDirection.eAngle;
+            var dead = false;  // For holding Pacman in Position while animation is played
+
+            // Public Method
+            // Accessors
+            this.getScore = function(){
+                return score;
+            }
+            
+            this.getPosX = function() {
+                return posX;
+            }
+            
+            this.getPosY = function() {
+		return posY;
+            }
+            
+            this.getGridPosX = function() {
+		return (posX - (posX % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
+            }
+
+            this.getGridPosY = function() {
+		return (posY - (posY % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
+            }
+            
+            this.isStunned = function(){
+                return stunned;
+            }
+            
+            this.isBeast = function(){
+                return beastMode;
+            }
+                
+            // Mutators
+            this.setPositionPx = function(x, y) {
+                posX = x;
+                posY = y;
+            }
+            
+            // Checking functions
+            
+            this.inGrid = function() {
+		if((posX % WIDTH === Starvrun.GRID_SIZE/2) 
+                    && (posY % (WIDTH) === Starvrun.GRID_SIZE/2)) {
+                        return true;
+                    }
+		return false;
+            }
+
+            // Private Methods for State Management
+            var enableBeastMode = function(){
+		beastMode = true;
+		beastMode_Timer = Starvrun.FRAME_RATE * Starvrun.BEAST_TIME; // 3seconds
+            }
+            
+            var disableBeastMode = function() { 
+		beastMode = false; 
+            }
+                
+            var enableStunned = function(){
+                stunned = true;
+                stunned_Timer = Starvrun.FRAME_RATE * Starvrun.STUN_TIME;
+                console.log("Stunned for " + stunned_Timer );
+            }
+                
+            var disableStunned = function(){
+                stunned = false; 
+            }
+
+            this.checkDirectionChange = function() {
+		if (this.directionWatcher.get() !== null) {
+                    if ((stuckX === 1) && this.directionWatcher.get() === right){ 
+                        this.directionWatcher.set(null);
+                    }else {
+                        stuckX = 0;
+			stuckY = 0;
+                        if ((this.inGrid())) {
+                            // check if possible to change direction without getting stuck
+                            var x = this.getGridPosX() + this.directionWatcher.get().dirX;
+                            var y = this.getGridPosY() + this.directionWatcher.get().dirY;
+                            //boundary checking, ensure Pac can move across other side of map
+                            if (x < 0) x = map.getWidth()-1;
+                            if (x >= map.getWidth()) x = 0;
+                            if (y < 0) y = map.getHeight()-1;
+                            if (y >= map.getHeight()) y = 0;
+                            var nextGrid = map.getMapContent(x,y);
+                            if (nextGrid !== Starvrun.WALL) {
+                                if (!stunned) {
+                                    setDirection(this.directionWatcher.get());
+                                    this.directionWatcher.set(null);
+				}
+                            }
+			}
+                    }
 		}
-                
-                this.setColor = function(color) {
-                    this.colour = color;
+            }
+
+            this.checkCollision = function () {
+		if ((stuckX === 0) && (stuckY === 0) && dead === false) {
+                    if(this.inGrid()){
+                    //get current grid position of pac
+			var gridX = this.getGridPosX();
+			var gridY = this.getGridPosY();
+                        var mapItem = map.getMapContent(gridX, gridY);
+                        
+			var gridAheadX = gridX;
+			var gridAheadY = gridY;
+					
+                        // get 1 grid ahead for wall collision // Assumes there is a boundary
+			if ((dirX == 1) && (gridAheadX < map.getWidth())) gridAheadX += 1;
+			if ((dirY == 1) && (gridAheadY < map.getHeight())) gridAheadY += 1;
+			if ((dirX == -1) && (gridAheadX >= 0)) gridAheadX -= 1;
+			if ((dirY == -1) && (gridAheadY >= 0)) gridAheadY -= 1;
+
+			var mapItemAhead = map.getMapContent(gridAheadX, gridAheadY);
+			//check for pellet eating
+			if ((mapItem === Starvrun.PELLET) || (mapItem === Starvrun.POWERUP)) {
+                            var point = Starvrun.PELLET_SCORE;
+                            if (mapItem === Starvrun.POWERUP) {
+                                point = Starvrun.POWERUP_SCORE;
+                                enableBeastMode();
+                            }
+                            
+                            //clear the item on map
+                            score += point;
+                            map.eatAt(gridX, gridY);
+                        }
+
+                        //check for wall
+			if ((mapItemAhead === Starvrun.WALL || mapItemAhead === Starvrun.EMPTY)) {
+                            stuckX = dirX;
+                            stuckY = dirY;
+                            this.stop();
+                            // get out of the wall
+                            // 4(which is also the speed) is the first step into the cell
+                            console.log(posX % (WIDTH/2))
+                            if ((stuckX == 1) && ((posX % (WIDTH/2)) !== 0)) posX -= speed;
+                            if ((stuckY == 1) && ((posY % (WIDTH/2)) !== 0)) posY -= speed;
+			}		
+                    }
                 }
+            }
+            
+            var runTimers = function(){
+                if (beastMode_Timer > 0) {
+			beastMode_Timer--;
+                }
+                       
+                if(stunned_Timer > 0){
+                    stunned_Timer --;
+                }
+
+		if ((beastMode_Timer === 0) && (beastMode === true)) disableBeastMode();
+                if ((stunned_Timer === 0) && (stunned === true)) disableStunned();
+            }
+
+            this.moveBack = function(){
+                if(!stunned){
+                    enableStunned();
+                    dirX *= -1;
+                    dirY *= -1;
+                }
+            }
+		
+            this.move = function() {
+                // Game Loop
+		this.checkDirectionChange();
+		this.checkCollision();
+                runTimers();
+
+		if (!dead) {
+                    posX += speed * dirX;
+                    posY += speed * dirY;
+                    
+                    // Check if out of canvas
+                    //boundary checking, ensure Pac can move across other side of map
+                    if (posX >= map.getWidthPx()-WIDTH/2) posX = speed-WIDTH/2;
+                    if (posX <= 0-WIDTH/2) posX = map.getWidthPx()-speed-WIDTH/2;
+                    if (posY >= map.getHeightPx()-WIDTH/2) posY = speed-WIDTH/2;
+                    if (posY <= 0-WIDTH/2) posY = map.getHeightPx()-4-WIDTH/2;
+		}
+            }
                 
-        this.render = function(context) {
+            this.kill = function (){
+                score += 100;
+            }
+                
+            this.died = function() {
+                dead = true;
+            }
+		
+            var eat = function () {
+		if (!dead) {
+                    if (dirX !== 0 || dirY !== 0) {
+                        sAngle -= mouthOpen*0.07;
+			eAngle += mouthOpen*0.07;
+					
+			var limitMax1 = curDirection.sAngle;
+			var limitMax2 = curDirection.eAngle;
+			var limitMin1 = curDirection.sAngle - 0.21;
+			var limitMin2 = curDirection.eAngle + 0.21;
+						
+                        if (sAngle < limitMin1 || eAngle > limitMin2){
+                            mouthOpen = -1;
+                        }
+			
+                        if (sAngle >= limitMax1 || eAngle <= limitMax2){
+                            mouthOpen = 1;
+                        }
+                    }
+		}
+            }
             
-            
-            var radius = this.width / 2;
-            //console.log("rendering at " + this.posX + " , " + this.posY);
-            if(this.beastMode){ radius = this.width * 3/4;}
-            
-            
-            
-            // Fixed For now, Check for Direction
-            var angle1 = this.sAngle * Math.PI;
-            var angle2 = this.eAngle * Math.PI;
+            this.animate = function(){
+                eat();
+                if(dead) this.dieAnimation();
+            }
 
-            // Draw the Pacman
-            context.fillStyle = this.colour;
-            context.beginPath();
-            context.arc(this.posX, this.posY, radius, angle1, angle2, false);
-            context.lineTo(this.posX,this.posY);
-            context.closePath();
-            context.fill();
-        }
+            var setDirection = function(dir) {
+		if (!dead) {
+                    dirX = dir.dirX;
+                    dirY = dir.dirY;
+                    sAngle = dir.sAngle;
+                    eAngle = dir.eAngle;
+                    curDirection = dir;
+		}
+            }
+            
+            this.stop = function() {
+                //this will make the pacman speed to 0
+		dirX = 0;
+		dirY = 0;
+            }
+		
+            this.respawn = function() {
+                if(lives > 0){
+                    dead = false;
+                    posX = map.gridToPx(startX);
+                    posY = map.gridToPx(startY);
+                    setDirection(right);
+                    this.stop();
+                    stuckX = 0;
+                    stuckY = 0;
+                    lives --;
+                }else{
+                    console.log("No More Lives");
+                    //game.drawHearts(this.lives);
+                }
+            }
+            
+            this.reset = function(){
+                lives = Starvrun.LIVES + 1;
+                this.respawn();
+            }
 
+            this.dieAnimation = function() {
+		dead = true;
+		sAngle += 0.05;
+		eAngle -= 0.05;
+		if (sAngle >= curDirection.sAngle+0.7 || eAngle <= curDirection.eAngle-0.7) {
+                    this.respawn();
+		}    
+            }
+            
+            this.setColor = function(color) {
+                this.COLOR = color;
+            }
+                
+            this.render = function(context) {
+                var radius = WIDTH / 2;
+                //console.log("rendering at " + this.posX + " , " + this.posY);
+                if(beastMode){radius = WIDTH * 3/4;}
+            
+                // Fixed For now, Check for Direction
+                var angle1 = sAngle * Math.PI;
+                var angle2 = eAngle * Math.PI;
+
+                // Draw the Pacman
+                context.fillStyle = COLOR;
+                context.beginPath();
+                context.arc(posX, posY, radius, angle1, angle2, false);
+                context.lineTo(posX,posY);
+                context.closePath();
+                context.fill();
+                this.animate();
+            }
 	}

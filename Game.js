@@ -271,29 +271,29 @@ function Game()
         {
             
             case 37: // Left 
-                    if(!pacman[0].stunned) pacman[0].directionWatcher.setLeft();
+                    if(!pacman[0].isStunned()) pacman[0].directionWatcher.setLeft();
                     break;
             case 38: // Up
-                    if(!pacman[0].stunned) pacman[0].directionWatcher.setUp();
+                    if(!pacman[0].isStunned()) pacman[0].directionWatcher.setUp();
                     break;
             case 39: // Right
-                    if(!pacman[0].stunned) pacman[0].directionWatcher.setRight();
+                    if(!pacman[0].isStunned()) pacman[0].directionWatcher.setRight();
                     break;
             case 40: // Down
-                    if(!pacman[0].stunned) pacman[0].directionWatcher.setDown();
+                    if(!pacman[0].isStunned()) pacman[0].directionWatcher.setDown();
                     break;
 
             case 65: // 'A' Left 
-                    if(!pacman[1].stunned) pacman[1].directionWatcher.setLeft();
+                    if(!pacman[1].isStunned()) pacman[1].directionWatcher.setLeft();
                     break;
             case 87: // 'W' Up
-                    if(!pacman[1].stunned) pacman[1].directionWatcher.setUp();
+                    if(!pacman[1].isStunned()) pacman[1].directionWatcher.setUp();
                     break;
             case 68: // 'D' Right
-                    if(!pacman[1].stunned) pacman[1].directionWatcher.setRight();
+                    if(!pacman[1].isStunned()) pacman[1].directionWatcher.setRight();
                     break;
             case 83: // 'S' Down
-                    if(!pacman[1].stunned) pacman[1].directionWatcher.setDown();
+                    if(!pacman[1].isStunned()) pacman[1].directionWatcher.setDown();
                     break; 
             case 32: // 'Space'
                     //FOR TESTING ONLY!
@@ -310,10 +310,10 @@ function Game()
         var i;
         for(i=0;i<numberOfPacman;i++)
         {
-            pacman[i].move();
+            pacman[i].move();   
             render();
         }
-
+        
         // To check if the pacmans are colliding
         checkCollision(numberOfPacman);
     }
@@ -335,18 +335,19 @@ function Game()
             pacman[i] = new Pacman(this);    
         }
         
-        pacman[0].setPosition(48,48);
+        pacman[0].setPositionPx(48,48);
         pacman[0].setColor("red");
-        pacman[1].setPosition(560,48);
+        pacman[1].setPositionPx(560,48);
         pacman[1].setColor("yellow");
 
         levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
         levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
         levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
         levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
-
+        
         initGUI();
         // Start drawing 
+        
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
 
@@ -359,14 +360,14 @@ function Game()
                 if(i!=j)
                 {
                     condition = checkCondition(pacman[i], pacman[j]);
-                    console.log(condition);
+                    //console.log(condition);
                     if(condition)
                     {
                         // Check If same State
-                        if(pacman[i].beastMode === pacman[j].beastMode){
+                        if(pacman[i].isBeast()=== pacman[j].isBeast()){
                             pacman[i].moveBack();
                             pacman[j].moveBack();
-                        }else if(pacman[i].beastMode === true && pacman[j].beastMode == false){
+                        }else if(pacman[i].isBeast() === true && pacman[j].isBeast() == false){
                             // pacman i eat pacman j
                             pacman[i].kill();
                             pacman[j].died();

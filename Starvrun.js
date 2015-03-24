@@ -19,13 +19,15 @@ var Starvrun = {
         // Pacman Constants
         // Directions for PACMAN ?
         BEAST_TIME : 3,                         // time in seconds pacman in beast
+        STUN_TIME : 0.5,                        // time in seconds
         PELLET_SCORE : 10,
         POWERUP_SCORE : 50,
+        LIVES : 3,
 	RIGHT : 0,
 	UP: 1,
 	LEFT: 2,
 	DOWN: 3,
-
+        
 	
         // Rendering Constants
         BG_COLOUR : "black",
