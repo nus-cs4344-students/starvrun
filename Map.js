@@ -230,3 +230,6 @@ function Map() {
 	}
 	height++;	
 }
+
+// For nodejs.require
+global.Map = Map;

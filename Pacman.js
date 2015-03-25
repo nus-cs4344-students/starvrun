@@ -376,5 +376,5 @@
             }
 	}
         
-        
-//global.Pacman = Pacman;
+// For nodejs require        
+global.Pacman = Pacman;

@@ -4,9 +4,13 @@ var LIB_PATH = "./";
 require(LIB_PATH + "Starvrun.js");
 require(LIB_PATH + "Map.js");
 require(LIB_PATH + "Pacman.js");
+    
 
-function GameServer() {
-    // Private Variables
+
+function GameServer() {    
+    
+
+    // Server Variables
     var port;         // Game port 
     var IP;           // Game IP
     var count;        // Keeps track how many people are connected to server 
@@ -14,6 +18,12 @@ function GameServer() {
     var gameInterval; // Interval variable used for gameLoop 
     var sockets;      // Associative array for sockets, indexed via player ID
     var players;      // Associative array for players, indexed via socket ID
+    
+     /*Game Variables*/
+    var levelMap;
+    var pacman = [];
+    var FRAME_RATE = 35;
+    var numberOfPacman = 2;
     
     var broadcast = function (msg) {
         var id;
@@ -123,11 +133,96 @@ function GameServer() {
             console.log("Visit http://"+ IP + ":" + port + 
                     "/index.html in your browser to start the game");
             //gameInterval = setInterval(function() {gameLoop();}, 1000/Pong.FRAME_RATE);
+            
+            this.startGame();
 
         } catch (e) {
             console.log("Cannot listen to " + port);
             console.log("Error: " + e);
         }
+    }
+
+    // Where the game starts to be played
+    var gameLoop = function() 
+    {
+        // Moves the pacman on the map always (from start to stop)
+        var i;
+        for(i=0;i<numberOfPacman;i++)
+        {
+            pacman[i].move();   
+        }
+        
+        // To check if the pacmans are colliding
+        checkCollision(numberOfPacman);
+    }
+
+    /*
+     * priviledge method: start
+     *
+     * Create the objects, draws the GUI, and starts the rendering 
+     * loop
+     * Starting game play by calling game loop
+     */
+    this.startGame = function() 
+    {
+        // Initialize game objects
+        levelMap = new Map();
+        var i;
+        for(i=0;i<numberOfPacman;i++)
+        {
+            pacman[i] = new Pacman(levelMap);    
+        }
+        
+        pacman[0].setPositionPx(48,48);
+        pacman[0].setColor("red");
+        pacman[1].setPositionPx(560,48);
+        pacman[1].setColor("yellow");
+
+        levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
+        levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
+        levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
+        levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
+        
+        setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
+    };
+
+    // To check if the pacmans are colliding
+    var checkCollision = function(numberOfPacman)
+    {
+        var i, j, condition;
+        for(i=0;i<numberOfPacman;i++)
+            for(j=i;j<numberOfPacman;j++)
+                if(i!=j)
+                {
+                    condition = checkCondition(pacman[i], pacman[j]);
+                    //console.log(condition);
+                    if(condition)
+                    {
+                        // Check If same State
+                        if(pacman[i].isBeast()=== pacman[j].isBeast()){
+                            pacman[i].moveBack();
+                            pacman[j].moveBack();
+                        }else if(pacman[i].isBeast() === true && pacman[j].isBeast() == false){
+                            // pacman i eat pacman j
+                            pacman[i].kill();
+                            pacman[j].died();
+                        }else {
+                            // pacman j eat pacman i
+                            pacman[j].kill();
+                            pacman[i].died();
+                        }
+                    }
+                }
+    }
+
+    // Condition if pacmans are colliding 
+    // Check for both 1 colliding with 2 and 2 colliding with 1
+    var checkCondition = function(pacman1, pacman2)
+    {
+        if((pacman1.getGridPosX()=== pacman2.getGridPosX())&&(pacman1.getGridPosY()=== pacman2.getGridPosY()))
+            return true;
+        else 
+            return false;
     }
 }
 

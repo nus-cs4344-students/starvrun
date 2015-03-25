@@ -38,4 +38,6 @@ var Starvrun = {
         WALL_WIDTH : 8
 };
 
-//global.Starvrun = Starvrun;
+
+// For nodejs require
+global.Starvrun = Starvrun;
