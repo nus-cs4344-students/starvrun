@@ -45,7 +45,7 @@
 		return x >= min && x <= max;
 	}
 
-	function Pacman(game) {
+	function Pacman(map) {
             // Public Variables
             
             this.directionWatcher = new directionWatcher();  // For KeyPress
@@ -53,9 +53,8 @@
             // Game Level States
             var startX = -1;
             var startY = -1;
-            			
-            var game = game;
-            var map = game.getMap();
+            
+            var map = map;
             
             // Game Variables
             var score = 0;
@@ -376,3 +375,6 @@
                 this.animate();
             }
 	}
+        
+        
+//global.Pacman = Pacman;

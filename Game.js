@@ -332,7 +332,7 @@ function Game()
         var i;
         for(i=0;i<numberOfPacman;i++)
         {
-            pacman[i] = new Pacman(this);    
+            pacman[i] = new Pacman(levelMap);    
         }
         
         pacman[0].setPositionPx(48,48);
