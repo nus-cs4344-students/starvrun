@@ -1,2 +1,26 @@
+*{
+    text-align : center;
+    display : block;
+    left:  auto;
+    right: auto;
+    
+}
 
+#playArea{
+    display : inline-block;
+        
+}
 
+#scoreBoard{
+    display : inline-block;
+    vertical-align: top;
+    float: center;
+    font-size : 25px;
+}
+
+#serverMsg {
+    display : inline-block;
+    vertical-align : top;
+    float: center;
+    
+}
