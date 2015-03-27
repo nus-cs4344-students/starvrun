@@ -105,6 +105,10 @@
 		return posY;
             }
             
+            this.getSpeed = function(){
+                return speed;
+            }
+            
             this.getGridPosX = function() {
 		return (posX - (posX % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
             }
@@ -125,6 +129,10 @@
             this.setPositionPx = function(x, y) {
                 posX = x;
                 posY = y;
+            }
+            
+            this.setSpeed  = function(v){
+                speed = v; 
             }
             
             // Checking functions
