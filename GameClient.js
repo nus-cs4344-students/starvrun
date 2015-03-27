@@ -46,13 +46,13 @@ function GameClient() {
                     appendMessage("serverMsg", message.content);
                     break;
                 case "periodic": 
-                            for(var j=0;j<numberOfPacman;j++)
-        {
-            pacman[j].setPositionPx(message.posX[j], message.posY[j]);
-            pacman[j].setDirection(message.direction[j]);
-            pacman[j].setSpeed(message.speed[j]);
-            pacman[j].setScore(message.score[j]);
-        }
+                for(var j=0;j<numberOfPacman;j++)
+                    {
+                        pacman[j].setPositionPx(message.posX[j], message.posY[j]);
+                        pacman[j].setDirection(message.direction[j]);
+                        pacman[j].setSpeed(message.speed[j]);
+                        pacman[j].setScore(message.score[j]);
+                    }
                     break;
                 case "updateMap":
                     levelMap.setChanges(message.content);
@@ -287,31 +287,36 @@ function GameClient() {
         39: right arrow
         */
        var message = {
-           type: "changeDirection"
        }
 
         switch(e.keyCode)
         {
             
             case 37: // Left 
+                    message.type = "changeDirection";
                     message.direction = Starvrun.LEFT;
                     sendToServer(message);
                     break;
             case 38: // Up
+                    message.type = "changeDirection";
                     message.direction = Starvrun.UP;
                     sendToServer(message);                    
                     break;
             case 39: // Right
+                    message.type = "changeDirection";
                     message.direction = Starvrun.RIGHT;                    
                     sendToServer(message);                    
                     break;
             case 40: // Down
+                    message.type = "changeDirection";
                     message.direction = Starvrun.DOWN;
                     sendToServer(message);                   
                     break;
             case 32: // 'Space'
+                    message.type = "startGame";
+                    sendToServer(message);
                     //FOR TESTING ONLY!
-                    levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
+                    //levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
                     break;
         }
         

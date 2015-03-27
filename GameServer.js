@@ -22,6 +22,7 @@ function GameServer() {
     var gameInterval; // Interval variable used for gameLoop 
     var sockets;      // Associative array for sockets, indexed via player ID
     var players;      // Associative array for players, indexed via socket ID
+    var started = false;
     
     /*Game Variables*/
     var levelMap;
@@ -101,42 +102,44 @@ function GameServer() {
                     //    return;
                     //} 
                     switch (message.type) {
-                        // one of the player starts the game.
-                        case "start": 
-                        break;
-                        // one of the player moves the mouse.
+                        case "startGame":
+                            if(!started) {started =true; startGame();} 
+                            broadcast({type:"message", content:"Game Started"});
+                            console.log("Game Started");
+                            break;
                         case "changeDirection":
                             var pid = p.pid; // get player sending the update
                             var pm = pacman[pid];
                             var direction = message.direction;
-                            switch(direction){
-                                case Starvrun.UP:
-                                if(!pm.isStunned()) pm.directionWatcher.setUp();
-                                break;
-                                case Starvrun.DOWN:
-                                if(!pm.isStunned()) pm.directionWatcher.setDown();
-                                break;
-                                case Starvrun.LEFT:
-                                if(!pm.isStunned()) pm.directionWatcher.setLeft();
-                                break;
-                                case Starvrun.RIGHT:
-                                if(!pm.isStunned()) pm.directionWatcher.setRight();
-                                break;
-                                default: console.log("unexpected direction : " + direction);
+                            if(started){
+                                switch(direction){
+                                    case Starvrun.UP:
+                                    if(!pm.isStunned()) pm.directionWatcher.setUp();
+                                    break;
+                                    case Starvrun.DOWN:
+                                    if(!pm.isStunned()) pm.directionWatcher.setDown();
+                                    break;
+                                    case Starvrun.LEFT:
+                                    if(!pm.isStunned()) pm.directionWatcher.setLeft();
+                                    break;
+                                    case Starvrun.RIGHT:
+                                    if(!pm.isStunned()) pm.directionWatcher.setRight();
+                                    break;
+                                    default: console.log("unexpected direction : " + direction);
+                                }           
                             }
-                            
-                            
                             break;
                             case "echo":
                             // Testing Connection
                             broadcast({type:"message", content:"There is now " + count + " players"});
                             break;
+                        
                             default:
                             console.log("Unhandled " + message.type);
                         }
                 }); // conn.on("data"
             }); // socket.on("connection"
-
+            
             // Standard code to starts the Pong server and listen
             // for connectionpn
             var app = express();
@@ -150,8 +153,6 @@ function GameServer() {
                 "/index.html in your browser to start the game");
             //gameInterval = setInterval(function() {gameLoop();}, 1000/Pong.FRAME_RATE);
             
-            this.startGame();
-
         } catch (e) {
             console.log("Cannot listen to " + port);
             console.log("Error: " + e);
@@ -233,7 +234,7 @@ function GameServer() {
      * loop
      * Starting game play by calling game loop
      */
-     this.startGame = function() 
+     var startGame = function() 
      {
         // Initialize game objects
         levelMap = new Map();
