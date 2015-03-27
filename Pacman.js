@@ -96,7 +96,9 @@
             this.getScore = function(){
                 return score;
             }
-            
+            this.setScore = function(scr){
+                score = scr; 
+            }
             this.getPosX = function() {
                 return posX;
             }

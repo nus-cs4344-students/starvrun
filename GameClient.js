@@ -46,7 +46,7 @@ function GameClient() {
                     appendMessage("serverMsg", message.content);
                     break;
                 case "periodic": 
-                            for(j=0;j<numberOfPacman;j++)
+                            for(var j=0;j<numberOfPacman;j++)
         {
             pacman[j].setPositionPx(pacmanStates.posX[j], pacmanStates.posY[j]);
             pacman[j].setDirection(pacmanStates.direction[j]);
