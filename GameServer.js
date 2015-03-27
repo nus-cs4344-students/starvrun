@@ -210,7 +210,7 @@ function GameServer() {
         }
         
         //periodic map update
-        if (levelMap.getChanges().numberOfPacman > 0) {
+        if (levelMap.getChanges().length > 0) {
             var states = { 
                 type: "updateMap",
                 content : levelMap.getChanges()
