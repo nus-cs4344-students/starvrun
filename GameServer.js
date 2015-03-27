@@ -43,8 +43,13 @@ function GameServer() {
     var newPlayer = function (conn) {        
         count ++;
         
+        if(nextPID > numberOfPacman) {
+            unicast(conn, {type: "message", content: "Server Full"}); 
+            return;
+        }
+            
         // Send message to new player (the current client)
-        unicast(conn, {type: "message", content:"You are Player " + nextPID });
+        unicast(conn, {type: "message", content:"You are Player " + (nextPID+1) });
 
         // Create player object and insert into players with key = conn.id
         players[conn.id] = new Player(conn.id, nextPID);
@@ -52,6 +57,7 @@ function GameServer() {
 
         // Updates the nextPID to issue 
         nextPID = (nextPID + 1);
+        
     }
     
     this.start = function(){
@@ -63,7 +69,7 @@ function GameServer() {
 
             // reinitialize 
             count = 0;
-            nextPID = 1;
+            nextPID = 0;
             gameInterval = undefined;
             players = new Object;
             sockets = new Object;
