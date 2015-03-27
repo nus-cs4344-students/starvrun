@@ -4,7 +4,7 @@ var LIB_PATH = "./";
 require(LIB_PATH + "Starvrun.js");
 require(LIB_PATH + "Map.js");
 require(LIB_PATH + "Pacman.js");
-    
+
 function Player(connid, pid) {
     this.connid = connid;
     this.pid = pid;
@@ -12,7 +12,7 @@ function Player(connid, pid) {
 
 
 function GameServer() {    
-    
+
 
     // Server Variables
     var port;         // Game port 
@@ -23,7 +23,7 @@ function GameServer() {
     var sockets;      // Associative array for sockets, indexed via player ID
     var players;      // Associative array for players, indexed via socket ID
     
-     /*Game Variables*/
+    /*Game Variables*/
     var levelMap;
     var pacman = [];
     var FRAME_RATE = 35;
@@ -46,7 +46,7 @@ function GameServer() {
             unicast(conn, {type: "message", content: "Server Full"}); 
             return;
         }
-            
+
         // Send message to new player (the current client)
         unicast(conn, {type: "message", content:"You are Player " + (nextPID+1) });
 
@@ -61,10 +61,10 @@ function GameServer() {
     
     this.start = function(){
        try {
-            var express = require('express');
-            var http = require('http');
-            var sockjs = require('sockjs');
-            var sock = sockjs.createServer();
+        var express = require('express');
+        var http = require('http');
+        var sockjs = require('sockjs');
+        var sock = sockjs.createServer();
 
             // reinitialize 
             count = 0;
@@ -86,7 +86,7 @@ function GameServer() {
 
                 // When the client closes the connection to the server/closes the window
                 conn.on('close', function () {
-                   
+
                 });
 
                 // When the client send something to the server.
@@ -102,7 +102,7 @@ function GameServer() {
                     switch (message.type) {
                         // one of the player starts the game.
                         case "start": 
-                            break;
+                        break;
                         // one of the player moves the mouse.
                         case "changeDirection":
                             var pid = p.pid; // get player sending the update
@@ -110,29 +110,29 @@ function GameServer() {
                             var direction = message.direction;
                             switch(direction){
                                 case Starvrun.UP:
-                                    if(!pm.isStunned()) pm.directionWatcher.setUp();
-                                    break;
+                                if(!pm.isStunned()) pm.directionWatcher.setUp();
+                                break;
                                 case Starvrun.DOWN:
-                                    if(!pm.isStunned()) pm.directionWatcher.setDown();
-                                    break;
+                                if(!pm.isStunned()) pm.directionWatcher.setDown();
+                                break;
                                 case Starvrun.LEFT:
-                                    if(!pm.isStunned()) pm.directionWatcher.setLeft();
-                                    break;
+                                if(!pm.isStunned()) pm.directionWatcher.setLeft();
+                                break;
                                 case Starvrun.RIGHT:
-                                    if(!pm.isStunned()) pm.directionWatcher.setRight();
-                                    break;
+                                if(!pm.isStunned()) pm.directionWatcher.setRight();
+                                break;
                                 default: console.log("unexpected direction : " + direction);
                             }
                             
                             
                             break;
-                        case "echo":
+                            case "echo":
                             // Testing Connection
                             broadcast({type:"message", content:"There is now " + count + " players"});
                             break;
-                        default:
+                            default:
                             console.log("Unhandled " + message.type);
-                    }
+                        }
                 }); // conn.on("data"
             }); // socket.on("connection"
 
@@ -144,9 +144,9 @@ function GameServer() {
             httpServer.listen(port, IP);
             app.use(express.static(__dirname));
             console.log("Server running on http://"+IP + ":" + 
-                    port + "\n");
+                port + "\n");
             console.log("Visit http://"+ IP + ":" + port + 
-                    "/index.html in your browser to start the game");
+                "/index.html in your browser to start the game");
             //gameInterval = setInterval(function() {gameLoop();}, 1000/Pong.FRAME_RATE);
             
             this.startGame();
@@ -161,15 +161,17 @@ function GameServer() {
     var gameLoop = function() 
     {
         // Moves the pacman on the map always (from start to stop)
-        var i;
+        var i, j;
         var states = 
         {
             type:"",
             content:"",
-            pos:"",
-            dir:"",
-            speed:"",
-            score:"",
+            timestamp:"",
+            posX:[],
+            posY:[],
+            direction:[],
+            speed:[],
+            score:[],
         };
         var pacmanStates = [];
 
@@ -184,16 +186,29 @@ function GameServer() {
         
         // To update on the player side
         for(i=0;i<count;i++)
-        var date = new Date();
-        var currentTime = date.getTime();
+        {
+            var date = new Date();
+            var currentTime = date.getTime();
+            
+            // Setting the states for each pacman
+            pacmanStates[i].type = "periodic";
+            pacmanStates[i].content = "update loop";
+            pacmanStates[i].timestamp = currentTime;
+            for(j=0;j<count;j++)
+            {
+                pacmanStates[i].posX[j] = pacman[i].getPosX();
+                pacmanStates[i].posY[j] = pacman[i].getPosY();
+                pacmanStates[i].direction[j] = pacman[i].getDirection();
+                pacmanStates[i].speed[j] = pacman[i].getSpeed();
+                pacmanStates[i].score[j] = pacman[i].getScore();
+            }
 
-        var states = { 
-                type: "update",
-                content : "Updated Loop"
+            if(sockets[0])
+            {
+            setTimeout(unicast, 0, sockets[0], pacmanStates);
             }
-            if(sockets[0]){
-            setTimeout(unicast, 0, sockets[0], states);
-            }
+        }
+
         // Send Updates here
     }
 
@@ -204,8 +219,8 @@ function GameServer() {
      * loop
      * Starting game play by calling game loop
      */
-    this.startGame = function() 
-    {
+     this.startGame = function() 
+     {
         // Initialize game objects
         levelMap = new Map();
         var i;
@@ -258,7 +273,7 @@ function GameServer() {
                         }
                     }
                 }
-    }
+            }
 
     // Condition if pacmans are colliding 
     // Check for both 1 colliding with 2 and 2 colliding with 1
