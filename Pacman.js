@@ -195,7 +195,7 @@
                             var nextGrid = map.getMapContent(x,y);
                             if (nextGrid !== Starvrun.WALL) {
                                 if (!stunned) {
-                                    setDirection(this.directionWatcher.get());
+                                    this.setDirection(this.directionWatcher.get());
                                     this.directionWatcher.set(null);
 				}
                             }
@@ -350,7 +350,7 @@
                     dead = false;
                     posX = map.gridToPx(startX);
                     posY = map.gridToPx(startY);
-                    setDirection(right);
+                    this.setDirection(right);
                     this.stop();
                     stuckX = 0;
                     stuckY = 0;
