@@ -135,6 +135,10 @@
                 speed = v; 
             }
             
+            this.isDead = function(){
+                return dead;
+            }
+            
             // Checking functions
             
             this.inGrid = function() {

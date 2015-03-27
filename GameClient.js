@@ -379,12 +379,16 @@ function GameClient() {
                             pacman[j].moveBack();
                         }else if(pacman[i].isBeast() === true && pacman[j].isBeast() == false){
                             // pacman i eat pacman j
-                            pacman[i].kill();
-                            pacman[j].died();
+                            if(!pacman[j].isDead()){
+                                pacman[i].kill();
+                                pacman[j].died();
+                            }
                         }else {
                             // pacman j eat pacman i
-                            pacman[j].kill();
-                            pacman[i].died();
+                            if(!pacman[i].isDead()){
+                                pacman[j].kill();
+                                pacman[i].died();
+                            }
                         }
                     }
                 }
