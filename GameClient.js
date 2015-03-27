@@ -45,7 +45,14 @@ function GameClient() {
                 case "message": 
                     appendMessage("serverMsg", message.content);
                     break;
-                case "update": 
+                case "periodic": 
+                            for(j=0;j<numberOfPacman;j++)
+        {
+            pacman[j].setPositionPx(pacmanStates.posX[j], pacmanStates.posY[j]);
+            pacman[j].setDirection(pacmanStates.direction[j]);
+            pacman[j].setSpeed(pacmanStates.speed[j]);
+            pacman[j].setScore(pacmanStates.score[j]);
+        }
                     break;
                 case "updateMap":
                     levelMap.setChanges(message.content);
@@ -321,12 +328,12 @@ function GameClient() {
         var i;
         for(i=0;i<numberOfPacman;i++)
         {
-            pacman[i].move();   
-            render();
+            //pacman[i].move();   
+            
         }
-        
+        render();
         // To check if the pacmans are colliding
-        checkCollision(numberOfPacman);
+        //checkCollision(numberOfPacman);
     }
 
     /*
