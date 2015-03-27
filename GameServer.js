@@ -27,7 +27,6 @@ function GameServer() {
     var levelMap;
     var pacman = [];
     var FRAME_RATE = 35;
-    var numberOfPacman = 2;
     
     var broadcast = function (msg) {
         var id;
@@ -43,7 +42,7 @@ function GameServer() {
     var newPlayer = function (conn) {        
         count ++;
         
-        if(nextPID > numberOfPacman) {
+        if(nextPID > count) {
             unicast(conn, {type: "message", content: "Server Full"}); 
             return;
         }
@@ -163,15 +162,31 @@ function GameServer() {
     {
         // Moves the pacman on the map always (from start to stop)
         var i;
-        for(i=0;i<numberOfPacman;i++)
+        var states = 
         {
+            type:"",
+            content:"",
+            pos:"",
+            dir:"",
+            speed:"",
+            score:"",
+        };
+        var pacmanStates = [];
+
+        for(i=0;i<count;i++)
+        {
+            pacmanStates[i] = new states();
             pacman[i].move();   
         }
         
         // To check if the pacmans are colliding
-        checkCollision(numberOfPacman);
+        checkCollision(count);
         
-          
+        // To update on the player side
+        for(i=0;i<count;i++)
+        var date = new Date();
+        var currentTime = date.getTime();
+
         var states = { 
                 type: "update",
                 content : "Updated Loop"
@@ -209,7 +224,7 @@ function GameServer() {
         // Initialize game objects
         levelMap = new Map();
         var i;
-        for(i=0;i<numberOfPacman;i++)
+        for(i=0;i<count;i++)
         {
             pacman[i] = new Pacman(levelMap);    
         }

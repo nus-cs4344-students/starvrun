@@ -51,8 +51,8 @@
             this.directionWatcher = new directionWatcher();  // For KeyPress
             // Private Variables
             // Game Level States
-            var startX = -1;
-            var startY = -1;
+            var startX = -1; // In Grid
+            var startY = -1; // In Grid
             
             var map = map;
             
@@ -129,6 +129,11 @@
             this.setPositionPx = function(x, y) {
                 posX = x;
                 posY = y;
+            }
+            
+            this.setStartGrid = function(x,y){
+                startX = x;
+                startY = y;
             }
             
             this.setSpeed  = function(v){
