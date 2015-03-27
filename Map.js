@@ -7,6 +7,27 @@ function Map() {
 	var pelletNumber = 0;
 	var powerupNumber = 0;
 
+	var changes = [];
+
+	this.getChanges = function() {
+		return changes;
+	}
+
+	this.setChanges = function(newChanges) {
+		changes = newChanges;
+	}
+
+	var pushChange = function(x,y,i) {
+		changes.push({x:x, y:y, i:i});
+	}
+
+	this.implementChanges = function() {
+		for (var i = 0; i < changes.length; i++) {
+			grids[changes[i]['x']][changes[i]['y']] = changes[i]['i'];
+		}
+		changes = [];
+	}
+
 	this.getWidth = function() {
 		return width;
 	}
@@ -42,6 +63,7 @@ function Map() {
 	//return none
 	this.setMapContent = function (x,y,i) {
 		grids[x][y] = i;
+		pushChange(x,y,i);
 	}
 
 
@@ -63,7 +85,7 @@ function Map() {
 	this.eatAt = function(x,y) {
 		if (grids[x][y] = Starvrun.PELLET) pelletNumber--;
 		if (grids[x][y] = Starvrun.POWERUP) powerupNumber--;
-		grids[x][y] = Starvrun.FREE;
+		this.setMapContent(x,y,Starvrun.FREE);
 	}
 
 	//input: x and y in grid
@@ -193,7 +215,7 @@ function Map() {
 	this.setPelletAt = function (x,y) {
 		if (grids[x][y] != Starvrun.PELLET) {
 			pelletNumber++;
-			grids[x][y] = Starvrun.PELLET;
+			this.setMapContent(x,y,Starvrun.PELLET);
 		}
 	}
 
@@ -203,7 +225,7 @@ function Map() {
 	this.setPowerupAt = function (x,y) {
 		if (grids[x][y] != Starvrun.POWERUP) {
 			powerupNumber++;
-			grids[x][y] = Starvrun.POWERUP;
+			this.setMapContent(x,y,Starvrun.POWERUP);
 		}
 	}
 
