@@ -176,9 +176,24 @@ function GameServer() {
                 type: "update",
                 content : "Updated Loop"
             }
-            if(sockets[0]){
+        if(sockets[0]){
             setTimeout(unicast, 0, sockets[0], states);
+        }
+
+        //periodic map update
+        if (levelMap.getChanges().count > 0) {
+            var states = { 
+                type: "updateMap",
+                content : levelMap.getChanges()
             }
+            for(i=0;i<numberOfPacman;i++)
+            {
+                if (sockets[i]) {
+                    setTimeout(unicast, 0, sockets[i], states);
+                }
+            }
+            levelMap.flushChanges();
+        }
         // Send Updates here
     }
 

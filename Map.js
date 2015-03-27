@@ -13,6 +13,10 @@ function Map() {
 		return changes;
 	}
 
+	this.flushChanges = function() {
+		changes = [];
+	}
+
 	this.setChanges = function(newChanges) {
 		changes = newChanges;
 	}
@@ -25,7 +29,6 @@ function Map() {
 		for (var i = 0; i < changes.length; i++) {
 			grids[changes[i]['x']][changes[i]['y']] = changes[i]['i'];
 		}
-		changes = [];
 	}
 
 	this.getWidth = function() {

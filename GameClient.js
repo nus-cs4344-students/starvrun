@@ -47,6 +47,11 @@ function GameClient() {
                     break;
                 case "update": 
                     break;
+                case "updateMap":
+                    levelMap.setChanges(message.content);
+                    levelMap.implementChanges(); 
+                    levelMap.flushChanges();
+                    break;
                 default: 
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
