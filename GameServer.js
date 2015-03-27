@@ -26,6 +26,7 @@ function GameServer() {
     /*Game Variables*/
     var levelMap;
     var pacman = [];
+    var numberOfPacman = 2;
     var FRAME_RATE = 35;
     
     var broadcast = function (msg) {
@@ -160,6 +161,14 @@ function GameServer() {
     // Where the game starts to be played
     var gameLoop = function() 
     {
+        for(i=0;i<numberOfPacman;i++)
+        {
+            pacman[i].move();   
+        }
+        
+        // To check if the pacmans are colliding
+        checkCollision(numberOfPacman);
+        
         // Moves the pacman on the map always (from start to stop)
         var i, j;
         var states = 
@@ -173,44 +182,35 @@ function GameServer() {
             speed:[],
             score:[],
         };
-        var pacmanStates = [];
-
-        for(i=0;i<count;i++)
-        {
-            pacmanStates[i] = new states();
-            pacman[i].move();   
-        }
         
-        // To check if the pacmans are colliding
-        checkCollision(count);
-        
-        // To update on the player side
-        for(i=0;i<count;i++)
-        {
-            var date = new Date();
-            var currentTime = date.getTime();
+        var pacmanStates = states;
+        var date = new Date();
+        var currentTime = date.getTime();
             
-            // Setting the states for each pacman
-            pacmanStates[i].type = "periodic";
-            pacmanStates[i].content = "update loop";
-            pacmanStates[i].timestamp = currentTime;
-            for(j=0;j<count;j++)
+        // Setting the states for each pacman
+        pacmanStates.type = "periodic";
+        pacmanStates.content = "update loop";
+        pacmanStates.timestamp = currentTime;
+        for(j=0;j<numberOfPacman;j++)
+        {
+            pacmanStates.posX[j] = pacman[j].getPosX();
+            pacmanStates.posY[j] = pacman[j].getPosY();
+            pacmanStates.direction[j] = pacman[j].getDirection();
+            pacmanStates.speed[j] = pacman[j].getSpeed();
+            pacmanStates.score[j] = pacman[j].getScore();
+        }
+            
+        // To update on the player side
+        for(i=0;i<numberOfPacman;i++)
+        {
+            if(sockets[i])
             {
-                pacmanStates[i].posX[j] = pacman[i].getPosX();
-                pacmanStates[i].posY[j] = pacman[i].getPosY();
-                pacmanStates[i].direction[j] = pacman[i].getDirection();
-                pacmanStates[i].speed[j] = pacman[i].getSpeed();
-                pacmanStates[i].score[j] = pacman[i].getScore();
-            }
-
-            if(sockets[0])
-            {
-            setTimeout(unicast, 0, sockets[0], pacmanStates);
+            setTimeout(unicast, 0, sockets[i], pacmanStates);
             }
         }
         
         //periodic map update
-        if (levelMap.getChanges().count > 0) {
+        if (levelMap.getChanges().numberOfPacman > 0) {
             var states = { 
                 type: "updateMap",
                 content : levelMap.getChanges()
@@ -238,11 +238,11 @@ function GameServer() {
         // Initialize game objects
         levelMap = new Map();
         var i;
-        for(i=0;i<count;i++)
+        for(i=0;i<numberOfPacman;i++)
         {
             pacman[i] = new Pacman(levelMap);    
         }
-        
+        console.log("Error Here?");
         pacman[0].setPositionPx(48,48);
         pacman[0].setColor("red");
         pacman[1].setPositionPx(560,48);
