@@ -333,6 +333,10 @@
 		}
             }
             
+            var getDirection = function(){
+                return curDirection;
+            }
+            
             this.stop = function() {
                 //this will make the pacman speed to 0
 		dirX = 0;
