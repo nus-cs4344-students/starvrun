@@ -80,18 +80,17 @@ function GameClient() {
     }
     
     var renderScore = function(){
-         var sb = document.getElementById("scoreBoard"); 
-         var scores = "Scoreboard";
-         var i=0;
-         for(i=0;i<pacman.length; i++){
-             scores = scores + "\n";
+        var sb = document.getElementById("scoreBoard"); 
+        var scores = "<p>Scoreboard</p>";
+        var i=0;
+        for(i=0;i<pacman.length; i++){
+             scores = scores + "<p>";
              scores = scores + (i+1) + ") " + pacman[i].getScore();
+             scores = scores + "</p>";
          }
          
          sb.innerHTML = scores;
-
-        
-    }
+     }
     
     var renderWalls = function(context)
     {
@@ -275,40 +274,38 @@ function GameClient() {
         37: left arrow
         39: right arrow
         */
+       var message = {
+           type: "changeDirection"
+       }
 
         switch(e.keyCode)
         {
             
             case 37: // Left 
-                    if(!pacman[0].isStunned()) pacman[0].directionWatcher.setLeft();
+                    message.direction = Starvrun.LEFT;
+                    sendToServer(message);
                     break;
             case 38: // Up
-                    if(!pacman[0].isStunned()) pacman[0].directionWatcher.setUp();
+                    message.direction = Starvrun.UP;
+                    sendToServer(message);                    
                     break;
             case 39: // Right
-                    if(!pacman[0].isStunned()) pacman[0].directionWatcher.setRight();
+                    message.direction = Starvrun.RIGHT;                    
+                    sendToServer(message);                    
                     break;
             case 40: // Down
-                    if(!pacman[0].isStunned()) pacman[0].directionWatcher.setDown();
+                    message.direction = Starvrun.DOWN;
+                    sendToServer(message);                   
                     break;
-
-            case 65: // 'A' Left 
-                    if(!pacman[1].isStunned()) pacman[1].directionWatcher.setLeft();
-                    break;
-            case 87: // 'W' Up
-                    if(!pacman[1].isStunned()) pacman[1].directionWatcher.setUp();
-                    break;
-            case 68: // 'D' Right
-                    if(!pacman[1].isStunned()) pacman[1].directionWatcher.setRight();
-                    break;
-            case 83: // 'S' Down
-                    if(!pacman[1].isStunned()) pacman[1].directionWatcher.setDown();
-                    break; 
             case 32: // 'Space'
                     //FOR TESTING ONLY!
                     levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
                     break;
         }
+        
+        
+            
+        
 
     }
 
