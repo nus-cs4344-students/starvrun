@@ -101,19 +101,24 @@ function GameServer() {
                         // one of the player moves the mouse.
                         case "changeDirection":
                             var pid = p.pid; // get player sending the update
+                            var pm = pacman[pid];
                             var direction = message.direction;
                             switch(direction){
                                 case Starvrun.UP:
-                                    
+                                    if(!pm.isStunned()) pm.directionWatcher.setUp();
                                     break;
                                 case Starvrun.DOWN:
+                                    if(!pm.isStunned()) pm.directionWatcher.setDown();
                                     break;
                                 case Starvrun.LEFT:
+                                    if(!pm.isStunned()) pm.directionWatcher.setLeft();
                                     break;
                                 case Starvrun.RIGHT:
+                                    if(!pm.isStunned()) pm.directionWatcher.setRight();
                                     break;
-                                default: console.log("direction : " + direction);
+                                default: console.log("unexpected direction : " + direction);
                             }
+                            
                             
                             break;
                         case "echo":
