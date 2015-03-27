@@ -301,8 +301,8 @@
             var eat = function () {
 		if (!dead) {
                     if (dirX !== 0 || dirY !== 0) {
-                        sAngle -= mouthOpen*0.07;
-			eAngle += mouthOpen*0.07;
+                        sAngle -= mouthOpen*0.035;
+			eAngle += mouthOpen*0.035;
 					
 			var limitMax1 = curDirection.sAngle;
 			var limitMax2 = curDirection.eAngle;
@@ -321,12 +321,13 @@
             }
             
             this.animate = function(){
+                
                 eat();
                 if(dead) this.dieAnimation();
             }
 
-            this.setDirection = function(dir) {
-		if (!dead) {
+            this.setDirection = function(dir) {                
+		if (!dead && dir && (dir.name !== curDirection.name)) {
                     dirX = dir.dirX;
                     dirY = dir.dirY;
                     sAngle = dir.sAngle;
@@ -380,6 +381,7 @@
             }
                 
             this.render = function(context) {
+                this.animate();
                 var radius = WIDTH / 2;
                 //console.log("rendering at " + this.posX + " , " + this.posY);
                 if(beastMode){radius = WIDTH * 3/4;}
@@ -395,7 +397,7 @@
                 context.lineTo(posX,posY);
                 context.closePath();
                 context.fill();
-                this.animate();
+                
             }
 	}
         
