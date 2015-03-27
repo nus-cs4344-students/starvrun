@@ -5,6 +5,10 @@ require(LIB_PATH + "Starvrun.js");
 require(LIB_PATH + "Map.js");
 require(LIB_PATH + "Pacman.js");
     
+function Player(connid, pid) {
+    this.connid = connid;
+    this.pid = pid;
+}
 
 
 function GameServer() {    
@@ -43,24 +47,11 @@ function GameServer() {
         unicast(conn, {type: "message", content:"You are Player " + nextPID });
 
         // Create player object and insert into players with key = conn.id
-        //players[conn.id] = new Player(conn.id, nextPID);
+        players[conn.id] = new Player(conn.id, nextPID);
         sockets[nextPID] = conn;
 
         // Updates the nextPID to issue 
         nextPID = (nextPID + 1);
-    }
-    
-    /*No Rendering Required*/
-    var gameLoop = function(){
-        
-        var states = { 
-                type: "update",
-                content : "Updated Loop"
-            }
-            if(sockets[0]){
-            setTimeout(unicast, 0, sockets[0], states);
-            }
-        // Send Updates here
     }
     
     this.start = function(){
@@ -74,7 +65,7 @@ function GameServer() {
             count = 0;
             nextPID = 1;
             gameInterval = undefined;
-            //players = new Object;
+            players = new Object;
             sockets = new Object;
             port = 4344; //Starvrun.PORT;
             IP = "0.0.0.0";//Starvrun.SERVER_IP;
@@ -96,7 +87,7 @@ function GameServer() {
                 // When the client send something to the server.
                 conn.on('data', function (data) {
                     var message = JSON.parse(data);
-                    //var p = players[conn.id];
+                    var p = players[conn.id];
 
                     //if (p === undefined) {
                         // we received data from a connection with no 
@@ -109,7 +100,21 @@ function GameServer() {
                             break;
                         // one of the player moves the mouse.
                         case "changeDirection":
-                        // one of the player moves the mouse.
+                            var pid = p.pid; // get player sending the update
+                            var direction = message.direction;
+                            switch(direction){
+                                case Starvrun.UP:
+                                    
+                                    break;
+                                case Starvrun.DOWN:
+                                    break;
+                                case Starvrun.LEFT:
+                                    break;
+                                case Starvrun.RIGHT:
+                                    break;
+                                default: console.log("direction : " + direction);
+                            }
+                            
                             break;
                         case "echo":
                             // Testing Connection
@@ -154,6 +159,16 @@ function GameServer() {
         
         // To check if the pacmans are colliding
         checkCollision(numberOfPacman);
+        
+          
+        var states = { 
+                type: "update",
+                content : "Updated Loop"
+            }
+            if(sockets[0]){
+            setTimeout(unicast, 0, sockets[0], states);
+            }
+        // Send Updates here
     }
 
     /*
