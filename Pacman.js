@@ -323,7 +323,7 @@
                 if(dead) this.dieAnimation();
             }
 
-            var setDirection = function(dir) {
+            this.setDirection = function(dir) {
 		if (!dead) {
                     dirX = dir.dirX;
                     dirY = dir.dirY;
@@ -333,7 +333,7 @@
 		}
             }
             
-            var getDirection = function(){
+            this.getDirection = function(){
                 return curDirection;
             }
             
