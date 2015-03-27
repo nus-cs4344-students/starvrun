@@ -208,7 +208,21 @@ function GameServer() {
             setTimeout(unicast, 0, sockets[0], pacmanStates);
             }
         }
-
+        
+        //periodic map update
+        if (levelMap.getChanges().count > 0) {
+            var states = { 
+                type: "updateMap",
+                content : levelMap.getChanges()
+            }
+            for(i=0;i<numberOfPacman;i++)
+            {
+                if (sockets[i]) {
+                    setTimeout(unicast, 0, sockets[i], states);
+                }
+            }
+            levelMap.flushChanges();
+        }
         // Send Updates here
     }
 
