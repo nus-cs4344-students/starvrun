@@ -242,7 +242,6 @@ function GameServer() {
         {
             pacman[i] = new Pacman(levelMap);    
         }
-        console.log("Error Here?");
         pacman[0].setPositionPx(48,48);
         pacman[0].setColor("red");
         pacman[1].setPositionPx(560,48);
