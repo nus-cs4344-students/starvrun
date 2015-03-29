@@ -281,6 +281,20 @@ function GameServer() {
                     }
                 }
             }
+            
+            if(!pacman[i].isDead() && pacman[i].deadUpdated){
+                pacman[i].deadUpdated = true;
+                var message = {};
+                message.type = "respawn"
+                message.pm = i;
+                for(j=0;j<numberOfPacman;j++)
+                {
+                    if (sockets[j]) {
+                        setTimeout(unicast, 0, sockets[j], message);
+                    }
+                }   
+                //console.log("stunned Sent");
+            }
         }
         
     }
@@ -364,6 +378,7 @@ function GameServer() {
                                 message.type = "kill";
                                 message.killer = i;
                                 message.killed = j;
+                                pacman[j].deadUpdated =true;
                                 // To update on the player side
                                 for(i=0;i<numberOfPacman;i++)
                                 {
@@ -382,6 +397,7 @@ function GameServer() {
                                 message.type = "kill";
                                 message.killer = j;
                                 message.killed = i;
+                                pacman[i].deadUpdated =true;
                                 // To update on the player side
                                 for(i=0;i<numberOfPacman;i++)
                                 {

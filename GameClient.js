@@ -82,6 +82,9 @@ function GameClient() {
                 case "unbeast":
                     pacman[message.pm].disableBeastMode();
                     break;
+                case "respawn":
+                    pacman[message.pm].respawn();
+                    break;
                 default: 
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
