@@ -92,6 +92,7 @@
             var sAngle = curDirection.sAngle;
             var eAngle = curDirection.eAngle;
             var dead = false;  // For holding Pacman in Position while animation is played
+            this.deadUpdated = false;
 
             // Public Method
             // Accessors
@@ -171,7 +172,7 @@
             this.enableStunned = function(){
                 stunned = true;
                 stunned_Timer = Starvrun.FRAME_RATE * Starvrun.STUN_TIME;
-                console.log("Stunned for " + stunned_Timer );
+                //console.log("Stunned for " + stunned_Timer );
             }
                 
             this.disableStunned = function(){
@@ -244,7 +245,7 @@
                             this.stop();
                             // get out of the wall
                             // 4(which is also the speed) is the first step into the cell
-                            console.log(posX % (WIDTH/2))
+                            //console.log(posX % (WIDTH/2))
                             if ((stuckX == 1) && ((posX % (WIDTH/2)) !== 0)) posX -= speed;
                             if ((stuckY == 1) && ((posY % (WIDTH/2)) !== 0)) posY -= speed;
 			}		
