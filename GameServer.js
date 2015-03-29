@@ -224,7 +224,65 @@ function GameServer() {
             }
             levelMap.flushChanges();
         }
-        // Send Updates here
+        
+        //Stun/Beast Mode Update 
+        for(i=0;i<numberOfPacman;i++)
+        {
+            if(pacman[i].isStunned() && !pacman[i].stunUpdated){
+                pacman[i].stunUpdated = true;
+                var message = {};
+                message.type = "stunned"
+                message.pm = i;
+                for(j=0;j<numberOfPacman;j++)
+                {
+                    if (sockets[j]) {
+                        setTimeout(unicast, 0, sockets[j], message);
+                    }
+                }   
+                //console.log("stunned Sent");
+            }
+            
+            if(!pacman[i].isStunned() && pacman[i].stunUpdated){
+                pacman[i].stunUpdated = false;
+                var message = {};
+                message.type = "unstunned"
+                message.pm = i;
+                for(j=0;j<numberOfPacman;j++)
+                {
+                    if (sockets[j]) {
+                        setTimeout(unicast, 0, sockets[j], message);
+                    }
+                }   
+                //console.log("Unstunned Sent");
+            }
+            
+            if(pacman[i].isBeast() && !pacman[i].beastUpdated){
+                pacman[i].beastUpdated = true;
+                var message = {};
+                message.type = "beast"
+                message.pm = i;
+                for(j=0;j<numberOfPacman;j++)
+                {
+                    if (sockets[j]) {
+                        setTimeout(unicast, 0, sockets[j], message);
+                    }
+                }
+            }
+            
+            if(!pacman[i].isBeast() && pacman[i].beastUpdated){
+                pacman[i].beastUpdated = false;
+                var message = {};
+                message.type = "unbeast"
+                message.pm = i;
+                for(j=0;j<numberOfPacman;j++)
+                {
+                    if (sockets[j]) {
+                        setTimeout(unicast, 0, sockets[j], message);
+                    }
+                }
+            }
+        }
+        
     }
 
     /*
@@ -266,23 +324,61 @@ function GameServer() {
                 {
                     condition = checkCondition(pacman[i], pacman[j]);
                     //console.log(condition);
-                    if(condition)
+                    if(condition && !pacman[i].isDead() && !pacman[j].isDead())
                     {
                         // Check If same State
                         if(pacman[i].isBeast()=== pacman[j].isBeast()){
                             pacman[i].moveBack();
                             pacman[j].moveBack();
+                            var message = {};
+                                message.type = "moveBack";
+                                message.move1 = i;
+                                message.move2 = j;
+                                // To update on the player side
+                                for(i=0;i<numberOfPacman;i++)
+                                {
+                                    if(sockets[i])
+                                    {
+                                    setTimeout(unicast, 0, sockets[i], message);
+                                    }
+                                }
+                                //console.log("sending moveBack");
                         }else if(pacman[i].isBeast() === true && pacman[j].isBeast() == false){
                             // pacman i eat pacman j
                             if(!pacman[j].isDead()){
                                 pacman[i].kill();
                                 pacman[j].died();
+                                //Send message on i kill j
+                                var message = {};
+                                message.type = "kill";
+                                message.killer = i;
+                                message.killed = j;
+                                // To update on the player side
+                                for(i=0;i<numberOfPacman;i++)
+                                {
+                                    if(sockets[i])
+                                    {
+                                    setTimeout(unicast, 0, sockets[i], message);
+                                    }
+                                }
                             }
                         }else {
                             // pacman j eat pacman i
                             if(!pacman[i].isDead()){
                                 pacman[j].kill();
                                 pacman[i].died();
+                                var message = {};
+                                message.type = "kill";
+                                message.killer = j;
+                                message.killed = i;
+                                // To update on the player side
+                                for(i=0;i<numberOfPacman;i++)
+                                {
+                                    if(sockets[i])
+                                    {
+                                    setTimeout(unicast, 0, sockets[i], message);
+                                    }
+                                }
                             }
                         }
                     }

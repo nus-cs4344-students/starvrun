@@ -66,10 +66,12 @@
             // POWER UP Stuff
             var beastMode = false;
             var beastMode_Timer = 0;
+            this.beastUpdated = false;
             
             // Collision Stuff
             var stunned = false;
             var stunned_Timer = 0;
+            this.stunUpdated = false;
             
             // Movement Variables
             var speed = 4;
@@ -126,7 +128,7 @@
             this.isBeast = function(){
                 return beastMode;
             }
-                
+               
             // Mutators
             this.setPositionPx = function(x, y) {
                 posX = x;
@@ -157,22 +159,22 @@
             }
 
             // Private Methods for State Management
-            var enableBeastMode = function(){
-		beastMode = true;
+            this.enableBeastMode = function(){
+                beastMode = true;
 		beastMode_Timer = Starvrun.FRAME_RATE * Starvrun.BEAST_TIME; // 3seconds
             }
             
-            var disableBeastMode = function() { 
+            this.disableBeastMode = function() { 
 		beastMode = false; 
             }
                 
-            var enableStunned = function(){
+            this.enableStunned = function(){
                 stunned = true;
                 stunned_Timer = Starvrun.FRAME_RATE * Starvrun.STUN_TIME;
                 console.log("Stunned for " + stunned_Timer );
             }
                 
-            var disableStunned = function(){
+            this.disableStunned = function(){
                 stunned = false; 
             }
 
@@ -227,7 +229,7 @@
                             var point = Starvrun.PELLET_SCORE;
                             if (mapItem === Starvrun.POWERUP) {
                                 point = Starvrun.POWERUP_SCORE;
-                                enableBeastMode();
+                                this.enableBeastMode();
                             }
                             
                             //clear the item on map
@@ -250,7 +252,7 @@
                 }
             }
             
-            var runTimers = function(){
+            this.runTimers = function(){
                 if (beastMode_Timer > 0) {
 			beastMode_Timer--;
                 }
@@ -259,13 +261,13 @@
                     stunned_Timer --;
                 }
 
-		if ((beastMode_Timer === 0) && (beastMode === true)) disableBeastMode();
-                if ((stunned_Timer === 0) && (stunned === true)) disableStunned();
+		if ((beastMode_Timer === 0) && (beastMode === true)) this.disableBeastMode();
+                if ((stunned_Timer === 0) && (stunned === true)) this.disableStunned();
             }
 
             this.moveBack = function(){
                 if(!stunned){
-                    enableStunned();
+                    this.enableStunned();
                     dirX *= -1;
                     dirY *= -1;
                 }
@@ -275,7 +277,7 @@
                 // Game Loop
 		this.checkDirectionChange();
 		this.checkCollision();
-                runTimers();
+                this.runTimers();
 
 		if (!dead) {
                     posX += speed * dirX;

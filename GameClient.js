@@ -59,6 +59,26 @@ function GameClient() {
                     levelMap.implementChanges(); 
                     levelMap.flushChanges();
                     break;
+                case "kill":
+                    pacman[message.killer].kill();
+                    pacman[message.killed].died();
+                    break;
+                case "moveBack":
+                    pacman[message.move1].moveBack();
+                    pacman[message.move2].moveBack();
+                    break;    
+                case "stunned":
+                    pacman[message.pm].enableStunned();
+                    break;
+                case "unstunned":
+                    pacman[message.pm].disableStunned();
+                    break;
+                case "beast":
+                    pacman[message.pm].enableBeastMode();
+                    break;
+                case "unbeast":
+                    pacman[message.pm].disableBeastMode();
+                    break;
                 default: 
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
