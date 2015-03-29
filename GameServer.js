@@ -311,6 +311,17 @@ function GameServer() {
         levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
         levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
         
+        var message = {};
+        message.type = "startGame";
+        // To update on the player side
+        for(i=0;i<numberOfPacman;i++)
+        {
+            if(sockets[i])
+            {
+                setTimeout(unicast, 0, sockets[i], message);
+            }
+        }
+        
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
 

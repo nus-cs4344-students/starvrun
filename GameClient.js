@@ -15,6 +15,7 @@ function GameClient() {
     var pacman = [];
     var FRAME_RATE = 35;
     var numberOfPacman = 2;
+    var started = false;
     
     var showMessage = function(location, msg) {
         document.getElementById(location).innerHTML = msg; 
@@ -45,6 +46,8 @@ function GameClient() {
                 case "message": 
                     appendMessage("serverMsg", message.content);
                     break;
+                case "startGame":
+                    startGame();
                 case "periodic": 
                 for(var j=0;j<numberOfPacman;j++)
                     {
@@ -283,6 +286,7 @@ function GameClient() {
         context.fillStyle = Starvrun.BG_COLOUR;
         context.fillRect(0, 0, playArea.width, playArea.height);
         renderWalls(context);
+        render();
         
         // Add event handlers
         document.addEventListener("keydown", function(e) {
@@ -340,25 +344,30 @@ function GameClient() {
                     break;
         }
         
-        
-            
-        
-
+    }
+    
+    var startGame = function(){
+        if(started) return;
+        started = true;
     }
 
     // Where the game starts to be played
     var gameLoop = function() 
     {
+        
+        if(started){
         // Moves the pacman on the map always (from start to stop)
         var i;
         for(i=0;i<numberOfPacman;i++)
         {
-            //pacman[i].move();   
+            pacman[i].move();   
             
         }
-        render();
         // To check if the pacmans are colliding
-        //checkCollision(numberOfPacman);
+        checkCollision(numberOfPacman);
+        render();
+        
+        }
     }
 
     /*
@@ -391,8 +400,8 @@ function GameClient() {
         initGUI();
         initNetwork();
         // Start drawing 
-        
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
+        
     };
 
     // To check if the pacmans are colliding
