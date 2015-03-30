@@ -36,7 +36,8 @@ function GameClient() {
     var initNetwork = function() {
         // Attempts to connect to game server
         try {
-            var url= "http://" + Starvrun.SERVER_NAME + ":" + Starvrun.PORT + "/starvrun";
+            //var url= "http://" + Starvrun.SERVER_NAME + ":" + Starvrun.PORT + "/starvrun";
+            var url= "http://" + Starvrun.SERVER_IP + ":" + Starvrun.PORT + "/starvrun";
             console.log("Trying to connect to " + url);
             socket = new SockJS(url);
             console.log("connected");

@@ -74,8 +74,8 @@ function GameServer() {
             gameInterval = undefined;
             players = new Object;
             sockets = new Object;
-            port = 4344; //Starvrun.PORT;
-            IP = "0.0.0.0";//Starvrun.SERVER_IP;
+            port = Starvrun.PORT;
+            IP = Starvrun.SERVER_IP;
             
             // Upon connection established from a client socket
             sock.on('connection', function (conn) {
