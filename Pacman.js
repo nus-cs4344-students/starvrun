@@ -131,6 +131,8 @@
             }
                
             // Mutators
+            
+            
             this.setPositionPx = function(x, y) {
                 posX = x;
                 posY = y;
@@ -139,6 +141,7 @@
             this.setStartGrid = function(x,y){
                 startX = x;
                 startY = y;
+                this.setPositionPx(map.gridToPx(x),map.gridToPx(y));
             }
             
             this.setSpeed  = function(v){
@@ -360,7 +363,10 @@
                     stuckY = 0;
                     lives --;
                 }else{
-                    console.log("No More Lives");
+                    posX = map.gridToPx(-1);
+                    posY = map.gridToPx(-1);
+                    this.stop();
+                    //console.log("No More Lives");
                     //game.drawHearts(this.lives);
                 }
             }
@@ -384,6 +390,9 @@
             }
                 
             this.render = function(context) {
+                if(lives <= 0){
+                    return;
+                }
                 this.animate();
                 var radius = WIDTH / 2;
                 //console.log("rendering at " + this.posX + " , " + this.posY);
