@@ -150,8 +150,7 @@ function GameServer() {
             console.log("Server running on http://"+IP + ":" + 
                 port + "\n");
             console.log("Visit http://"+ IP + ":" + port + 
-                "/index.html in your browser to start the game");
-            //gameInterval = setInterval(function() {gameLoop();}, 1000/Pong.FRAME_RATE);
+                "/index_net.html in your browser to start the game");
             
         } catch (e) {
             console.log("Cannot listen to " + port);
