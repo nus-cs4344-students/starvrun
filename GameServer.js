@@ -27,7 +27,7 @@ function GameServer() {
     /*Game Variables*/
     var levelMap;
     var pacman = [];
-    var numberOfPacman = 2;
+    var numberOfPacman = 4;
     var FRAME_RATE = 35;
     
     var broadcast = function (msg) {
@@ -315,10 +315,18 @@ function GameServer() {
         {
             pacman[i] = new Pacman(levelMap);    
         }
-        pacman[0].setPositionPx(48,48);
+        //pacman[0].setPositionPx(48,48);
+        pacman[0].setStartGrid(1,1);
         pacman[0].setColor("red");
-        pacman[1].setPositionPx(560,48);
+        //pacman[1].setPositionPx(560,48);
         pacman[1].setColor("yellow");
+        pacman[1].setStartGrid(levelMap.getWidth()-2,1);
+        //pacman[2].setPositionPx(48,Map.get);
+        pacman[2].setColor("blue");
+        pacman[2].setStartGrid(1,levelMap.getHeight()-2);
+        //pacman[3].setPositionPx(560,560);
+        pacman[3].setColor("green");
+        pacman[3].setStartGrid(levelMap.getWidth()-2,levelMap.getHeight()-2);
 
         levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
         levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
@@ -416,10 +424,12 @@ function GameServer() {
     // Check for both 1 colliding with 2 and 2 colliding with 1
     var checkCondition = function(pacman1, pacman2)
     {
-        if((pacman1.getGridPosX()=== pacman2.getGridPosX())&&(pacman1.getGridPosY()=== pacman2.getGridPosY()))
-            return true;
-        else 
-            return false;
+        if(pacman1 && pacman2){
+            if((pacman1.getGridPosX()=== pacman2.getGridPosX())&&(pacman1.getGridPosY()=== pacman2.getGridPosY()))
+                return true;
+            else 
+                return false;
+            }
     }
 }
 
