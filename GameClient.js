@@ -393,15 +393,15 @@ function GameClient() {
         
         //pacman[0].setPositionPx(48,48);
         pacman[0].setStartGrid(1,1);
-        pacman[0].setColor("red");
+        pacman[0].setColor("lime");
         //pacman[1].setPositionPx(560,48);
         pacman[1].setColor("yellow");
         pacman[1].setStartGrid(levelMap.getWidth()-2,1);
         //pacman[2].setPositionPx(48,Map.get);
-        pacman[2].setColor("blue");
+        pacman[2].setColor("pink");
         pacman[2].setStartGrid(1,levelMap.getHeight()-2);
         //pacman[3].setPositionPx(560,560);
-        pacman[3].setColor("green");
+        pacman[3].setColor("cyan");
         pacman[3].setStartGrid(levelMap.getWidth()-2,levelMap.getHeight()-2);
 
         levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
