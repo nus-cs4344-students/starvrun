@@ -386,7 +386,7 @@
             }
             
             this.setColor = function(color) {
-                this.COLOR = color;
+                COLOR = color;
             }
                 
             this.render = function(context) {
