@@ -354,27 +354,29 @@
             }
 		
             this.respawn = function() {
+                var me = this;
                 if(lives > 0){
                     dead = false;
                     posX = map.gridToPx(startX);
                     posY = map.gridToPx(startY);
-                    this.setDirection(right);
-                    this.stop();
+                    me.setDirection(startDir);
+                    me.stop();
                     stuckX = 0;
                     stuckY = 0;
                     lives --;
+                    //console.log("Lives Remaining = " + lives);
                 }else{
                     posX = map.gridToPx(-1);
                     posY = map.gridToPx(-1);
-                    this.stop();
-                    //console.log("No More Lives");
-                    //game.drawHearts(this.lives);
+                    me.stop();
+                    //console.log("No more Lives");
                 }
             }
             
             this.reset = function(){
+                var me = this;
                 lives = Starvrun.LIVES + 1;
-                this.respawn();
+                me.respawn();
             }
 
             this.dieAnimation = function() {
@@ -382,7 +384,7 @@
 		sAngle += 0.05;
 		eAngle -= 0.05;
 		if (sAngle >= curDirection.sAngle+0.7 || eAngle <= curDirection.eAngle-0.7) {
-                    this.respawn();
+                    if(lives > 0) this.respawn();
 		}    
             }
             
