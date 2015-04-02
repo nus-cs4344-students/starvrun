@@ -13,6 +13,7 @@
 	var down = new Direction("down", 0.75, 0.25, 0, 1);		// DOWN
 	var left = new Direction("left", 1.25, 0.75, -1, 0);	// LEFT
 	var up = new Direction("up", 1.75, 1.25, 0, -1);		// UP 
+        var startDir = new Direction("start", 0.25, 1.75,0,0);
 
 
 	// DirectionWatcher
@@ -76,9 +77,9 @@
             // Movement Variables
             var speed = 4;
 
-            var curDirection = right;
-            var dirX = curDirection.dirX;
-            var dirY = curDirection.dirY;
+            var curDirection = startDir;
+            var dirX = 0;
+            var dirY = 0;
                         
             var stuckX = 0;
             var stuckY = 0; // >? What are these used for?
