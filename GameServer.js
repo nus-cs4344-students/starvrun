@@ -13,7 +13,6 @@ function Player(connid, pid) {
 
 function GameServer() {    
 
-
     // Server Variables
     var port;         // Game port 
     var IP;           // Game IP
@@ -91,7 +90,8 @@ function GameServer() {
 
                 // When the client closes the connection to the server/closes the window
                 conn.on('close', function () {
-
+                    var p = players[conn.id];
+                    
                 });
 
                 // When the client send something to the server.
@@ -164,7 +164,7 @@ function GameServer() {
     // Where the game starts to be played
     var gameLoop = function() 
     {
-        for(var i=0;i<numberOfPacman;i++)
+        for(var i in pacman)
         {
             pacman[i].move();   
         }
@@ -184,7 +184,7 @@ function GameServer() {
     
     var sendStateChanges = function(){
         //Stun/Beast Mode Update 
-        for(var i=0;i<numberOfPacman;i++)
+        for(var i in pacman)
         {
             var message = {};
             var toSend = false;
@@ -237,7 +237,7 @@ function GameServer() {
             score:[],
         };
                 
-        for(var j=0;j<numberOfPacman;j++)
+        for(var j in pacman)
         {
             states.posX[j] = pacman[j].getPosX();
             states.posY[j] = pacman[j].getPosY();
@@ -272,8 +272,22 @@ function GameServer() {
      {
         // Initialize game objects
         levelMap = new Map();
-        var i;
-        for(i=0;i<numberOfPacman;i++)
+        levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
+        levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
+        levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
+        levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
+        
+        initPacman();
+        var message = {};
+        message.type = "startGame";
+        // To update on the player side
+        setTimeout(broadcast, 0, message);
+        
+        setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
+    };
+    
+    var initPacman = function(){
+        for(var i=0;i<numberOfPacman;i++)
         {
             pacman[i] = new Pacman(levelMap);    
         }
@@ -281,32 +295,14 @@ function GameServer() {
         pacman[1].setStartGrid(levelMap.getWidth()-2,1);
         pacman[2].setStartGrid(1,levelMap.getHeight()-2);
         pacman[3].setStartGrid(levelMap.getWidth()-2,levelMap.getHeight()-2);
-
-        levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
-        levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
-        levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
-        levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
-        
-        var message = {};
-        message.type = "startGame";
-        // To update on the player side
-        for(i=0;i<numberOfPacman;i++)
-        {
-            if(sockets[i])
-            {
-                setTimeout(unicast, 0, sockets[i], message);
-            }
-        }
-        
-        setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
-    };
+    }
 
     // To check if the pacmans are colliding
     var checkCollision = function(numberOfPacman)
     {
         var i, j, condition;
         for(i=0;i<numberOfPacman;i++)
-            for(j=i;j<numberOfPacman;j++)
+            for(j=i+1;j<numberOfPacman;j++)
                 if(i!=j)
                 {
                     condition = checkCondition(pacman[i], pacman[j]);
@@ -322,19 +318,14 @@ function GameServer() {
                                 message.move1 = i;
                                 message.move2 = j;
                                 // To update on the player side
-                                for(i=0;i<numberOfPacman;i++)
-                                {
-                                    if(sockets[i])
-                                    {
-                                    setTimeout(unicast, 0, sockets[i], message);
-                                    }
-                                }
+                                setTimeout(broadcast,0,message);
                                 //console.log("sending moveBack");
                         }else if(pacman[i].isBeast() === true && pacman[j].isBeast() == false){
                             // pacman i eat pacman j
                             if(!pacman[j].isDead()){
                                 pacman[i].kill();
                                 pacman[j].died();
+                                pacman[j].respawn();
                                 //Send message on i kill j
                                 var message = {};
                                 message.type = "kill";
@@ -342,32 +333,21 @@ function GameServer() {
                                 message.killed = j;
                                 pacman[j].deadUpdated =true;
                                 // To update on the player side
-                                for(i=0;i<numberOfPacman;i++)
-                                {
-                                    if(sockets[i])
-                                    {
-                                    setTimeout(unicast, 0, sockets[i], message);
-                                    }
-                                }
+                               setTimeout(broadcast,0,message);
                             }
                         }else {
                             // pacman j eat pacman i
                             if(!pacman[i].isDead()){
                                 pacman[j].kill();
                                 pacman[i].died();
+                                pacman[i].respawn();
                                 var message = {};
                                 message.type = "kill";
                                 message.killer = j;
                                 message.killed = i;
                                 pacman[i].deadUpdated =true;
                                 // To update on the player side
-                                for(i=0;i<numberOfPacman;i++)
-                                {
-                                    if(sockets[i])
-                                    {
-                                    setTimeout(unicast, 0, sockets[i], message);
-                                    }
-                                }
+                                setTimeout(broadcast,0,message);
                             }
                         }
                     }
