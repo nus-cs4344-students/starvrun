@@ -17,10 +17,6 @@ function GameClient() {
     var numberOfPacman = 4;
     var started = false;
     
-    var showMessage = function(location, msg) {
-        document.getElementById(location).innerHTML = msg; 
-    }
-    
     var appendMessage = function(location, msg) {
         var prev_msgs = document.getElementById(location).innerHTML;
         document.getElementById(location).innerHTML = "[" + new Date().toString() + "] " + msg + "<br />" + prev_msgs;
@@ -83,6 +79,7 @@ function GameClient() {
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
             }
+                        
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME+ ":" + Starvrun.PORT);
         }
@@ -357,11 +354,11 @@ function GameClient() {
         var i;
         for(i=0;i<numberOfPacman;i++)
         {
-        //    pacman[i].move();   
+            pacman[i].move();   
             
         }
         // To check if the pacmans are colliding
-        //checkCollision(numberOfPacman);
+        checkCollision(numberOfPacman);
         render();
         
         }
@@ -378,6 +375,20 @@ function GameClient() {
     {
         // Initialize game objects
         levelMap = new Map();
+        levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
+        levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
+        levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
+        levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
+        
+        initPacman();
+        
+        initGUI();
+        initNetwork();
+        // Start drawing 
+        setInterval(function() {gameLoop();}, 1000/FRAME_RATE);  
+    };
+    
+    var initPacman = function(){
         var i;
         for(i=0;i<numberOfPacman;i++)
         {
@@ -392,18 +403,8 @@ function GameClient() {
         pacman[2].setStartGrid(1,levelMap.getHeight()-2);
         pacman[3].setColor("cyan");
         pacman[3].setStartGrid(levelMap.getWidth()-2,levelMap.getHeight()-2);
-
-        levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
-        levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
-        levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
-        levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
         
-        initGUI();
-        initNetwork();
-        // Start drawing 
-        setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
-        
-    };
+    }
 
     // To check if the pacmans are colliding
     var checkCollision = function(numberOfPacman)
