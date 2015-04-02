@@ -71,20 +71,13 @@ function GameClient() {
                     pacman[message.move1].moveBack();
                     pacman[message.move2].moveBack();
                     break;    
-                case "stunned":
-                    pacman[message.pm].enableStunned();
-                    break;
-                case "unstunned":
-                    pacman[message.pm].disableStunned();
-                    break;
-                case "beast":
-                    pacman[message.pm].enableBeastMode();
-                    break;
-                case "unbeast":
-                    pacman[message.pm].disableBeastMode();
-                    break;
-                case "respawn":
-                    pacman[message.pm].respawn();
+                case "stateChanges":
+                    var pm = pacman[message.pm];
+                    if(message.stunned === true) pm.enableStunned();
+                    if(message.stunned === false) pm.disableStunned();
+                    if(message.beast === true) pm.enableBeastMode();
+                    if(message.beast === false) pm.disableBeastMode();
+                    if(message.respawn === true) pm.respawn();
                     break;
                 default: 
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
@@ -364,11 +357,11 @@ function GameClient() {
         var i;
         for(i=0;i<numberOfPacman;i++)
         {
-            pacman[i].move();   
+        //    pacman[i].move();   
             
         }
         // To check if the pacmans are colliding
-        checkCollision(numberOfPacman);
+        //checkCollision(numberOfPacman);
         render();
         
         }
@@ -391,16 +384,12 @@ function GameClient() {
             pacman[i] = new Pacman(levelMap);    
         }
         
-        //pacman[0].setPositionPx(48,48);
         pacman[0].setStartGrid(1,1);
         pacman[0].setColor("lime");
-        //pacman[1].setPositionPx(560,48);
         pacman[1].setColor("yellow");
         pacman[1].setStartGrid(levelMap.getWidth()-2,1);
-        //pacman[2].setPositionPx(48,Map.get);
         pacman[2].setColor("pink");
         pacman[2].setStartGrid(1,levelMap.getHeight()-2);
-        //pacman[3].setPositionPx(560,560);
         pacman[3].setColor("cyan");
         pacman[3].setStartGrid(levelMap.getWidth()-2,levelMap.getHeight()-2);
 
@@ -421,7 +410,7 @@ function GameClient() {
     {
         var i, j, condition;
         for(i=0;i<numberOfPacman;i++)
-            for(j=i;j<numberOfPacman;j++)
+            for(j=i+1;j<numberOfPacman;j++)
                 if(i!=j)
                 {
                     condition = checkCondition(pacman[i], pacman[j]);

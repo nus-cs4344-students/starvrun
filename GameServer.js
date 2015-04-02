@@ -33,11 +33,14 @@ function GameServer() {
     var broadcast = function (msg) {
         var id;
         for (id in sockets) {
-            sockets[id].write(JSON.stringify(msg));
+            unicast(sockets[id], msg);
         }
     }
     
     var unicast = function (socket, msg) {
+        var date = new Date();
+        var currentTime = date.getTime();
+        msg["timestamp"] = currentTime;
         socket.write(JSON.stringify(msg));
     }
     
@@ -161,7 +164,7 @@ function GameServer() {
     // Where the game starts to be played
     var gameLoop = function() 
     {
-        for(i=0;i<numberOfPacman;i++)
+        for(var i=0;i<numberOfPacman;i++)
         {
             pacman[i].move();   
         }
@@ -170,10 +173,61 @@ function GameServer() {
         checkCollision(numberOfPacman);
         
         // Moves the pacman on the map always (from start to stop)
-        var i, j;
+        sendPeriodicUpdate();
+        sendMapChanges();
+        sendStateChanges();
+            
+        
+        
+        
+    }
+    
+    var sendStateChanges = function(){
+        //Stun/Beast Mode Update 
+        for(var i=0;i<numberOfPacman;i++)
+        {
+            var message = {};
+            var toSend = false;
+            message.type = "stateChanges";
+            message.pm = i;
+            if(pacman[i].isStunned() && !pacman[i].stunUpdated){
+                pacman[i].stunUpdated = true;
+                message.stunned = true;
+                toSend = true;
+                
+            }
+            
+            if(!pacman[i].isStunned() && pacman[i].stunUpdated){
+                pacman[i].stunUpdated = false;
+                message.stunned = false;
+                toSend = true;
+            }
+            
+            if(pacman[i].isBeast() && !pacman[i].beastUpdated){
+                pacman[i].beastUpdated = true;
+                message.beast = true;
+                toSend = true;
+            }
+            
+            if(!pacman[i].isBeast() && pacman[i].beastUpdated){
+                pacman[i].beastUpdated = false;
+                message.beast = false;
+                toSend = true;
+            }
+            
+            if(!pacman[i].isDead() && pacman[i].deadUpdated){
+                pacman[i].deadUpdated = true;
+                message.respawn = true;
+                toSend = true;
+            }
+            if(toSend) setTimeout(broadcast,0,message);
+        }
+    }
+    
+    var sendPeriodicUpdate = function(){
         var states = 
         {
-            type:"",
+            type:"periodic",
             content:"",
             timestamp:"",
             posX:[],
@@ -182,120 +236,29 @@ function GameServer() {
             speed:[],
             score:[],
         };
-        
-        var pacmanStates = states;
-        var date = new Date();
-        var currentTime = date.getTime();
-            
-        // Setting the states for each pacman
-        pacmanStates.type = "periodic";
-        pacmanStates.content = "update loop";
-        pacmanStates.timestamp = currentTime;
-        for(j=0;j<numberOfPacman;j++)
+                
+        for(var j=0;j<numberOfPacman;j++)
         {
-            pacmanStates.posX[j] = pacman[j].getPosX();
-            pacmanStates.posY[j] = pacman[j].getPosY();
-            pacmanStates.direction[j] = pacman[j].getDirection();
-            pacmanStates.speed[j] = pacman[j].getSpeed();
-            pacmanStates.score[j] = pacman[j].getScore();
-        }
-            
-        // To update on the player side
-        for(i=0;i<numberOfPacman;i++)
-        {
-            if(sockets[i])
-            {
-            setTimeout(unicast, 0, sockets[i], pacmanStates);
-            }
+            states.posX[j] = pacman[j].getPosX();
+            states.posY[j] = pacman[j].getPosY();
+            states.direction[j] = pacman[j].getDirection();
+            states.speed[j] = pacman[j].getSpeed();
+            states.score[j] = pacman[j].getScore();
         }
         
+        setTimeout(broadcast, 0, states);
+    }
+    
+    var sendMapChanges = function(){
         //periodic map update
         if (levelMap.getChanges().length > 0) {
             var states = { 
                 type: "updateMap",
                 content : levelMap.getChanges()
             }
-            for(i=0;i<numberOfPacman;i++)
-            {
-                if (sockets[i]) {
-                    setTimeout(unicast, 0, sockets[i], states);
-                }
-            }
+            setTimeout(broadcast, 0, states);
             levelMap.flushChanges();
         }
-        
-        //Stun/Beast Mode Update 
-        for(i=0;i<numberOfPacman;i++)
-        {
-            if(pacman[i].isStunned() && !pacman[i].stunUpdated){
-                pacman[i].stunUpdated = true;
-                var message = {};
-                message.type = "stunned"
-                message.pm = i;
-                for(j=0;j<numberOfPacman;j++)
-                {
-                    if (sockets[j]) {
-                        setTimeout(unicast, 0, sockets[j], message);
-                    }
-                }   
-                //console.log("stunned Sent");
-            }
-            
-            if(!pacman[i].isStunned() && pacman[i].stunUpdated){
-                pacman[i].stunUpdated = false;
-                var message = {};
-                message.type = "unstunned"
-                message.pm = i;
-                for(j=0;j<numberOfPacman;j++)
-                {
-                    if (sockets[j]) {
-                        setTimeout(unicast, 0, sockets[j], message);
-                    }
-                }   
-                //console.log("Unstunned Sent");
-            }
-            
-            if(pacman[i].isBeast() && !pacman[i].beastUpdated){
-                pacman[i].beastUpdated = true;
-                var message = {};
-                message.type = "beast"
-                message.pm = i;
-                for(j=0;j<numberOfPacman;j++)
-                {
-                    if (sockets[j]) {
-                        setTimeout(unicast, 0, sockets[j], message);
-                    }
-                }
-            }
-            
-            if(!pacman[i].isBeast() && pacman[i].beastUpdated){
-                pacman[i].beastUpdated = false;
-                var message = {};
-                message.type = "unbeast"
-                message.pm = i;
-                for(j=0;j<numberOfPacman;j++)
-                {
-                    if (sockets[j]) {
-                        setTimeout(unicast, 0, sockets[j], message);
-                    }
-                }
-            }
-            
-            if(!pacman[i].isDead() && pacman[i].deadUpdated){
-                pacman[i].deadUpdated = true;
-                var message = {};
-                message.type = "respawn"
-                message.pm = i;
-                for(j=0;j<numberOfPacman;j++)
-                {
-                    if (sockets[j]) {
-                        setTimeout(unicast, 0, sockets[j], message);
-                    }
-                }   
-                //console.log("stunned Sent");
-            }
-        }
-        
     }
 
     /*
