@@ -350,28 +350,33 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
             message.direction = Starvrun.LEFT;
             sendToServer(message);
             if(!pacman[player].isStunned()) pacman[player].directionWatcher.setLeft();
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
             break;
             case 38: // Up
             message.type = "changeDirection";
             message.direction = Starvrun.UP;
             sendToServer(message);                    
             if(!pacman[player].isStunned()) pacman[player].directionWatcher.setUp();
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
             break;
             case 39: // Right
             message.type = "changeDirection";
             message.direction = Starvrun.RIGHT;                    
             sendToServer(message);                    
             if(!pacman[player].isStunned()) pacman[player].directionWatcher.setRight();
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
             break;
             case 40: // Down
             message.type = "changeDirection";
             message.direction = Starvrun.DOWN;
             sendToServer(message);                  
             if(!pacman[player].isStunned()) pacman[player].directionWatcher.setDown();
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
             break;
             case 32: // 'Space'
             message.type = "startGame";
             sendToServer(message);
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                     //FOR TESTING ONLY!
                     //levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
                     break;
