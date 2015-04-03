@@ -30,7 +30,8 @@ function GameServer() {
             // Workaround to get delay
             for(var p in players){
                 if (players[p].pid == id){
-                    setTimeout(unicast, players[p].getDelay(), sockets[id],msg);
+                    //setTimeout(unicast, players[p].getDelay(), sockets[id],msg);
+                    setTimeout(unicast, 500, sockets[id],msg);
                     break;
                 }
             }
@@ -276,7 +277,7 @@ function GameServer() {
      var startGame = function() 
      {
         // Initialize game objects
-        levelMap = new Map();
+        levelMap = new Map(true);
         levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
         levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
         levelMap.spawnPelletAndPowerupBetween(1,19,17,19);

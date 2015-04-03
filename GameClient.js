@@ -395,7 +395,7 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
      this.start = function() 
      {
         // Initialize game objects
-        levelMap = new Map();
+        levelMap = new Map(false);
         levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
         levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
         levelMap.spawnPelletAndPowerupBetween(1,19,17,19);

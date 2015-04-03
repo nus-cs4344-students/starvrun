@@ -1,4 +1,4 @@
-function Map() {
+function Map(isServer) {
 	//Private variable
 	var self = this; 
 	var width = 0;
@@ -6,6 +6,10 @@ function Map() {
 	var grids = [];
 	var pelletNumber = 0;
 	var powerupNumber = 0;
+	this.isServer = isServer;
+	if (this.isServer == undefined) {
+		this.isServer = false;
+	}
 
 	var changes = [];
 
@@ -92,6 +96,7 @@ function Map() {
 	//input: x and y in grid
 	//set the grid to free block
 	this.eatAt = function(x,y) {
+		if (!isServer) return;
 		if (grids[x][y] = Starvrun.PELLET) pelletNumber--;
 		if (grids[x][y] = Starvrun.POWERUP) powerupNumber--;
 		this.setMapContent(x,y,Starvrun.FREE);
