@@ -52,8 +52,8 @@
             this.directionWatcher = new directionWatcher();  // For KeyPress
             // Private Variables
             // Game Level States
-            var startX = -1; // In Grid
-            var startY = -1; // In Grid
+            var startX = map.getWidth()+1; // In Grid
+            var startY = map.getHeight()+1; // In Grid
             
             var map = map;
             
@@ -366,8 +366,8 @@
                     lives --;
                     //console.log("Lives Remaining = " + lives);
                 }else{
-                    posX = map.gridToPx(-1);
-                    posY = map.gridToPx(-1);
+                    posX = map.gridToPx(map.getWidth()+1);
+                    posY = map.gridToPx(map.getHeight()+1);
                     me.stop();
                     //console.log("No more Lives");
                 }
