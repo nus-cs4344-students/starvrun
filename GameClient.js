@@ -53,10 +53,12 @@ function GameClient() {
                 case "periodic": 
                 for(var j=0;j<numberOfPacman;j++)
                     {
-                        pacman[j].setPositionPx(message.posX[j], message.posY[j]);
-                        if(j !== player) pacman[j].directionWatcher.set(message.direction[j]);
-                        pacman[j].setSpeed(message.speed[j]);
-                        pacman[j].setScore(message.score[j]);
+                        if(j !== player)  {
+                            pacman[j].setPositionPx(message.posX[j], message.posY[j]);
+                            pacman[j].directionWatcher.set(message.direction[j]);
+                            pacman[j].setSpeed(message.speed[j]);
+                            pacman[j].setScore(message.score[j]);
+                        }
                     }
                     break;
                 case "updateMap":
