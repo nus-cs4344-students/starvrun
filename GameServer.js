@@ -4,12 +4,7 @@ var LIB_PATH = "./";
 require(LIB_PATH + "Starvrun.js");
 require(LIB_PATH + "Map.js");
 require(LIB_PATH + "Pacman.js");
-
-function Player(connid, pid) {
-    this.connid = connid;
-    this.pid = pid;
-}
-
+require(LIB_PATH + "Player.js");
 
 function GameServer() {    
 
@@ -32,7 +27,12 @@ function GameServer() {
     var broadcast = function (msg) {
         var id;
         for (id in sockets) {
-            unicast(sockets[id], msg);
+            //var p = players[id];
+            //console.log(players);
+            //console.log(id);
+            //console.log(p);
+            //setTimeout(unicast, p.getDelay() ,sockets[id], msg);
+            setTimeout(unicast, 200 ,sockets[id], msg);
         }
     }
     
