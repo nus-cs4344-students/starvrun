@@ -6,9 +6,9 @@ function Map(isServer) {
 	var grids = [];
 	var pelletNumber = 0;
 	var powerupNumber = 0;
-	this.isServer = isServer;
-	if (this.isServer == undefined) {
-		this.isServer = false;
+	var isServer = isServer;
+	if (isServer == undefined) {
+		isServer = false;
 	}
 
 	var changes = {};

@@ -298,7 +298,7 @@ function GameServer() {
     var initPacman = function(){
         for(var i=0;i<numberOfPacman;i++)
         {
-            pacman[i] = new Pacman(levelMap);    
+            pacman[i] = new Pacman(levelMap, false);    
         }
         pacman[0].setStartGrid(1,1);
         pacman[1].setStartGrid(levelMap.getWidth()-2,1);

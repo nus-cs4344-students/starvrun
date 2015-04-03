@@ -46,8 +46,13 @@
           return x >= min && x <= max;
       }
 
-      function Pacman(map) {
+      function Pacman(map, isPlayer) {
             // Public Variables
+
+            var isPlayer = isPlayer;
+            if (isPlayer == undefined) {
+                isPlayer = false;
+            }
             
             this.directionWatcher = new directionWatcher();  // For KeyPress
             // Private Variables

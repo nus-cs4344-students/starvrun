@@ -437,7 +437,11 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
         var i;
         for(i=0;i<numberOfPacman;i++)
         {
-            pacman[i] = new Pacman(levelMap);    
+            if (i==player) {
+                pacman[i] = new Pacman(levelMap, true);   
+            } else {
+                pacman[i] = new Pacman(levelMap, false);   
+            }
         }
         
         pacman[0].setStartGrid(1,1);
