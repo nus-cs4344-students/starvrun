@@ -17,6 +17,15 @@
     var numberOfPacman = 4;
     var started = false;
     var player = 0;
+    var delay;
+    
+    var sendPing = function(){
+        var startTime = Date.now();
+        var message = {};
+        message.type = "ping";
+        message.startTime = startTime;
+        sendToServer(message);   
+    }
     
     var appendMessage = function(location, msg) {
         var prev_msgs = document.getElementById(location).innerHTML;
@@ -44,14 +53,23 @@
                     case "message": 
                     appendMessage("serverMsg", message.content);
                     break;
-                    case "player":
+                case "player":
                     player = message.player;
                     //console.log(player);
                     break;
-                    case "startGame":
+                case "startGame":
                     startGame();
-                    case "periodic": 
-                    for(var j=0;j<numberOfPacman;j++)
+                case "pong":
+                    var RTT = Date.now() - message.startTime;
+                    RTT /= 2;
+                    if(delay) {
+                        delay *= 0.9;
+                        delay += 0.1 * RTT;
+                    }else{
+                        delay = RTT;
+                    }
+                    //console.log(delay);
+                    sendToServer({type:"delay", delay:delay});
                     break;
                 case "periodic": 
                 for(var j=0;j<numberOfPacman;j++)
@@ -96,7 +114,7 @@
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
             }
-
+            sendPing();
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME+ ":" + Starvrun.PORT);
         }
@@ -332,28 +350,33 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
             message.direction = Starvrun.LEFT;
             sendToServer(message);
             if(!pacman[player].isStunned()) pacman[player].directionWatcher.setLeft();
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
             break;
             case 38: // Up
             message.type = "changeDirection";
             message.direction = Starvrun.UP;
             sendToServer(message);                    
             if(!pacman[player].isStunned()) pacman[player].directionWatcher.setUp();
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
             break;
             case 39: // Right
             message.type = "changeDirection";
             message.direction = Starvrun.RIGHT;                    
             sendToServer(message);                    
             if(!pacman[player].isStunned()) pacman[player].directionWatcher.setRight();
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
             break;
             case 40: // Down
             message.type = "changeDirection";
             message.direction = Starvrun.DOWN;
             sendToServer(message);                  
             if(!pacman[player].isStunned()) pacman[player].directionWatcher.setDown();
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
             break;
             case 32: // 'Space'
             message.type = "startGame";
             sendToServer(message);
+            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                     //FOR TESTING ONLY!
                     //levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
                     break;
@@ -407,6 +430,7 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
         initNetwork();
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);  
+        setInterval(function() {sendPing();}, 3000/FRAME_RATE);  
     };
     
     var initPacman = function(){
