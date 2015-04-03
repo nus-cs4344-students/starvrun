@@ -53,12 +53,18 @@ function GameClient() {
                 case "periodic": 
                 for(var j=0;j<numberOfPacman;j++)
                     {
-                        if(j !== player)  {
+                        if (j == player) {
+                            // if (sqrt(pow(pacman[j].getPosX()-message.posX[j],2) + pow(pacman[j].getPosY()-message.posY[j],2)) > 128) {
+                            //     pacman[j].setPositionPx(message.posX[j], message.posY[j]);
+                            //     pacman[j].directionWatcher.set(message.direction[j]);
+                            //     pacman[j].setSpeed(message.speed[j]);
+                            // }
+                        } else {
                             pacman[j].setPositionPx(message.posX[j], message.posY[j]);
                             pacman[j].directionWatcher.set(message.direction[j]);
                             pacman[j].setSpeed(message.speed[j]);
-                            pacman[j].setScore(message.score[j]);
                         }
+                        pacman[j].setScore(message.score[j]);
                     }
                     break;
                 case "updateMap":
