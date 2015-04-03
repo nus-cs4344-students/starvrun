@@ -20,25 +20,26 @@
 	function directionWatcher() {
             //this is the temp dir upon key pressed
             //used to update curDirection
-            this.dir = null;
+            var me = this;
+            me.dir = null;
             this.set = function(dir) {
-                this.dir = dir;
+                me.dir = dir;
                 
             }
             this.setUp = function(){         
-                this.set(up);
+                me.set(up);
             }
             this.setDown = function(){
-                this.set(down);                    
+                me.set(down);                    
             }
             this.setLeft = function(){
-                this.set(left);
+                me.set(left);
             }
             this.setRight = function(){
-                this.set(right);
+                me.set(right);
             }
             this.get = function() {
-                return this.dir;
+                return me.dir;
             }
         }
 
@@ -237,7 +238,7 @@ this.enableStunned = function(){
                             }
                         }
                     }
-                }
+                }                
             }
 
             this.checkCollision = function () {
@@ -402,6 +403,7 @@ this.enableStunned = function(){
                     lives --;
                     //console.log("Lives Remaining = " + lives);
                 }else{
+                    dead= true;
                     posX = map.gridToPx(map.getWidth()+1);
                     posY = map.gridToPx(map.getHeight()+1);
                     me.stop();
