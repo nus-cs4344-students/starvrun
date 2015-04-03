@@ -54,6 +54,12 @@ function Map() {
 	this.gridToPx = function (pos){
 		return (pos+0.50)*Starvrun.GRID_SIZE;
 	}
+
+	//input: either x or y in pixels
+	//return the x or y in grid
+	this.pxToGrid = function (pos){
+		return (posX- (pos % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
+	}
 	
 	//input: x and y in grid
 	//return the content of the map in grid coordinate x,y
@@ -174,6 +180,11 @@ function Map() {
 		}
 		return path;
 
+	}
+
+	this.getDistance = function(sx,sy,tx,ty) {
+		var path = bfs(sx,sy,tx,ty);
+		return path.length;
 	}
 
 	this.spawnPelletBetween = function(sx,sy,tx,ty) {
