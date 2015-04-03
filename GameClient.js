@@ -17,6 +17,15 @@
     var numberOfPacman = 4;
     var started = false;
     var player = 0;
+    var delay = 0;
+    
+    var sendPing = function(){
+        var startTime = Date.now();
+        var message = {};
+        message.type = "ping";
+        message.startTime = startTime;
+        sendToServer(message);   
+    }
     
     var appendMessage = function(location, msg) {
         var prev_msgs = document.getElementById(location).innerHTML;
@@ -44,14 +53,16 @@
                     case "message": 
                     appendMessage("serverMsg", message.content);
                     break;
-                    case "player":
+                case "player":
                     player = message.player;
                     //console.log(player);
                     break;
-                    case "startGame":
+                case "startGame":
                     startGame();
-                    case "periodic": 
-                    for(var j=0;j<numberOfPacman;j++)
+                case "pong":
+                    delay = Date.now() - message.startTime;
+                    delay /= 2;
+                    sendToServer({type:"delay", delay:delay});
                     break;
                 case "periodic": 
                 for(var j=0;j<numberOfPacman;j++)
@@ -407,6 +418,7 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
         initNetwork();
         // Start drawing 
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);  
+        setInterval(function() {sendPing();}, 3000/FRAME_RATE);  
     };
     
     var initPacman = function(){

@@ -24,6 +24,8 @@ function GameServer() {
     var numberOfPacman = 4;
     var FRAME_RATE = 35;
     
+    
+    
     var broadcast = function (msg) {
         var id;        
         for (id in sockets) {
@@ -137,12 +139,19 @@ function GameServer() {
                                 }           
                             }
                             break;
-                            case "echo":
-                            // Testing Connection
-                            broadcast({type:"message", content:"There is now " + count + " players"});
+                        case "delay":
+                            var p = players[conn.id];
+                            p.delay = message.delay;
+                            //console.log(p.delay);
                             break;
-                        
-                            default:
+                        case "ping":
+                            var msg = {};
+                            msg.type = "pong";
+                            msg.startTime  = message.startTime;
+                            var s = sockets[players[conn.id].pid];
+                            unicast(s , msg);
+                            break;
+                        default:
                             console.log("Unhandled " + message.type);
                         }
                 }); // conn.on("data"
@@ -233,8 +242,6 @@ function GameServer() {
         var states = 
         {
             type:"periodic",
-            content:"",
-            timestamp:"",
             posX:[],
             posY:[],
             direction:[],
@@ -250,7 +257,6 @@ function GameServer() {
             states.speed[j] = pacman[j].getSpeed();
             states.score[j] = pacman[j].getScore();
         }
-        
         setTimeout(broadcast, 0, states);
     }
     
