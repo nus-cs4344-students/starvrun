@@ -54,11 +54,12 @@ function GameClient() {
                 for(var j=0;j<numberOfPacman;j++)
                     {
                         if (j == player) {
-                            // if (sqrt(pow(pacman[j].getPosX()-message.posX[j],2) + pow(pacman[j].getPosY()-message.posY[j],2)) > 128) {
-                            //     pacman[j].setPositionPx(message.posX[j], message.posY[j]);
-                            //     pacman[j].directionWatcher.set(message.direction[j]);
-                            //     pacman[j].setSpeed(message.speed[j]);
-                            // }
+                            var dist = levelMap.getDistance(pacman[j].getGridPosX(), pacman[j].getGridPosY(), levelMap.pxToGrid(message.posX[j]), levelMap.pxToGrid(message.posY[j]));
+                            if (dist > Starvrun.DR_THRESHOLD) {
+                                pacman[j].setPositionPx(message.posX[j], message.posY[j]);
+                                pacman[j].setDirection(message.direction[j]);
+                                pacman[j].setSpeed(message.speed[j]);
+                            }
                         } else {
                             pacman[j].setPositionPx(message.posX[j], message.posY[j]);
                             pacman[j].directionWatcher.set(message.direction[j]);

@@ -35,7 +35,8 @@ var Starvrun = {
         PELLET_COLOUR : "white",
         POWERUP_COLOUR : "red",
         
-        WALL_WIDTH : 8
+        WALL_WIDTH : 8,
+    DR_THRESHOLD: 6
 };
 
 

@@ -183,6 +183,7 @@ function Map() {
 	}
 
 	this.getDistance = function(sx,sy,tx,ty) {
+		if ((sx==tx) && (sy==ty)) return 0;
 		var path = bfs(sx,sy,tx,ty);
 		return path.length;
 	}
