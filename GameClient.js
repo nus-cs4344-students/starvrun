@@ -52,10 +52,21 @@
                     startGame();
                     case "periodic": 
                     for(var j=0;j<numberOfPacman;j++)
+                    break;
+                case "periodic": 
+                for(var j=0;j<numberOfPacman;j++)
                     {
-                        pacman[j].setPositionPx(message.posX[j], message.posY[j]);
-                        if(j !== player) pacman[j].directionWatcher.set(message.direction[j]);
-                        pacman[j].setSpeed(message.speed[j]);
+                        if (j == player) {
+                            // if (sqrt(pow(pacman[j].getPosX()-message.posX[j],2) + pow(pacman[j].getPosY()-message.posY[j],2)) > 128) {
+                            //     pacman[j].setPositionPx(message.posX[j], message.posY[j]);
+                            //     pacman[j].directionWatcher.set(message.direction[j]);
+                            //     pacman[j].setSpeed(message.speed[j]);
+                            // }
+                        } else {
+                            pacman[j].setPositionPx(message.posX[j], message.posY[j]);
+                            pacman[j].directionWatcher.set(message.direction[j]);
+                            pacman[j].setSpeed(message.speed[j]);
+                        }
                         pacman[j].setScore(message.score[j]);
                     }
                     break;
