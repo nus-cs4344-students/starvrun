@@ -25,14 +25,17 @@ function GameServer() {
     var FRAME_RATE = 35;
     
     var broadcast = function (msg) {
-        var id;
+        var id;        
         for (id in sockets) {
-            //var p = players[id];
-            //console.log(players);
-            //console.log(id);
-            //console.log(p);
+            // Workaround to get delay
+            for(var p in players){
+                if (players[p].pid == id){
+                    setTimeout(unicast, players[p].getDelay(), sockets[id],msg);
+                    break;
+                }
+            }
             //setTimeout(unicast, p.getDelay() ,sockets[id], msg);
-            setTimeout(unicast, 200 ,sockets[id], msg);
+            //setTimeout(unicast, 0 ,sockets[id], msg);
         }
     }
     
