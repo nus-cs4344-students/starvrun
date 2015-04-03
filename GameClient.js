@@ -16,6 +16,7 @@ function GameClient() {
     var FRAME_RATE = 35;
     var numberOfPacman = 4;
     var started = false;
+    var player = 0;
     
     var appendMessage = function(location, msg) {
         var prev_msgs = document.getElementById(location).innerHTML;
@@ -42,6 +43,10 @@ function GameClient() {
                 switch (message.type) {
                 case "message": 
                     appendMessage("serverMsg", message.content);
+                    break;
+                case "player":
+                    player = message.player;
+                    //console.log(player);
                     break;
                 case "startGame":
                     startGame();
@@ -314,21 +319,25 @@ function GameClient() {
                     message.type = "changeDirection";
                     message.direction = Starvrun.LEFT;
                     sendToServer(message);
+                    pacman[player].directionWatcher.setLeft();
                     break;
             case 38: // Up
                     message.type = "changeDirection";
                     message.direction = Starvrun.UP;
                     sendToServer(message);                    
+                    pacman[player].directionWatcher.setUp();
                     break;
             case 39: // Right
                     message.type = "changeDirection";
                     message.direction = Starvrun.RIGHT;                    
                     sendToServer(message);                    
+                    pacman[player].directionWatcher.setRight();
                     break;
             case 40: // Down
                     message.type = "changeDirection";
                     message.direction = Starvrun.DOWN;
-                    sendToServer(message);                   
+                    sendToServer(message);                  
+                    pacman[player].directionWatcher.setDown();
                     break;
             case 32: // 'Space'
                     message.type = "startGame";

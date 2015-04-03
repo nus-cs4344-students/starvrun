@@ -58,6 +58,8 @@ function GameServer() {
         players[conn.id] = new Player(conn.id, nextPID);
         sockets[nextPID] = conn;
 
+        // Send Player his PID so he knows which to update
+        unicast(conn, {type: "player", player:nextPID});
         // Updates the nextPID to issue 
         nextPID = (nextPID + 1);
         
