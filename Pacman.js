@@ -77,6 +77,7 @@
             // Blinking animation for the pacman during eating and collision
             var blinkMode = false;
             var blinkTimer = 0;
+            var pacmanColor;
             this.blinkUpdate = false;
             
             // Movement Variables
@@ -187,14 +188,16 @@
   {
     blinkMode = true;
     blinkTimer = Starvrun.FRAME_RATE * Starvrun.BLINK_TIME;
-  }
+    pacmanColor = this.getColor();
+}
 
-  this.disableBlinkAnim = function()
-  {
+this.disableBlinkAnim = function()
+{
     blinkMode = false;
-  }
+    this.setColor(pacmanColor);
+}
 
-  this.enableStunned = function(){
+this.enableStunned = function(){
     stunned = true;
     stunned_Timer = Starvrun.FRAME_RATE * Starvrun.STUN_TIME;
                 //console.log("Stunned for " + stunned_Timer );
@@ -280,10 +283,10 @@
             
             this.runTimers = function(){
                 if (beastMode_Timer > 0) {
-                 beastMode_Timer--;
-             }
+                   beastMode_Timer--;
+               }
 
-             if(stunned_Timer > 0){
+               if(stunned_Timer > 0){
                 stunned_Timer --;
             }
 
@@ -357,6 +360,7 @@
         this.animate = function(){
 
             eat();
+            this.blinkAnimation();
             if(dead) this.dieAnimation();
         }
 
@@ -419,6 +423,11 @@
             COLOR = color;
         }
 
+        this.getColor = function()
+        {
+            return COLOR;
+        }
+
         this.render = function(context) {
             if(lives <= 0){
                 return;
@@ -442,15 +451,23 @@
                 
             } 
 
-            this.startBlinkAnimation = function()
+            this.blinkAnimation = function()
             {
-                this.enableBlinkAnim();
                 if(blinkMode)
                 {
-                    this.setColor("green");   
+                    if(Math.floor(blinkTimer/4)%2===0)
+                    {
+                        this.setColor("red");
+                    }
+                    else
+                    {
+                        this.setColor("white");
+                    }
                 }
             }
-        }
-        
+
+        this.enableBlinkAnim();
+    }
+
 // For nodejs require        
 global.Pacman = Pacman;
