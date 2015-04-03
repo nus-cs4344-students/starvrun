@@ -50,6 +50,7 @@ function GameClient() {
                     break;
                 case "startGame":
                     startGame();
+                    break;
                 case "periodic": 
                 for(var j=0;j<numberOfPacman;j++)
                     {
