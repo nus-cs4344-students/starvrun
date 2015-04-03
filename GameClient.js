@@ -3,13 +3,13 @@
  *    Include in HTML body onload to run on a web page.
  *    <body onload="loadScript('', 'GameClient.js')">
  */
-"use strict"; 
+ "use strict"; 
 
-function GameClient() {
+ function GameClient() {
     // Network Variables
     var socket;         // socket used to connect to server 
     
-     /*Game Variables*/
+    /*Game Variables*/
     var playArea;
     var levelMap;
     var pacman = [];
@@ -41,15 +41,18 @@ function GameClient() {
             socket.onmessage = function (e) {
                 var message = JSON.parse(e.data);
                 switch (message.type) {
-                case "message": 
+                    case "message": 
                     appendMessage("serverMsg", message.content);
                     break;
-                case "player":
+                    case "player":
                     player = message.player;
                     //console.log(player);
                     break;
-                case "startGame":
+                    case "startGame":
                     startGame();
+                    case "periodic": 
+                    for(var j=0;j<numberOfPacman;j++)
+                    break;
                 case "periodic": 
                 for(var j=0;j<numberOfPacman;j++)
                     {
@@ -68,20 +71,20 @@ function GameClient() {
                         pacman[j].setScore(message.score[j]);
                     }
                     break;
-                case "updateMap":
+                    case "updateMap":
                     levelMap.setChanges(message.content);
                     levelMap.implementChanges(); 
                     levelMap.flushChanges();
                     break;
-                case "kill":
+                    case "kill":
                     pacman[message.killer].kill();
                     pacman[message.killed].died();
                     break;
-                case "moveBack":
+                    case "moveBack":
                     pacman[message.move1].moveBack();
                     pacman[message.move2].moveBack();
                     break;    
-                case "stateChanges":
+                    case "stateChanges":
                     var pm = pacman[message.pm];
                     if(message.stunned === true) pm.enableStunned();
                     if(message.stunned === false) pm.disableStunned();
@@ -89,11 +92,11 @@ function GameClient() {
                     if(message.beast === false) pm.disableBeastMode();
                     if(message.respawn === true) pm.respawn();
                     break;
-                default: 
+                    default: 
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
             }
-                        
+
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME+ ":" + Starvrun.PORT);
         }
@@ -107,8 +110,8 @@ function GameClient() {
      * Draw the play area.  Called periodically at a rate
      * equals to the frame rate.
      */
-    var render = function()
-    {
+     var render = function()
+     {
         // Get context
         var context = playArea.getContext("2d");
         
@@ -127,31 +130,31 @@ function GameClient() {
         var scores = "<p>Scoreboard</p>";
         var i=0;
         for(i=0;i<pacman.length; i++){
-             scores = scores + "<p>";
-             scores = scores + (i+1) + ") " + pacman[i].getScore();
-             scores = scores + "</p>";
-         }
-         
-         sb.innerHTML = scores;
-     }
-    
-    var renderWalls = function(context)
+           scores = scores + "<p>";
+           scores = scores + (i+1) + ") " + pacman[i].getScore();
+scores = scores + "</p>";
+}
+
+sb.innerHTML = scores;
+}
+
+var renderWalls = function(context)
+{
+    for(var i =0; i<levelMap.getWidth(); ++i)
     {
-        for(var i =0; i<levelMap.getWidth(); ++i)
+        for(var j=0; j<levelMap.getHeight(); ++j)
         {
-            for(var j=0; j<levelMap.getHeight(); ++j)
-            {
-                var obj = levelMap.getMapContent(i,j);
-                if(obj === Starvrun.WALL)
-                {                       
-                    renderWall(context,i,j);
-                }
+            var obj = levelMap.getMapContent(i,j);
+            if(obj === Starvrun.WALL)
+            {                       
+                renderWall(context,i,j);
             }
         }
     }
-    
-    var renderPacmans = function(context)
-    {
+}
+
+var renderPacmans = function(context)
+{
         //console.log("Starting to Render Pacmans");
         var i;
         for(i=0;i<numberOfPacman;i++)
@@ -180,41 +183,41 @@ function GameClient() {
                 switch(obj)
                 {
                     case Starvrun.PELLET:
-                        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
-                        renderPellet(context,posX,posY);
-                        break;
+                    renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+                    renderPellet(context,posX,posY);
+                    break;
                     case Starvrun.POWERUP:
-                        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
-                        renderPowerUp(context,posX,posY);
-                        break;
+                    renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+                    renderPowerUp(context,posX,posY);
+                    break;
                     
                     case Starvrun.FREE:
-                        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
-                        break;
+                    renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+                    break;
                     case Starvrun.WALL:
-                        
-                        break;
+
+                    break;
                     case Starvrun.EMPTY:
-                        clearBlock(context,posX,posY);
-                        break; 
+                    clearBlock(context,posX,posY);
+                    break; 
                     default :
-                        console.log("Unhandled Case : " + obj);
-                        break;  
+                    console.log("Unhandled Case : " + obj);
+                    break;  
                 }                
             }
         }
        // console.log("Completed Rendering Remaining Objects");
-    }
-    
-    var clearBlock = function(context,posX,posY)
-    {
-        var block = Starvrun.GRID_SIZE/2;
-        context.clearRect(posX-block, posY-block, block*2, block*2);
-    }
-    
-    var renderBlock = function(context, posX,posY, colour){
-        var block = Starvrun.GRID_SIZE /2;
-        context.fillStyle = colour;
+   }
+
+   var clearBlock = function(context,posX,posY)
+   {
+    var block = Starvrun.GRID_SIZE/2;
+    context.clearRect(posX-block, posY-block, block*2, block*2);
+}
+
+var renderBlock = function(context, posX,posY, colour){
+    var block = Starvrun.GRID_SIZE /2;
+    context.fillStyle = colour;
         // Find a better way to write this
         context.fillRect(posX-block,posY-block,block*2,block*2);
     }
@@ -239,46 +242,46 @@ function GameClient() {
         if(X !== maxX) east = levelMap.getMapContent(X+1,Y);
         if(X !== 0) west = levelMap.getMapContent(X-1,Y);
        //console.log("Map Content Retrieved");
-        
-        var width = Starvrun.WALL_WIDTH;        
-        context.fillStyle = Starvrun.WALL_COLOUR;
-        
-        context.fillRect(posX-width/2, posY-width/2, width,width);
-        
-        if(north === Starvrun.WALL){
-            context.fillRect(posX-width/2, posY-Starvrun.GRID_SIZE/2, width,Starvrun.GRID_SIZE/2);    
-        }
-        if(south === Starvrun.WALL){
-            context.fillRect(posX-width/2, posY, width, Starvrun.GRID_SIZE/2);    
-        }
-        if(west === Starvrun.WALL){
-            context.fillRect(posX-Starvrun.GRID_SIZE/2, posY-width/2, Starvrun.GRID_SIZE/2,width);    
-        }
-        if(east === Starvrun.WALL){
-            context.fillRect(posX, posY-width/2, Starvrun.GRID_SIZE/2,width);    
-        }
-        
+
+       var width = Starvrun.WALL_WIDTH;        
+       context.fillStyle = Starvrun.WALL_COLOUR;
+
+       context.fillRect(posX-width/2, posY-width/2, width,width);
+
+       if(north === Starvrun.WALL){
+        context.fillRect(posX-width/2, posY-Starvrun.GRID_SIZE/2, width,Starvrun.GRID_SIZE/2);    
     }
-    
-    var renderPellet = function(context,posX,posY){
-        var radius = 5;
-        renderRoundObj(context,posX,posY,radius, Starvrun.PELLET_COLOUR);
+    if(south === Starvrun.WALL){
+        context.fillRect(posX-width/2, posY, width, Starvrun.GRID_SIZE/2);    
     }
-    
-    var renderPowerUp = function(context,posX,posY){
-        var radius = 10;
-        renderRoundObj(context,posX,posY,radius,Starvrun.POWERUP_COLOUR);
+    if(west === Starvrun.WALL){
+        context.fillRect(posX-Starvrun.GRID_SIZE/2, posY-width/2, Starvrun.GRID_SIZE/2,width);    
     }
-    
-    var renderRoundObj= function(context, posX, posY, radius, colour)
-    {
-        context.fillStyle = colour;
-        context.beginPath();
-        context.arc(posX, posY, radius, 0, Math.PI * 2, true);
-        context.closePath();
-        context.fill();
+    if(east === Starvrun.WALL){
+        context.fillRect(posX, posY-width/2, Starvrun.GRID_SIZE/2,width);    
     }
-    
+
+}
+
+var renderPellet = function(context,posX,posY){
+    var radius = 5;
+    renderRoundObj(context,posX,posY,radius, Starvrun.PELLET_COLOUR);
+}
+
+var renderPowerUp = function(context,posX,posY){
+    var radius = 10;
+    renderRoundObj(context,posX,posY,radius,Starvrun.POWERUP_COLOUR);
+}
+
+var renderRoundObj= function(context, posX, posY, radius, colour)
+{
+    context.fillStyle = colour;
+    context.beginPath();
+    context.arc(posX, posY, radius, 0, Math.PI * 2, true);
+    context.closePath();
+    context.fill();
+}
+
     /*
      * private method: initGUI
      *
@@ -300,8 +303,8 @@ function GameClient() {
         document.addEventListener("keydown", function(e) {
             //console.log("KeyPressed "  + e );
             onKeyPress(e);
-            }, false);
-     }
+        }, false);
+    }
 
     /*
      * private method: onKeyPress
@@ -309,8 +312,8 @@ function GameClient() {
      * When we detect a key press, send the new
      * coordinates to the server.
      */
-    var onKeyPress = function(e) 
-    {
+     var onKeyPress = function(e) 
+     {
         /*
         keyCode represents keyboard button
         38: up arrow
@@ -318,55 +321,55 @@ function GameClient() {
         37: left arrow
         39: right arrow
         */
-       var message = {
-       }
+        var message = {
+        }
 
         switch(e.keyCode)
         {
-            
+
             case 37: // Left 
-                    message.type = "changeDirection";
-                    message.direction = Starvrun.LEFT;
-                    sendToServer(message);
-                    if(!pacman[player].isStunned()) pacman[player].directionWatcher.setLeft();
-                    break;
+            message.type = "changeDirection";
+            message.direction = Starvrun.LEFT;
+            sendToServer(message);
+            if(!pacman[player].isStunned()) pacman[player].directionWatcher.setLeft();
+            break;
             case 38: // Up
-                    message.type = "changeDirection";
-                    message.direction = Starvrun.UP;
-                    sendToServer(message);                    
-                    if(!pacman[player].isStunned()) pacman[player].directionWatcher.setUp();
-                    break;
+            message.type = "changeDirection";
+            message.direction = Starvrun.UP;
+            sendToServer(message);                    
+            if(!pacman[player].isStunned()) pacman[player].directionWatcher.setUp();
+            break;
             case 39: // Right
-                    message.type = "changeDirection";
-                    message.direction = Starvrun.RIGHT;                    
-                    sendToServer(message);                    
-                    if(!pacman[player].isStunned()) pacman[player].directionWatcher.setRight();
-                    break;
+            message.type = "changeDirection";
+            message.direction = Starvrun.RIGHT;                    
+            sendToServer(message);                    
+            if(!pacman[player].isStunned()) pacman[player].directionWatcher.setRight();
+            break;
             case 40: // Down
-                    message.type = "changeDirection";
-                    message.direction = Starvrun.DOWN;
-                    sendToServer(message);                  
-                    if(!pacman[player].isStunned()) pacman[player].directionWatcher.setDown();
-                    break;
+            message.type = "changeDirection";
+            message.direction = Starvrun.DOWN;
+            sendToServer(message);                  
+            if(!pacman[player].isStunned()) pacman[player].directionWatcher.setDown();
+            break;
             case 32: // 'Space'
-                    message.type = "startGame";
-                    sendToServer(message);
+            message.type = "startGame";
+            sendToServer(message);
                     //FOR TESTING ONLY!
                     //levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
                     break;
-        }
-        
-    }
-    
-    var startGame = function(){
-        if(started) return;
-        started = true;
-    }
+                }
+
+            }
+
+            var startGame = function(){
+                if(started) return;
+                started = true;
+            }
 
     // Where the game starts to be played
     var gameLoop = function() 
     {
-        
+
         if(started){
         // Moves the pacman on the map always (from start to stop)
         var i;
@@ -379,8 +382,8 @@ function GameClient() {
         checkCollision(numberOfPacman);
         render();
         
-        }
     }
+}
 
     /*
      * priviledge method: start
@@ -389,8 +392,8 @@ function GameClient() {
      * loop
      * Starting game play by calling game loop
      */
-    this.start = function() 
-    {
+     this.start = function() 
+     {
         // Initialize game objects
         levelMap = new Map();
         levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
@@ -455,18 +458,19 @@ function GameClient() {
                         }
                     }
                 }
-    }
+            }
 
     // Condition if pacmans are colliding 
     // Check for both 1 colliding with 2 and 2 colliding with 1
     var checkCondition = function(pacman1, pacman2)
     {
-        if(pacman1 && pacman2){
-        if((pacman1.getGridPosX()=== pacman2.getGridPosX())&&(pacman1.getGridPosY()=== pacman2.getGridPosY()))
-            return true;
-        else 
-            return false;
-    }
+        if(pacman1 && pacman2)
+        {
+            if((pacman1.getGridPosX()=== pacman2.getGridPosX())&&(pacman1.getGridPosY()=== pacman2.getGridPosY()))
+                return true;
+            else 
+                return false;
+        }
     }
 }
 
