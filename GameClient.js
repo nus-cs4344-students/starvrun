@@ -17,7 +17,7 @@
     var numberOfPacman = 4;
     var started = false;
     var player = 0;
-    var delay = 0;
+    var delay;
     
     var sendPing = function(){
         var startTime = Date.now();
@@ -60,8 +60,15 @@
                 case "startGame":
                     startGame();
                 case "pong":
-                    delay = Date.now() - message.startTime;
-                    delay /= 2;
+                    var RTT = Date.now() - message.startTime;
+                    RTT /= 2;
+                    if(delay) {
+                        delay *= 0.9;
+                        delay += 0.1 * RTT;
+                    }else{
+                        delay = RTT;
+                    }
+                    //console.log(delay);
                     sendToServer({type:"delay", delay:delay});
                     break;
                 case "periodic": 
@@ -107,7 +114,7 @@
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
             }
-
+            sendPing();
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME+ ":" + Starvrun.PORT);
         }
