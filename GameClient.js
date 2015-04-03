@@ -54,7 +54,7 @@ function GameClient() {
                 for(var j=0;j<numberOfPacman;j++)
                     {
                         pacman[j].setPositionPx(message.posX[j], message.posY[j]);
-                        pacman[j].setDirection(message.direction[j]);
+                        if(j !== player) pacman[j].directionWatcher.set(message.direction[j]);
                         pacman[j].setSpeed(message.speed[j]);
                         pacman[j].setScore(message.score[j]);
                     }
@@ -319,25 +319,25 @@ function GameClient() {
                     message.type = "changeDirection";
                     message.direction = Starvrun.LEFT;
                     sendToServer(message);
-                    pacman[player].directionWatcher.setLeft();
+                    if(!pacman[player].isStunned()) pacman[player].directionWatcher.setLeft();
                     break;
             case 38: // Up
                     message.type = "changeDirection";
                     message.direction = Starvrun.UP;
                     sendToServer(message);                    
-                    pacman[player].directionWatcher.setUp();
+                    if(!pacman[player].isStunned()) pacman[player].directionWatcher.setUp();
                     break;
             case 39: // Right
                     message.type = "changeDirection";
                     message.direction = Starvrun.RIGHT;                    
                     sendToServer(message);                    
-                    pacman[player].directionWatcher.setRight();
+                    if(!pacman[player].isStunned()) pacman[player].directionWatcher.setRight();
                     break;
             case 40: // Down
                     message.type = "changeDirection";
                     message.direction = Starvrun.DOWN;
                     sendToServer(message);                  
-                    pacman[player].directionWatcher.setDown();
+                    if(!pacman[player].isStunned()) pacman[player].directionWatcher.setDown();
                     break;
             case 32: // 'Space'
                     message.type = "startGame";
