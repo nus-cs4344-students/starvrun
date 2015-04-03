@@ -58,7 +58,7 @@ function Map() {
 	//input: either x or y in pixels
 	//return the x or y in grid
 	this.pxToGrid = function (pos){
-		return (posX- (pos % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
+		return (pos- (pos % Starvrun.GRID_SIZE))/Starvrun.GRID_SIZE;
 	}
 	
 	//input: x and y in grid
