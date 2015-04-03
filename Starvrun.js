@@ -19,7 +19,8 @@ var Starvrun = {
         // Pacman Constants
         // Directions for PACMAN ?
         BEAST_TIME : 3,                         // time in seconds pacman in beast
-        STUN_TIME : 0.5,                        // time in seconds
+        STUN_TIME : 0.5,  
+        BLINK_TIME: 0.5,                      // time in seconds
         PELLET_SCORE : 10,
         POWERUP_SCORE : 50,
         LIVES : 3,
