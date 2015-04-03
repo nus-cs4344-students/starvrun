@@ -256,15 +256,12 @@ function GameServer() {
     }
     
     var sendMapChanges = function(){
-        //periodic map update
-        if (levelMap.getChanges().length > 0) {
-            var states = { 
-                type: "updateMap",
-                content : levelMap.getChanges()
-            }
-            setTimeout(broadcast, 0, states);
-            levelMap.flushChanges();
+        var states = { 
+            type: "updateMap",
+            content : levelMap.getChanges()
         }
+        setTimeout(broadcast, 0, states);
+        levelMap.flushChanges();
     }
 
     /*

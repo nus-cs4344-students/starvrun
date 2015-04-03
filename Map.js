@@ -11,14 +11,14 @@ function Map(isServer) {
 		this.isServer = false;
 	}
 
-	var changes = [];
+	var changes = {};
 
 	this.getChanges = function() {
 		return changes;
 	}
 
 	this.flushChanges = function() {
-		changes = [];
+		changes = {};
 	}
 
 	this.setChanges = function(newChanges) {
@@ -26,12 +26,14 @@ function Map(isServer) {
 	}
 
 	var pushChange = function(x,y,i) {
-		changes.push({x:x, y:y, i:i});
+		changes[y*width+x] = i;
 	}
 
 	this.implementChanges = function() {
-		for (var i = 0; i < changes.length; i++) {
-			grids[changes[i]['x']][changes[i]['y']] = changes[i]['i'];
+		for (var pos in changes) {
+			var posX = pos%width;
+			var posY = Math.floor(pos/width);
+			grids[posX][posY] = changes[pos];
 		}
 	}
 
