@@ -1,26 +1,45 @@
 *{
     text-align : center;
-    display : block;
-    left:  auto;
-    right: auto;
+    background-color : black;
+    margin-left : auto;
+    margin-right : auto;
+}
+
+html,body{
+    height:100vh;
+    width :100vh;
+}
+
+#left-toolbar{
+    width : 30vh;
+    height : 100vh;
+    float : left;
+    color: yellow;
+}
+
+#player_details{
+    vertical-align: top;
+}
+
+#scoreBoard{
+    font-size : 20px;
+}
+
+#serverMsg {
+    vertical-align : bottom;
+    
+}
+
+#canvas-container{
+    display : inline;
+    float : right;
+    background-color : black;
+    width : 70vh;
+    height : 100vh;
     
 }
 
 #playArea{
-    display : inline-block;
-        
 }
 
-#scoreBoard{
-    display : inline-block;
-    vertical-align: top;
-    float: center;
-    font-size : 25px;
-}
 
-#serverMsg {
-    display : inline-block;
-    vertical-align : top;
-    float: center;
-    
-}

@@ -11,19 +11,28 @@
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
          <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
     </head>
-    <body>
+    <body>      
         
-        <h1>Starvrun</h1>
-        <p>
-            Click the game area to start.
-	</p>
-        
+        <div id="left-toolbar">
+            <div id="player_details">
+                
+            </div>
+            
+            <div id="scoreBoard">
+                
+            </div>
+            
+            <div id="serverMsg"> 
+                
+            </div>
+        </div> 
+       
         <div id="canvas-container">
                
           	<canvas id ="playArea"></canvas>
-                 <p id="scoreBoard"></p>
-                <p id="serverMsg"> </p>
+                 
         </div>
+        
         
         <script type="text/javascript" src="./Starvrun.js"></script>
         <script type="text/javascript" src="./Pacman.js"></script>

@@ -9,7 +9,7 @@ var Starvrun = {
 	FRAME_RATE : 30,			// frame rate of Starvrun game
 
         // Map Constants
-	GRID_SIZE : 32,				// a grid length in pixels
+	GRID_SIZE : 28,				// a grid length in pixels
         EMPTY: -1,
 	WALL: 0,
 	FREE: 1,
@@ -17,7 +17,6 @@ var Starvrun = {
 	POWERUP: 3,
 
         // Pacman Constants
-        // Directions for PACMAN ?
         BEAST_TIME : 3,                         // time in seconds pacman in beast
         STUN_TIME : 0.5,  
         BLINK_TIME: 1,                      // time in seconds

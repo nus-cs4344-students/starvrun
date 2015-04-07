@@ -98,6 +98,7 @@
 
             //Rendering Constants
             var COLOR = "yellow";
+            var curColor = COLOR;
             var WIDTH = Starvrun.GRID_SIZE;
             
             //Rendering Variables 
@@ -194,13 +195,12 @@
   {
     blinkMode = true;
     blinkTimer = Starvrun.FRAME_RATE * Starvrun.BLINK_TIME;
-    pacmanColor = this.getColor();
 }
 
 this.disableBlinkAnim = function()
 {
     blinkMode = false;
-    this.setColor(pacmanColor);
+    this.setColor(COLOR);
 }
 
 this.enableStunned = function(){
@@ -425,9 +425,14 @@ this.enableStunned = function(){
                 if(lives > 0) this.respawn();
             }    
         }
+        
+        this.setStartColor = function(color){
+            COLOR = color;
+            curColor = COLOR;
+        }
 
         this.setColor = function(color) {
-            COLOR = color;
+            curColor = color;
         }
 
         this.getColor = function()
@@ -449,7 +454,7 @@ this.enableStunned = function(){
                 var angle2 = eAngle * Math.PI;
 
                 // Draw the Pacman
-                context.fillStyle = COLOR;
+                context.fillStyle = curColor;
                 context.beginPath();
                 context.arc(posX, posY, radius, angle1, angle2, false);
                 context.lineTo(posX,posY);
@@ -472,8 +477,6 @@ this.enableStunned = function(){
                     }
                 }
             }
-
-        this.enableBlinkAnim();
     }
 
 // For nodejs require        

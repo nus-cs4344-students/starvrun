@@ -134,7 +134,7 @@
         var context = playArea.getContext("2d");
         
         // Render Walls (Should I re-render this?)
-        renderWalls(context);
+        //renderWalls(context);
         renderGameContent(context);
         // Render Pacmans
         renderPacmans(context);
@@ -148,9 +148,9 @@
         var scores = "<p>Scoreboard</p>";
         var i=0;
         for(i=0;i<pacman.length; i++){
-           scores = scores + "<p>";
+           scores = scores + '<p style="color:' + pacman[i].getColor() + '">';
            scores = scores + (i+1) + ") " + pacman[i].getScore();
-scores = scores + "</p>";
+           scores = scores + "</p>";
 }
 
 sb.innerHTML = scores;
@@ -210,7 +210,8 @@ var renderPacmans = function(context)
                     break;
                     
                     case Starvrun.FREE:
-                    renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+                    //renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
+                    clearBlock(context,posX,posY);
                     break;
                     case Starvrun.WALL:
 
@@ -229,12 +230,13 @@ var renderPacmans = function(context)
 
    var clearBlock = function(context,posX,posY)
    {
-    var block = Starvrun.GRID_SIZE/2;
+       
+    var block = Starvrun.GRID_SIZE/4 * 3 ;
     context.clearRect(posX-block, posY-block, block*2, block*2);
 }
 
 var renderBlock = function(context, posX,posY, colour){
-    var block = Starvrun.GRID_SIZE /2;
+    var block = Starvrun.GRID_SIZE/4 * 3 ;
     context.fillStyle = colour;
         // Find a better way to write this
         context.fillRect(posX-block,posY-block,block*2,block*2);
@@ -245,7 +247,6 @@ var renderBlock = function(context, posX,posY, colour){
         //console.log("rendering wall at " + X + " , " + Y);
         var posX =levelMap.gridToPx(X);
         var posY = levelMap.gridToPx(Y);
-        renderBlock(context,posX,posY,Starvrun.BG_COLOUR);
         // Render a thin wall.. 
         // Max posY and max posX
         var maxX = levelMap.getWidth();
@@ -282,12 +283,12 @@ var renderBlock = function(context, posX,posY, colour){
 }
 
 var renderPellet = function(context,posX,posY){
-    var radius = 5;
+    var radius = Starvrun.GRID_SIZE / 8;
     renderRoundObj(context,posX,posY,radius, Starvrun.PELLET_COLOUR);
 }
 
 var renderPowerUp = function(context,posX,posY){
-    var radius = 10;
+    var radius = Starvrun.GRID_SIZE / 4;
     renderRoundObj(context,posX,posY,radius,Starvrun.POWERUP_COLOUR);
 }
 
@@ -445,12 +446,12 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
         }
         
         pacman[0].setStartGrid(1,1);
-        pacman[0].setColor("lime");
-        pacman[1].setColor("yellow");
+        pacman[0].setStartColor("lime");
+        pacman[1].setStartColor("yellow");
         pacman[1].setStartGrid(levelMap.getWidth()-2,1);
-        pacman[2].setColor("pink");
+        pacman[2].setStartColor("pink");
         pacman[2].setStartGrid(1,levelMap.getHeight()-2);
-        pacman[3].setColor("cyan");
+        pacman[3].setStartColor("cyan");
         pacman[3].setStartGrid(levelMap.getWidth()-2,levelMap.getHeight()-2);
         
     }
