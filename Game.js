@@ -329,18 +329,19 @@ function Game()
     this.start = function() 
     {
         // Initialize game objects
-        levelMap = new Map();
+        levelMap = new Map(true);
         var i;
         for(i=0;i<numberOfPacman;i++)
         {
             pacman[i] = new Pacman(levelMap);    
         }
         
-        pacman[0].setPositionPx(48,48);
-        pacman[0].setColor("red");
-        pacman[1].setPositionPx(560,48);
-        pacman[1].setColor("yellow");
-
+        
+        pacman[0].setStartGrid(1,1);
+        pacman[0].setStartColor("lime");
+        pacman[1].setStartColor("yellow");
+        pacman[1].setStartGrid(levelMap.getWidth()-2,1);
+        
         levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
         levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
         levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
