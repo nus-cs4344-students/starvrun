@@ -98,7 +98,8 @@ function GameServer(gport) {
                 // When the client closes the connection to the server/closes the window
                 conn.on('close', function () {
                     var p = players[conn.id];
-                    
+                    delete sockets[p.pid];
+                    delete players[conn.id];
                 });
 
                 // When the client send something to the server.

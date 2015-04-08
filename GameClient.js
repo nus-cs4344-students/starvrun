@@ -117,7 +117,6 @@
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
             }
-            sendPing();
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME+ ":" + Starvrun.PORT);
         }
@@ -380,10 +379,9 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
             case 32: // 'Space'
             message.type = "startGame";
             sendToServer(message);
-            setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
-                    //FOR TESTING ONLY!
-                    //levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
-                    break;
+            //FOR TESTING ONLY!
+            //levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
+            break;
                 }
 
             }
