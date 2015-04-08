@@ -504,5 +504,5 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
     }
 }
 
-var client = new GameClient(4344);
-client.start();
+//var client = new GameClient(4344);
+//client.start();

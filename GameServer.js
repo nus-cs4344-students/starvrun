@@ -14,8 +14,8 @@ function GameServer(gport) {
     var count;        // Keeps track how many people are connected to server 
     var nextPID;      // PID to assign to next connected player (i.e. which player slot is open) 
     var gameInterval; // Interval variable used for gameLoop 
-    var sockets;      // Associative array for sockets, indexed via player ID
-    var players;      // Associative array for players, indexed via socket ID
+    var sockets = {};      // Associative array for sockets, indexed via player ID
+    var players = {};      // Associative array for players, indexed via socket ID
     var started = false;
     
     /*Game Variables*/
@@ -82,8 +82,6 @@ function GameServer(gport) {
             count = 0;
             nextPID = 0;
             gameInterval = undefined;
-            players = new Object;
-            sockets = new Object;
             IP = Starvrun.SERVER_IP;
             
             // Upon connection established from a client socket
@@ -175,7 +173,15 @@ function GameServer(gport) {
             console.log("Error: " + e);
         }
     }
-
+    
+    this.isFull = function(){
+        return started || (players.length >= 4);
+    }
+    
+    this.getPort = function(){
+        return port;
+    }
+    
     // Where the game starts to be played
     var gameLoop = function() 
     {
@@ -375,6 +381,7 @@ function GameServer(gport) {
             }
     }
 }
-
-var server = new GameServer(4344);
-server.start();
+//
+//var server = new GameServer(4344);
+//server.start();
+global.GameServer = GameServer;
