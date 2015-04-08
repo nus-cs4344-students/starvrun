@@ -77,14 +77,15 @@
      */
      var initGUI = function()
      {	
-     	// Sets up the canvas element
-        
-        // Add event handlers
-        //document.addEventListener("keydown", function(e) {
-            //console.log("KeyPressed "  + e );
-//            onKeyPress(e);
-        //}, false);
-    }
+        //Create Button under player-details which says look for game
+        createLFGButton();
+     }
+     
+     var createLFGButton = function(){
+        var pd = document.getElementById("player_details");
+        pd.innerHTML = "<button id='LFG'> Look For Game </button>";
+        document.getElementById("LFG").addEventListener("click", lookForGame);
+     }
 
     /*
      * priviledge method: start
@@ -98,7 +99,7 @@
         initGUI();
         initNetwork();
         setInterval(function() {sendPing();}, 3000/Starvrun.FRAME_RATE);  
-        setTimeout(function(){lookForGame();}, 500);
+//        setTimeout(function(){lookForGame();}, 500);
         
     };
     
