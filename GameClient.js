@@ -61,6 +61,7 @@
                     break;
                 case "startGame":
                     startGame();
+                    break;
                 case "pong":
                     var RTT = Date.now() - message.startTime;
                     RTT /= 2;
