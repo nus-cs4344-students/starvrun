@@ -1,0 +1,20 @@
+{
+  "name": "Starvrun",
+  "version": "0.1.0",
+  "description": "CS4344 Final Project : Multiplayer Pacman",
+  "homepage": "https://github.com/nus-cs4344-students/starvrun",
+  "author": {
+    "name": "Du Yanxian",
+    "name": "Lau Yew Kai",
+    "name": "Priyadharshini Tamilarasan",
+    "name": "Edrick Rudy Putra"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:nus-cs4344-students/starvrun.git"
+  },
+  "dependencies": {
+    "express": "4.12.3",
+    "sockjs": "0.3.15",
+  }
+}
