@@ -5,9 +5,10 @@
  */
  "use strict"; 
 
- function GameClient() {
+ function GameClient(port) {
     // Network Variables
     var socket;         // socket used to connect to server 
+    var PORT = port; 
     
     /*Game Variables*/
     var playArea;
@@ -42,8 +43,9 @@
     var initNetwork = function() {
         // Attempts to connect to game server
         try {
+            
             //var url= "http://" + Starvrun.SERVER_NAME + ":" + Starvrun.PORT + "/starvrun";
-            var url= "http://" + Starvrun.SERVER_IP + ":" + Starvrun.PORT + "/starvrun";
+            var url= "http://" + Starvrun.SERVER_IP + ":" + PORT + "/starvrun";
             console.log("Trying to connect to " + url);
             socket = new SockJS(url);
             console.log("connected");
@@ -503,5 +505,5 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
     }
 }
 
-var client = new GameClient();
+var client = new GameClient(4344);
 client.start();

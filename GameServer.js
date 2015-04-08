@@ -6,10 +6,10 @@ require(LIB_PATH + "Map.js");
 require(LIB_PATH + "Pacman.js");
 require(LIB_PATH + "Player.js");
 
-function GameServer() {    
+function GameServer(gport) {    
 
     // Server Variables
-    var port;         // Game port 
+    var port = gport;         // Game port 
     var IP;           // Game IP
     var count;        // Keeps track how many people are connected to server 
     var nextPID;      // PID to assign to next connected player (i.e. which player slot is open) 
@@ -32,8 +32,8 @@ function GameServer() {
             // Workaround to get delay
             for(var p in players){
                 if (players[p].pid == id){
-                    //setTimeout(unicast, players[p].getDelay(), sockets[id],msg);
-                    setTimeout(unicast, 500, sockets[id],msg);
+                    setTimeout(unicast, players[p].getDelay(), sockets[id],msg);
+                    //setTimeout(unicast, 500, sockets[id],msg);
                     break;
                 }
             }
@@ -84,7 +84,6 @@ function GameServer() {
             gameInterval = undefined;
             players = new Object;
             sockets = new Object;
-            port = Starvrun.PORT;
             IP = Starvrun.SERVER_IP;
             
             // Upon connection established from a client socket
@@ -376,5 +375,5 @@ function GameServer() {
     }
 }
 
-var server = new GameServer();
+var server = new GameServer(4344);
 server.start();
