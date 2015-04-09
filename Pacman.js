@@ -83,7 +83,6 @@
             // Blinking animation for the pacman during eating and collision
             var blinkMode = false;
             var blinkTimer = 0;
-            var pacmanColor;
             this.blinkUpdate = false;
             
             // Movement Variables
