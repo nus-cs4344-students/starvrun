@@ -181,6 +181,11 @@
         return false;
     }
 
+    this.setColor = function(color) {
+            COLOR = color;
+            pacmanColor = color;
+        }
+
             // Private Methods for State Management
             this.enableBeastMode = function(){
                 beastMode = true;
@@ -366,7 +371,7 @@ this.enableStunned = function(){
         this.animate = function(){
 
             eat();
-            this.blinkAnimation();
+            if(beastMode||stunned)this.blinkAnimation();
             if(dead) this.dieAnimation();
         }
 
@@ -430,6 +435,7 @@ this.enableStunned = function(){
             COLOR = color;
             curColor = COLOR;
         }
+
 
         this.setColor = function(color) {
             curColor = color;
