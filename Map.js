@@ -12,6 +12,7 @@ function Map(isServer) {
 	}
 
 	var changes = {};
+	var localEat = {};
 
 	this.getChanges = function() {
 		return changes;
@@ -27,6 +28,10 @@ function Map(isServer) {
 
 	var pushChange = function(x,y,i) {
 		changes[y*width+x] = i;
+	}
+
+	var pushLocalEat = function(x,y) {
+		localEat[y*width+x] = true;
 	}
 
 	this.implementChanges = function() {
@@ -98,10 +103,13 @@ function Map(isServer) {
 	//input: x and y in grid
 	//set the grid to free block
 	this.eatAt = function(x,y) {
-		if (!isServer) return;
-		if (grids[x][y] = Starvrun.PELLET) pelletNumber--;
-		if (grids[x][y] = Starvrun.POWERUP) powerupNumber--;
-		this.setMapContent(x,y,Starvrun.FREE);
+		if (isServer) {
+			if (grids[x][y] == Starvrun.PELLET) pelletNumber--;
+			if (grids[x][y] == Starvrun.POWERUP) powerupNumber--;
+			this.setMapContent(x,y,Starvrun.FREE);
+		} else { //
+
+		}
 	}
 
 	//input: x and y in grid
