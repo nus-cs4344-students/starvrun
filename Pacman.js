@@ -83,7 +83,6 @@
             // Blinking animation for the pacman during eating and collision
             var blinkMode = false;
             var blinkTimer = 0;
-            var pacmanColor;
             this.blinkUpdate = false;
             
             // Movement Variables
@@ -180,6 +179,10 @@
         }
         return false;
     }
+
+    this.setColor = function(color) {
+            COLOR = color;
+        }
 
             // Private Methods for State Management
             this.enableBeastMode = function(){
@@ -366,7 +369,7 @@ this.enableStunned = function(){
         this.animate = function(){
 
             eat();
-            this.blinkAnimation();
+            if(beastMode||stunned)this.blinkAnimation();
             if(dead) this.dieAnimation();
         }
 
@@ -431,8 +434,10 @@ this.enableStunned = function(){
             curColor = COLOR;
         }
 
+
         this.setColor = function(color) {
             curColor = color;
+            pacmanColor = color;
         }
 
         this.getColor = function()
