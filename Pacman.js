@@ -183,7 +183,6 @@
 
     this.setColor = function(color) {
             COLOR = color;
-            pacmanColor = color;
         }
 
             // Private Methods for State Management
@@ -439,6 +438,7 @@ this.enableStunned = function(){
 
         this.setColor = function(color) {
             curColor = color;
+            pacmanColor = color;
         }
 
         this.getColor = function()
