@@ -200,7 +200,7 @@ function Map(isServer) {
 		for (var i = 0; i < path.length; i++) {
 			var posX = path[i].x;
 			var posY = path[i].y;
-			this.setPelletAt(posX, posY);
+			this.trySetPelletAt(posX, posY);
 		}
 		return path;
 	}
@@ -211,20 +211,39 @@ function Map(isServer) {
 			var posX = path[i].x;
 			var posY = path[i].y;
 			if (i==Math.floor(path.length/2)) {
-				this.setPowerupAt(posX, posY);
+				this.trySetPowerupAt(posX, posY);
 			} else {
-				this.setPelletAt(posX, posY);
+				this.trySetPelletAt(posX, posY);
 			}
 		}
 		return path;
 	}
 
 	//input: x and y in grid
+	//modify the content of the map in grid to pellet
+	//return none
+	this.setPelletAt = function (x,y) {
+		pelletNumber++;
+		this.setMapContent(x,y,Starvrun.PELLET);
+	}
+
+	//input: x and y in grid
+	//modify the content of the map in grid to pellet
+	//return none
+	this.setPowerupAt = function (x,y) {
+		if (grids[x][y] == Starvrun.PELLET) {
+			pelletNumber--;
+		}
+		powerupNumber++;
+		this.setMapContent(x,y,Starvrun.POWERUP);
+	}
+
+	//input: x and y in grid
 	//try to spawn a pellet in a grid coordinate, if free block is found, set to pellet
 	//return true if the pellet is spawned, return false otherwise 
 	this.trySetPelletAt = function (x,y) {
-		if (grids[x][y] == Starvrun.FREE) {
-			this.setPelletAt(x,y)
+		if ((grids[x][y] == Starvrun.FREE) && (grids[x][y] != Starvrun.PELLET) && (grids[x][y] != Starvrun.POWERUP)) {
+			this.setPelletAt(x,y);
 			return true;
 		} else {
 			return false;
@@ -232,22 +251,14 @@ function Map(isServer) {
 	}
 
 	//input: x and y in grid
-	//modify the content of the map in grid to pellet
-	//return none
-	this.setPelletAt = function (x,y) {
-		if (grids[x][y] != Starvrun.PELLET) {
-			pelletNumber++;
-			this.setMapContent(x,y,Starvrun.PELLET);
-		}
-	}
-
-	//input: x and y in grid
-	//modify the content of the map in grid to pellet
-	//return none
-	this.setPowerupAt = function (x,y) {
-		if (grids[x][y] != Starvrun.POWERUP) {
-			powerupNumber++;
-			this.setMapContent(x,y,Starvrun.POWERUP);
+	//try to spawn a pellet in a grid coordinate, if free block is found, set to pellet
+	//return true if the pellet is spawned, return false otherwise 
+	this.trySetPowerupAt = function (x,y) {
+		if ((grids[x][y] == Starvrun.FREE) && (grids[x][y] != Starvrun.POWERUP)) {
+			this.setPowerupAt(x,y);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
