@@ -12,6 +12,7 @@ function GameServer(gport) {
     var port = gport;         // Game port 
     var IP;           // Game IP
     var count;        // Keeps track how many people are connected to server 
+    var availablePIDs = [3,2,1,0]; // In reverse order to allow easy popping
     var nextPID;      // PID to assign to next connected player (i.e. which player slot is open) 
     var gameInterval; // Interval variable used for gameLoop 
     var sockets = {};      // Associative array for sockets, indexed via player ID
@@ -52,35 +53,29 @@ function GameServer(gport) {
     var newPlayer = function (conn) {        
         count ++;
         
-        if(nextPID > count) {
+        if(availablePIDs.length <= 0){
             unicast(conn, {type: "message", content: "Server Full"}); 
             return;
+        }else{
+            // Allocate based on available PIDS
+            var pid = availablePIDs.pop();
+            players[conn.id] = new Player(conn.id, pid);
+            sockets[pid] = conn;
+            // Send message to new player (the current client)
+            unicast(conn, {type: "player", player:nextPID});     
         }
-
-        // Send message to new player (the current client)
-        unicast(conn, {type: "message", content:"You are Player " + (nextPID+1) });
-
-        // Create player object and insert into players with key = conn.id
-        players[conn.id] = new Player(conn.id, nextPID);
-        sockets[nextPID] = conn;
-
-        // Send Player his PID so he knows which to update
-        unicast(conn, {type: "player", player:nextPID});
-        // Updates the nextPID to issue 
-        nextPID = (nextPID + 1);
         
     }
     
     this.start = function(){
        try {
-        var express = require('express');
-        var http = require('http');
-        var sockjs = require('sockjs');
-        var sock = sockjs.createServer();
-
-            // reinitialize 
-            count = 0;
-            nextPID = 0;
+            var express = require('express');
+            var http = require('http');
+            var sockjs = require('sockjs');
+            var sock = sockjs.createServer();
+        
+            reset();
+            
             gameInterval = undefined;
             IP = Starvrun.SERVER_IP;
             
@@ -92,17 +87,19 @@ function GameServer(gport) {
 
                 // create a new player
                 newPlayer(conn);
-
+                
                 // When the client closes the connection to the server/closes the window
                 conn.on('close', function () {
                     var p = players[conn.id];
+                    //add back the pid
+                    availablePIDs.push(p.pid);
                     delete sockets[p.pid];
                     delete players[conn.id];
                 });
 
                 // When the client send something to the server.
                 conn.on('data', function (data) {
-                    var message = JSON.parse(data);
+                    var message = JSON.parse(data);                    
                     var p = players[conn.id];
 
                     //if (p === undefined) {
@@ -112,7 +109,7 @@ function GameServer(gport) {
                     //} 
                     switch (message.type) {
                         case "startGame":
-                            if(!started) {started =true; startGame();} 
+                            if(!started) {started =true; startGame(); } 
                             broadcast({type:"message", content:"Game Started"});
                             console.log("Game Started");
                             break;
@@ -172,6 +169,8 @@ function GameServer(gport) {
             console.log("Cannot listen to " + port);
             console.log("Error: " + e);
         }
+        
+        
     }
     
     this.isFull = function(){
@@ -197,9 +196,6 @@ function GameServer(gport) {
         sendPeriodicUpdate();
         sendMapChanges();
         sendStateChanges();
-            
-        
-        
         
     }
     
@@ -285,14 +281,6 @@ function GameServer(gport) {
      */
      var startGame = function() 
      {
-        // Initialize game objects
-        levelMap = new Map(true);
-        levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
-        levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
-        levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
-        levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
-        
-        initPacman();
         var message = {};
         message.type = "startGame";
         // To update on the player side
@@ -301,11 +289,45 @@ function GameServer(gport) {
         setInterval(function() {gameLoop();}, 1000/FRAME_RATE);
     };
     
+    var initGame = function(){
+        levelMap = new Map(true);
+        levelMap.spawnPelletAndPowerupBetween(1,1,17,1);
+        levelMap.spawnPelletAndPowerupBetween(1,1,1,19);
+        levelMap.spawnPelletAndPowerupBetween(1,19,17,19);
+        levelMap.spawnPelletAndPowerupBetween(17,1,17,19);
+        
+        initPacman();
+    }
+    
+     var reset = function(){
+        // Remove all clients
+        for(var i in sockets){
+            sockets[i].close();
+            delete sockets[i];
+        }
+        for(var i in players){
+            delete players[i];
+        }
+        
+        // Reinitializing All Objects
+        count = 0;
+        nextPID = 0;
+        players = {};
+        sockets = {};
+        availablePIDs = [3,2,1,0];
+        
+        // Initialize game objects
+        initGame();
+    }
+    
+    
     var initPacman = function(){
+        pacman = [];
         for(var i=0;i<numberOfPacman;i++)
         {
             pacman[i] = new Pacman(levelMap, false);    
         }
+        
         pacman[0].setStartGrid(1,1);
         pacman[1].setStartGrid(levelMap.getWidth()-2,1);
         pacman[2].setStartGrid(1,levelMap.getHeight()-2);
