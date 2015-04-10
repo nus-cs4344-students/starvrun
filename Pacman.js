@@ -13,7 +13,7 @@
 	var down = new Direction("down", 0.75, 0.25, 0, 1);		// DOWN
 	var left = new Direction("left", 1.25, 0.75, -1, 0);	// LEFT
 	var up = new Direction("up", 1.75, 1.25, 0, -1);		// UP 
-    var startDir = new Direction("start", 0.25, 1.75,0,0);
+        var startDir = new Direction("start", 0.25, 1.75,0,0);
 
 
 	// DirectionWatcher
@@ -213,7 +213,11 @@ this.enableStunned = function(){
             }
 
             this.disableStunned = function(){
-                stunned = false; 
+                if(this.inGrid()){
+                    stunned = false; 
+                    this.stop();
+                }
+                
             }
 
             this.checkDirectionChange = function() {

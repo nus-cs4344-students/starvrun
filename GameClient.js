@@ -345,10 +345,9 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
         */
         var message = {
         }
-
         switch(e.keyCode)
         {
-
+            
             case 37: // Left 
             message.type = "changeDirection";
             message.direction = Starvrun.LEFT;
