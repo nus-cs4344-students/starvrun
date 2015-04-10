@@ -102,11 +102,12 @@ function GameServer(gport) {
                     var message = JSON.parse(data);                    
                     var p = players[conn.id];
 
-                    //if (p === undefined) {
+                    if (p === undefined) {
                         // we received data from a connection with no 
                         // corresponding player.  don't do anything.
-                    //    return;
-                    //} 
+                        return;
+                    } 
+                    
                     switch (message.type) {
                         case "startGame":
                             if(!started) {started =true; startGame(); } 

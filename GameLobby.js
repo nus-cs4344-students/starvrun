@@ -111,6 +111,7 @@ function GameLobby() {
                             var msg = {};
                             msg.type = "gameToJoin";
                             msg.port = searchForGame();
+                            
                             unicast(s, msg);
                             break;
                         default:

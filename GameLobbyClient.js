@@ -5,7 +5,7 @@
     var playArea;
     var player = 0;
     var delay;
-    var gameClient; 
+    var gameClient = null; 
     
     var sendPing = function(){
         var startTime = Date.now();
@@ -58,13 +58,24 @@
                     sendToServer({type:"delay", delay:delay});
                    break;
                case  "gameToJoin":
-                    gameClient = new GameClient(message.port);
-                    gameClient.start();
+                   if(message.port == -1){
+                        appendMessage("serverMsg", "No available game");
+                    }else if(gameClient == null ){
+                        gameClient = new GameClient(message.port);
+                        gameClient.start();
+                    }else{
+                        appendMessage("serverMsg", "Already in a game");
+                    }
                     break;
                 default: 
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
             }
+            
+            socket.onclose = function(){
+                console.log("Connection Closed");
+            }
+            
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME+ ":" + Starvrun.PORT);
         }

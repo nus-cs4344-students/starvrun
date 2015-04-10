@@ -118,6 +118,10 @@
                     appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
             }
+            
+            socket.onclose = function(){
+                console.log("socket closed");
+            }
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME+ ":" + Starvrun.PORT);
         }
