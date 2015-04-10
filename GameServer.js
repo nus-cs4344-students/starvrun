@@ -55,6 +55,7 @@ function GameServer(gport) {
         
         if(availablePIDs.length <= 0){
             unicast(conn, {type: "message", content: "Server Full"}); 
+            conn.close();
             return;
         }else{
             // Allocate based on available PIDS
@@ -62,7 +63,7 @@ function GameServer(gport) {
             players[conn.id] = new Player(conn.id, pid);
             sockets[pid] = conn;
             // Send message to new player (the current client)
-            unicast(conn, {type: "player", player:nextPID});     
+            unicast(conn, {type: "player", player:pid});     
         }
         
     }
