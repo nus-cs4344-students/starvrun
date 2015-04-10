@@ -57,6 +57,7 @@
                     break;
                 case "player":
                     player = message.player;
+                    appendMessage("serverMsg", "You are Player " + (player+1));
                     //console.log(player);
                     break;
                 case "startGame":
