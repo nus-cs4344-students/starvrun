@@ -251,16 +251,22 @@ function GameServer(gport) {
                 x4 = pacman[3].getGridPosX();
                 y4 = pacman[3].getGridPosY();
             }
-            if (Math.random() > 0.50) {
+            var random = Math.floor(Math.random() * 3.0);
+            if (random==0) {
                 levelMap.spawnPelletAndPowerupBetween(x1, y1, x2, y2);
                 levelMap.spawnPelletAndPowerupBetween(x2, y2, x3, y3);
                 levelMap.spawnPelletAndPowerupBetween(x3, y3, x4, y4);
                 levelMap.spawnPelletAndPowerupBetween(x4, y4, x1, y1);
-            } else {
+            } else if (random==1) {
                 levelMap.spawnPelletAndPowerupBetween(x1, y1, x2, y2);
                 levelMap.spawnPelletAndPowerupBetween(x2, y2, x4, y4);
                 levelMap.spawnPelletAndPowerupBetween(x4, y4, x3, y3);
                 levelMap.spawnPelletAndPowerupBetween(x3, y3, x1, y1);
+            } else {
+                levelMap.spawnPelletAndPowerupBetween(x1, y1, x3, y3);
+                levelMap.spawnPelletAndPowerupBetween(x3, y3, x2, y2);
+                levelMap.spawnPelletAndPowerupBetween(x2, y2, x4, y4);
+                levelMap.spawnPelletAndPowerupBetween(x4, y4, x1, y1);
             }
         }
         // To check if the pacmans are colliding
