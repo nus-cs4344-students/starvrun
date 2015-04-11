@@ -425,7 +425,8 @@ function GameClient(port) {
     }
     
     var endGame = function(){
-        
+        console.log("end game");
+        started = false;
     }
 
     // Where the game starts to be played
@@ -476,6 +477,10 @@ function GameClient(port) {
             sendPing();
         }, 3000 / FRAME_RATE);
     };
+    
+    this.isStarted = function(){
+        return started;
+    }
 
     var initPacman = function () {
         var i;

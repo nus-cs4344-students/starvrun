@@ -6,6 +6,7 @@ function GameLobbyClient() {
     var player = 0;
     var delay;
     var gameClient = null;
+    var playingGame = false;
 
     var sendPing = function () {
         var startTime = Date.now();
@@ -113,7 +114,17 @@ function GameLobbyClient() {
             sendPing();
         }, 3000 / Starvrun.FRAME_RATE);
 //        setTimeout(function(){lookForGame();}, 500);
-
+        setInterval(function(){
+            if(gameClient != null){
+                if(gameClient.isStarted() && !playingGame ){
+                    playingGame = true;
+                }else if(!gameClient.isStarted() && playingGame){
+                    // Game Ended Reset Game
+                    gameClient = null;
+                    playingGame = false;
+                }
+            }
+        }, 1000);
     };
 
     var lookForGame = function () {

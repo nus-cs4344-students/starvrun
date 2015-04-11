@@ -26,7 +26,7 @@ function GameServer(gport) {
     var numberOfPacman = 4;
     var FRAME_RATE = 35;
 
-    var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
+    var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER ;
 
     var runGameTimer = function () {
         if (gameTimer > 0) {
@@ -41,7 +41,8 @@ function GameServer(gport) {
     }
     
     var endGame = function(){
-        
+        console.log("Game Ended");
+        reset();
     }
 
     var broadcast = function (msg) {
@@ -347,6 +348,7 @@ function GameServer(gport) {
         players = {};
         sockets = {};
         availablePIDs = [3, 2, 1, 0];
+        started = false;
 
         // Initialize game objects
         initGame();
