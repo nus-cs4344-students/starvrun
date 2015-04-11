@@ -196,7 +196,10 @@ function Pacman(map, isPlayer) {
     }
 
     this.disableStunned = function(){
-        stunned = false; 
+        if (this.inGrid()) {
+            stunned = false;
+            this.stop();
+        }
     }
 
     this.checkDirectionChange = function() {
