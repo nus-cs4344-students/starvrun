@@ -118,7 +118,7 @@ function GameLobbyClient() {
         initGUI();
         initNetwork();
         setInterval(function () {
-            sendPing();
+            //sendPing();
         }, 3000 / Starvrun.FRAME_RATE);
 //        setTimeout(function(){lookForGame();}, 500);
         setInterval(function(){
