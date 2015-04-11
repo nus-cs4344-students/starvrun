@@ -14,6 +14,14 @@ function Map(isServer) {
     var changes = {};
     var localEat = {};
 
+    this.getPelletNumber = function() {
+    	return pelletNumber;
+    }
+
+    this.getPowerupNumber = function() {
+    	return powerupNumber;
+    }
+
     this.getChanges = function () {
         return changes;
     }

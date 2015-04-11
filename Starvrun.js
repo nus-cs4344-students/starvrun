@@ -15,6 +15,7 @@ var Starvrun = {
     FREE: 1,
     PELLET: 2,
     POWERUP: 3,
+    PELLET_THRESHOLD: 15,
 
     // Pacman Constants
     BEAST_TIME: 3, // time in seconds pacman in beast

@@ -213,6 +213,52 @@ function GameServer(gport) {
             pacman[i].move();
         }
 
+        if (levelMap.getPelletNumber() < Starvrun.PELLET_THRESHOLD) {
+            // pacman[0].getGridPosX(), pacman[0].getGridPosY(), 
+            // pacman[1].getGridPosX(), pacman[1].getGridPosY(),
+            // pacman[2].getGridPosX(), pacman[2].getGridPosY(),
+            // pacman[3].getGridPosX(), pacman[3].getGridPosY(),
+            var x1,y1,x2,y2,x3,y3,x4,y4;
+            if (pacman[0].isDead()) {
+                x1 = 1;
+                y1 = 1;
+            } else {
+                x1 = pacman[0].getGridPosX();
+                y1 = pacman[0].getGridPosY();
+            }
+            if (pacman[1].isDead()) {
+                x2 = 17;
+                y2 = 1;
+            } else {
+                x2 = pacman[1].getGridPosX();
+                y2 = pacman[1].getGridPosY();
+            }
+            if (pacman[2].isDead()) {
+                x3 = 1;
+                y3 = 19;
+            } else {
+                x3 = pacman[2].getGridPosX();
+                y3 = pacman[2].getGridPosY();
+            }
+            if (pacman[3].isDead()) {
+                x4 = 17;
+                y4 = 19;
+            } else {
+                x4 = pacman[3].getGridPosX();
+                y4 = pacman[3].getGridPosY();
+            }
+            if (Math.random() > 0.50) {
+                levelMap.spawnPelletAndPowerupBetween(x1, y1, x2, y2);
+                levelMap.spawnPelletAndPowerupBetween(x2, y2, x3, y3);
+                levelMap.spawnPelletAndPowerupBetween(x3, y3, x4, y4);
+                levelMap.spawnPelletAndPowerupBetween(x4, y4, x1, y1);
+            } else {
+                levelMap.spawnPelletAndPowerupBetween(x1, y1, x2, y2);
+                levelMap.spawnPelletAndPowerupBetween(x2, y2, x4, y4);
+                levelMap.spawnPelletAndPowerupBetween(x4, y4, x3, y3);
+                levelMap.spawnPelletAndPowerupBetween(x3, y3, x1, y1);
+            }
+        }
         // To check if the pacmans are colliding
         checkCollision(numberOfPacman);
 
