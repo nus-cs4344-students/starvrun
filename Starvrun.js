@@ -34,10 +34,10 @@ var Starvrun = {
     PELLET_COLOUR: "white",
     POWERUP_COLOUR: "red",
     WALL_WIDTH: 8,
-    DR_THRESHOLD: 2
+    DR_THRESHOLD: 2,
 
     //SERVER CONSTANT 
-    GAME_TIMER = 120;
+    GAME_TIMER: 120
 };
 
 
