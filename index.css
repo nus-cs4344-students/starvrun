@@ -1,45 +1,85 @@
 *{
     text-align : center;
     background-color : black;
-    margin-left : auto;
-    margin-right : auto;
+    z-index : 0;
+    color: yellow;
+    overflow: visible;
 }
 
-html,body{
-    height:100vh;
-    width :100vh;
+body,html{
+    height:100%;
+    width: 100%;
+}
+
+.fit{
+    max-height: 100vh;
+    max-width: 100%;
+}
+
+body{
+    min-height: 100%;
+    min-width : 100%;
+}
+
+#cover{
+    z-index: 1;
+    color: yellow;
+    position: absolute;
+    vertical-align: central;
+    font-size : 30px;
+    min-height: 100%;
+    min-width : 100%;
 }
 
 #left-toolbar{
-    width : 30vh;
-    height : 100vh;
+    min-height: 100%;
+    width : 20%;
+    
     float : left;
     color: yellow;
 }
 
 #player_details{
     vertical-align: top;
+    height: 20%;
+    width: 100%;
+}
+
+#LFG{
+    height:100%;
+    width :100%;
 }
 
 #scoreBoard{
+    min-height : 30%;
     font-size : 20px;
+    max-width: 100%;
 }
 
 #serverMsg {
+    height : 50%;
     vertical-align : bottom;
+    max-height: 50%;
+    max-width: 100%;
+    overflow : hidden;
+/*    overflow:scroll;*/
     
 }
 
 #canvas-container{
-    display : inline;
-    float : right;
-    background-color : black;
-    width : 70vh;
-    height : 100vh;
     
+    display : inline;
+    float:  left;
+    background-color : black;
+    width : 70%;    
+    min-height: 100%;
+
 }
 
 #playArea{
+    display : inline;
+    float : left;
+    height : 100%;
 }
 
 
