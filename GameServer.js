@@ -404,6 +404,27 @@ function GameServer(gport) {
                 return false;
             }
     }
+
+    var maxScore = function()
+    {
+        var maxValue = 0, playerCount = 0;
+        var i;
+        var playerNumber = [];
+        for(i=0;i<numberOfPacman;i++)
+        {
+            if(pacman[i].getScore()>=maxScore)
+                maxScore = pacman[i].getScore();
+        }
+
+        for(i=0;i<numberOfPacman;i++)
+        {
+            if(pacman[i].getScore()==maxScore)
+            {
+                playerNumber[playerCount] = i;
+                playerCount++;
+            }
+        }
+    }
 }
 //
 //var server = new GameServer(4344);
