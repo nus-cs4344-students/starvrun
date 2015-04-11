@@ -373,7 +373,7 @@ this.enableStunned = function(){
         this.animate = function(){
 
             eat();
-            if(beastMode||stunned)this.blinkAnimation();
+            this.blinkAnimation();
             if(dead) this.dieAnimation();
         }
 
