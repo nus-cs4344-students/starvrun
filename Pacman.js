@@ -359,7 +359,7 @@ function Pacman(map, isPlayer) {
     }
 
     this.setDirection = function(dir) {                
-        if (!dead && dir && (dir.name !== curDirection.name)) {
+        if (!dead && dir) {
             dirX = dir.dirX;
             dirY = dir.dirY;
             sAngle = dir.sAngle;
