@@ -475,17 +475,21 @@ var renderRoundObj= function(context, posX, posY, radius, colour)
                     {
                         // Check If same State
                         if(pacman[i].isBeast()=== pacman[j].isBeast()){
+                            pacman[i].enableBlinkAnim();
                             pacman[i].moveBack();
+                            pacman[j].enableBlinkAnim();
                             pacman[j].moveBack();
                         }else if(pacman[i].isBeast() === true && pacman[j].isBeast() == false){
                             // pacman i eat pacman j
                             if(!pacman[j].isDead()){
+                                pacman[i].enableBlinkAnim();
                                 pacman[i].kill();
                                 pacman[j].died();
                             }
                         }else {
                             // pacman j eat pacman i
                             if(!pacman[i].isDead()){
+                                pacman[j].enableBlinkAnim();
                                 pacman[j].kill();
                                 pacman[i].died();
                             }
