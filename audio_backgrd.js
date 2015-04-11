@@ -2,7 +2,7 @@
 
 // PLAYER VARIABLES
 
-var mp3snd 	= "pacman-techno.mp3";	// MP3 FILE
+var mp3snd 	= "music.mp3";	// MP3 FILE
 
 var loopsong	= "yes"			// LOOP MUSIC | yes | no |
 var autostarts	= "yes"			// AUTO START MUSIC | yes | no |
