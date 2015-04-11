@@ -20,6 +20,7 @@ function GameClient(port) {
     var player = 0;
     var delay;
     var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
+    var loopID =0;
 
 
     var sendPing = function () {
@@ -126,7 +127,8 @@ function GameClient(port) {
                     case "endGame":
                         var winner = message.winner;
                         renderEndGame(winner);
-                        console.log(message);
+                        clearInterval(loopID);
+                        
                         break;
                     default:
                         appendMessage("serverMsg", "unhandled meesage type " + message.type);
@@ -169,6 +171,7 @@ function GameClient(port) {
     var renderEndGame = function(winner){
         var context = playArea.getContext("2d");
         context.font = "48px serif";    
+        context.strokeStyle = "yellow";
         var text = "The Game has Ended \n";
         if (winner.length == 1) {
             if (winner[0] == player) {
@@ -184,7 +187,7 @@ function GameClient(port) {
             }
         }
         
-        context.strokeText(text,playArea.width/2, playArea.height/2);
+        context.strokeText(text, 0, playArea.height/2);
         
     }
 
@@ -550,7 +553,7 @@ function GameClient(port) {
         initGUI();
         initNetwork();
         // Start drawing 
-        setInterval(function () {
+        loopID = setInterval(function () {
             gameLoop();
         }, 1000 / FRAME_RATE);
         setInterval(function () {

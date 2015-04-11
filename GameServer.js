@@ -47,8 +47,9 @@ function GameServer(gport) {
         msg.type = "endGame";
         msg.winner = maxScorePlayerCount();
         broadcast(msg);
-        
-        reset();
+        clearInterval(loopID);
+
+        setTimeout(reset, 500);
         
     }
 
@@ -408,7 +409,6 @@ function GameServer(gport) {
         sockets = {};
         availablePIDs = [3, 2, 1, 0];
         started = false;
-        clearInterval(loopID);
         loopID = 0;
 
         // Initialize game objects
