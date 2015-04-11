@@ -123,6 +123,11 @@ function GameClient(port) {
                         if (message.respawn === true)
                             pm.respawn();
                         break;
+                    case "endGame":
+                        var winner = message.winner;
+                        renderEndGame(winner);
+                        console.log(message);
+                        break;
                     default:
                         appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
@@ -159,6 +164,28 @@ function GameClient(port) {
         //Render Game Timer
         renderGameTimer();
 
+    }
+    
+    var renderEndGame = function(winner){
+        var context = playArea.getContext("2d");
+        context.font = "48px serif";    
+        var text = "The Game has Ended \n";
+        if (winner.length == 1) {
+            if (winner[0] == player) {
+                text += "Congratuations ! You Have Won \n"
+            } else {
+                text += "Winner : Player " + winner[0] +"\n";
+            }
+        }else{
+            text += "We have a Tie! \n"
+            text += "Winners : Players";
+            for(var p in winner){
+                text += " " + winner[p] 
+            }
+        }
+        
+        context.strokeText(text,playArea.width/2, playArea.height/2);
+        
     }
 
     var renderScore = function () {

@@ -25,6 +25,7 @@ function GameServer(gport) {
     var pacman = [];
     var numberOfPacman = 4;
     var FRAME_RATE = 35;
+    var loopID ;
 
     var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER ;
 
@@ -42,7 +43,13 @@ function GameServer(gport) {
     
     var endGame = function(){
         console.log("Game Ended");
+        var msg = {};
+        msg.type = "endGame";
+        msg.winner = maxScorePlayerCount();
+        broadcast(msg);
+        
         reset();
+        
     }
 
     var broadcast = function (msg) {
@@ -368,7 +375,7 @@ function GameServer(gport) {
         // To update on the player side
         setTimeout(broadcast, 0, message);
 
-        setInterval(function () {
+        loopID = setInterval(function () {
             gameLoop();
         }, 1000 / FRAME_RATE);
     };
@@ -381,7 +388,7 @@ function GameServer(gport) {
         levelMap.spawnPelletAndPowerupBetween(17, 1, 17, 19);
 
         initPacman();
-        gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
+        gameTimer = Starvrun.FRAME_RATE * 5;//Starvrun.GAME_TIMER;
     }
 
     var reset = function () {
@@ -401,6 +408,8 @@ function GameServer(gport) {
         sockets = {};
         availablePIDs = [3, 2, 1, 0];
         started = false;
+        clearInterval(loopID);
+        loopID = 0;
 
         // Initialize game objects
         initGame();
@@ -493,7 +502,7 @@ function GameServer(gport) {
     // playerNumber array  contains the winning players
     var maxScorePlayerCount = function ()
     {
-        var maxValue = 0, playerCount = 0;
+        var maxScore = 0, playerCount = 0;
         var i;
         for (i = 0; i < numberOfPacman; i++)
         {
