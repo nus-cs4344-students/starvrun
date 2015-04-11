@@ -154,6 +154,8 @@ function GameClient(port) {
         renderPacmans(context);
         // Render Remaining Game Objects
         renderScore();
+        //Render Game Timer
+        renderGameTimer();
 
     }
 
@@ -319,6 +321,15 @@ function GameClient(port) {
         context.fill();
     }
 
+    var renderGameTimer = function(){
+        var gt = document.getElementById("gameTimer");
+       
+        var timeLeftSeconds = parseInt(gameTimer/Starvrun.FRAME_RATE) ;
+
+         var timeLeft = "<p>Game Timer</p>" + timeLeftSeconds;
+
+        gt.innerHTML = timeLeft;
+    }
     /*
      * private method: initGUI
      *
