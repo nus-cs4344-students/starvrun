@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-function Player(connid,pid){
-     // Public variables
+function Player(connid, pid) {
+    // Public variables
     this.connid;   // Socket id. Used to uniquely identify players via 
-                // the socket they are connected from
+    // the socket they are connected from
     this.pid;   // Player id. In this case, 1 or 2 
     this.pacman;// player's pacman object 
     this.delay; // player's delay 
@@ -19,12 +19,12 @@ function Player(connid,pid){
     this.pacman = new Object();
     this.delay = 0;
     this.lastUpdated = new Date().getTime();
-    
-    this.getDelay = function() {       
+
+    this.getDelay = function () {
         return this.delay;
     }
-    
-    this.setPacman = function(pm){
+
+    this.setPacman = function (pm) {
         this.pacman = pm;
     }
 
