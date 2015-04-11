@@ -28,7 +28,7 @@ function GameServer(gport) {
 
     var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
 
-    this.runGameTimer = function () {
+    var runGameTimer = function () {
         if (gameTimer > 0) {
             gameTimer--;
         }
