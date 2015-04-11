@@ -385,16 +385,8 @@ function GameClient(port) {
             onKeyPress(e);
         }, false);
 
-
-        if (window.DeviceMotionEvent) 
-        {
-            console.log("DeviceMotionEvent supported");
-            window.addEventListener("touchend", onTouchEnd);
-            window.addEventListener('devicemotion', deviceMotionHandler, false);
-        } else {
-            console.log("Not supported");
-        }
-
+            document.getElementById("body").addEventListener("touchend", onTouchEnd);
+            document.getElementById("body").addEventListener('devicemotion', deviceMotionHandler);
     }
 
     // Touch handler
