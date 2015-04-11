@@ -352,6 +352,29 @@ function GameClient(port) {
             //console.log("KeyPressed "  + e );
             onKeyPress(e);
         }, false);
+
+        if ((window.DeviceMotionEvent) 
+        {
+            console.log("DeviceMotionEvent supported");
+            window.addEventListener('devicemotion', deviceMotionHandler, false);
+        } else {
+            console.log("Not supported");
+        }
+
+    }
+
+    // Device motion handler
+    function deviceMotionHandler(eventData) 
+    {
+        var info, xyz = "[X, Y, Z]";
+
+        
+        // Grab the rotation rate from the results
+        var rotation = eventData.rotationRate;
+        info = xyz.replace("X", rotation.alpha);
+        info = info.replace("Y", rotation.beta);
+        info = info.replace("Z", rotation.gamma);
+        console.log(info);       
     }
 
     /*
