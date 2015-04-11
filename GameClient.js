@@ -81,11 +81,13 @@ function GameClient(port) {
                         for (var j = 0; j < numberOfPacman; j++)
                         {
                             if (j == player) {
-                                var dist = levelMap.getDistance(pacman[j].getGridPosX(), pacman[j].getGridPosY(), levelMap.pxToGrid(message.posX[j]), levelMap.pxToGrid(message.posY[j]));
-                                if (dist > Starvrun.DR_THRESHOLD) {
+                                //var dist = levelMap.getDistance(pacman[j].getGridPosX(), pacman[j].getGridPosY(), levelMap.pxToGrid(message.posX[j]), levelMap.pxToGrid(message.posY[j]));
+                                var dist = Math.abs(pacman[j].getGridPosX() - levelMap.pxToGrid(message.posX[j])) + Math.abs(pacman[j].getGridPosY() - levelMap.pxToGrid(message.posY[j]));
+                                if (dist > Starvrun.DR_THRESHOLD) { //dead reckoning
                                     pacman[j].setPositionPx(message.posX[j], message.posY[j]);
                                     pacman[j].setDirection(message.direction[j]);
                                     pacman[j].setSpeed(message.speed[j]);
+                                    fastForward(delay);
                                 }
                             } else {
                                 pacman[j].setPositionPx(message.posX[j], message.posY[j]);
@@ -439,13 +441,21 @@ function GameClient(port) {
             for (i = 0; i < numberOfPacman; i++)
             {
                 pacman[i].move();
-
             }
             // To check if the pacmans are colliding
             checkCollision(numberOfPacman);
             render();
             runGameTimer();
 
+        }
+    }
+
+    var fastForward = function (t)
+    {
+        var x = Math.round(t/(1000/Starvrun.FRAME_RATE));
+        for (i = 0; i < x; i++) {
+            pacman[player].move();
+            checkCollision(numberOfPacman);
         }
     }
 
