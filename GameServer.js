@@ -25,7 +25,19 @@ function GameServer(gport) {
     var numberOfPacman = 4;
     var FRAME_RATE = 35;
 
+    var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
 
+    this.runGameTimer = function () {
+        if (gameTimer > 0) {
+            gameTimer--;
+        }
+
+        if(gameTimer==0)
+        {
+            //Stop the game
+            reset();
+        }
+    }
 
     var broadcast = function (msg) {
         var id;
@@ -416,7 +428,7 @@ function GameServer(gport) {
         }
     }
 
-    var maxScore = function ()
+    var maxScorePlayer = function ()
     {
         var maxValue = 0, playerCount = 0;
         var i;
@@ -435,6 +447,7 @@ function GameServer(gport) {
                 playerCount++;
             }
         }
+        return playerNumber;
     }
 }
 //
