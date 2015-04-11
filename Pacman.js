@@ -72,7 +72,7 @@ function Pacman(map, isPlayer) {
 
     // POWER UP Stuff
     var beastMode = false;
-    var beastMode_r = 0;
+    var beastMode_Timer = 0;
     this.beastUpdated = false;
 
     // Collision Stuff
