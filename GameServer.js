@@ -206,6 +206,7 @@ function GameServer(gport) {
     // Where the game starts to be played
     var gameLoop = function ()
     {
+        runGameTimer();
         for (var i in pacman)
         {
             pacman[i].move();
