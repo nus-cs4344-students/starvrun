@@ -17,7 +17,8 @@ function GameServer(gport) {
     var gameInterval; // Interval variable used for gameLoop 
     var sockets = {};      // Associative array for sockets, indexed via player ID
     var players = {};      // Associative array for players, indexed via socket ID
-    var started = false;
+    var started = false; 
+    var playerNumber = []; //Winning player or players
 
     /*Game Variables*/
     var levelMap;
@@ -429,11 +430,12 @@ function GameServer(gport) {
         }
     }
 
-    var maxScorePlayer = function ()
+    // Returns number of players winning the game
+    // playerNumber array  contains the winning players
+    var maxScorePlayerCount = function ()
     {
         var maxValue = 0, playerCount = 0;
         var i;
-        var playerNumber = [];
         for (i = 0; i < numberOfPacman; i++)
         {
             if (pacman[i].getScore() >= maxScore)
@@ -448,7 +450,7 @@ function GameServer(gport) {
                 playerCount++;
             }
         }
-        return playerNumber;
+        return playerCount;
     }
 }
 //
