@@ -156,6 +156,8 @@ function GameClient(port) {
         renderPacmans(context);
         // Render Remaining Game Objects
         renderScore();
+        //Render Game Timer
+        renderGameTimer();
 
     }
 
@@ -321,6 +323,15 @@ function GameClient(port) {
         context.fill();
     }
 
+    var renderGameTimer = function(){
+        var gt = document.getElementById("gameTimer");
+       
+        var timeLeftSeconds = parseInt(gameTimer/Starvrun.FRAME_RATE) ;
+
+         var timeLeft = "<p>Game Timer</p>" + timeLeftSeconds;
+
+        gt.innerHTML = timeLeft;
+    }
     /*
      * private method: initGUI
      *
@@ -343,6 +354,38 @@ function GameClient(port) {
             //console.log("KeyPressed "  + e );
             onKeyPress(e);
         }, false);
+
+
+        if (window.DeviceMotionEvent) 
+        {
+            console.log("DeviceMotionEvent supported");
+            window.addEventListener("touchend", onTouchEnd);
+            window.addEventListener('devicemotion', deviceMotionHandler, false);
+        } else {
+            console.log("Not supported");
+        }
+
+    }
+
+    // Touch handler
+    var onTouchEnd = function(e)
+    {
+        message.type = "startGame";
+        sendToServer(message);
+    }
+
+    // Device motion handler
+    function deviceMotionHandler(eventData) 
+    {
+
+        var info, xyz = "[X, Y, Z]";
+        
+        // Grab the rotation rate from the results
+        var rotation = eventData.rotationRate;
+        info = xyz.replace("X", rotation.alpha);
+        info = info.replace("Y", rotation.beta);
+        info = info.replace("Z", rotation.gamma);
+        console.log(info);       
     }
 
     /*
@@ -484,7 +527,7 @@ function GameClient(port) {
             gameLoop();
         }, 1000 / FRAME_RATE);
         setInterval(function () {
-            sendPing();
+            //sendPing();
         }, 3000 / FRAME_RATE);
     };
     

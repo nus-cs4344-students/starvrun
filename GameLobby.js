@@ -90,6 +90,7 @@ function GameLobby() {
                 // When the client send something to the server.
                 conn.on('data', function (data) {
                     var message = JSON.parse(data)
+                    console.log(message);
                     var p = players[conn.id]
 
                     if (p === undefined) {

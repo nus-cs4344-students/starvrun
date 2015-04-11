@@ -97,6 +97,13 @@ function GameLobbyClient() {
         var pd = document.getElementById("player_details");
         pd.innerHTML = "<button id='LFG'> Look For Game </button>";
         document.getElementById("LFG").addEventListener("click", lookForGame);
+        document.getElementById("LFG").addEventListener("touchend", onTouchEnd);
+    }
+
+    var onTouchEnd = function(e) {
+        var msg = {};
+        msg.type = "joinGame";
+        sendToServer(msg);
     }
 
     /*
