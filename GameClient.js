@@ -356,6 +356,7 @@ function GameClient(port) {
         if ((window.DeviceMotionEvent) 
         {
             console.log("DeviceMotionEvent supported");
+            window.addEventListener("touchend", onTouchEnd);
             window.addEventListener('devicemotion', deviceMotionHandler, false);
         } else {
             console.log("Not supported");
@@ -363,11 +364,18 @@ function GameClient(port) {
 
     }
 
+    // Touch handler
+    var onTouchEnd = function(e)
+    {
+        message.type = "startGame";
+        sendToServer(message);
+    }
+
     // Device motion handler
     function deviceMotionHandler(eventData) 
     {
-        var info, xyz = "[X, Y, Z]";
 
+        var info, xyz = "[X, Y, Z]";
         
         // Grab the rotation rate from the results
         var rotation = eventData.rotationRate;
