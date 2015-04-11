@@ -36,8 +36,12 @@ function GameServer(gport) {
         if(gameTimer==0)
         {
             //Stop the game
-            reset();
+            endGame();
         }
+    }
+    
+    var endGame = function(){
+        
     }
 
     var broadcast = function (msg) {
@@ -370,6 +374,7 @@ function GameServer(gport) {
         levelMap.spawnPelletAndPowerupBetween(17, 1, 17, 19);
 
         initPacman();
+        gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
     }
 
     var reset = function () {

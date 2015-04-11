@@ -4,40 +4,44 @@
         <title>Starvrun</title>
         <!-- Import Style Sheet-->
         <link rel="stylesheet" type="text/css" href="./index.css">
-        
-        <script type="text/javascript"> 
+
+        <script type="text/javascript">
             var global = {}; // For node.js require 
-	</script>
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-         <script src="https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
     </head>
     <body>
+        <!--        <div id ="cover">
+                </div>-->
+
         <div id="left-toolbar">
             <div id="player_details">
-                
+
             </div>
-            
+
             <div id="scoreBoard">
-                
+
             </div>
-            
+
             <div id="serverMsg"> 
-                
+
             </div>
         </div> 
-       
+
         <div id="canvas-container">
-               
-          	<canvas id ="playArea"></canvas>
-                 
+
+            <canvas id ="playArea"></canvas>
+
         </div>
-        
-        
+
+
         <script type="text/javascript" src="./Starvrun.js"></script>
         <script type="text/javascript" src="./Pacman.js"></script>
         <script type="text/javascript" src="./Map.js"></script>
         <script type="text/javascript" src="./GameClient.js"></script>
         <script type="text/javascript" src="./GameLobbyClient.js"></script>
+        <!--        <script type="text/javascript" src="./animation.js"></script>-->
 
     </body>
 </html>

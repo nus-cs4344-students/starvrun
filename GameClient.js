@@ -19,6 +19,8 @@ function GameClient(port) {
     var started = false;
     var player = 0;
     var delay;
+    var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
+
 
     var sendPing = function () {
         var startTime = Date.now();
@@ -408,6 +410,23 @@ function GameClient(port) {
             return;
         started = true;
     }
+    
+
+    var runGameTimer = function () {
+        if (gameTimer > 0) {
+            gameTimer--;
+        }
+
+        if(gameTimer==0)
+        {
+            //Stop the game
+            endGame();
+        }
+    }
+    
+    var endGame = function(){
+        
+    }
 
     // Where the game starts to be played
     var gameLoop = function ()
@@ -424,6 +443,7 @@ function GameClient(port) {
             // To check if the pacmans are colliding
             checkCollision(numberOfPacman);
             render();
+            runGameTimer();
 
         }
     }
