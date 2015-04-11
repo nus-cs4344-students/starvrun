@@ -389,7 +389,7 @@ function GameServer(gport) {
         levelMap.spawnPelletAndPowerupBetween(17, 1, 17, 19);
 
         initPacman();
-        gameTimer = Starvrun.FRAME_RATE * 5;//Starvrun.GAME_TIMER;
+        gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
     }
 
     var reset = function () {
