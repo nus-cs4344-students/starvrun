@@ -353,7 +353,8 @@ function GameClient(port) {
             onKeyPress(e);
         }, false);
 
-        if ((window.DeviceMotionEvent) 
+
+        if (window.DeviceMotionEvent) 
         {
             console.log("DeviceMotionEvent supported");
             window.addEventListener("touchend", onTouchEnd);
@@ -516,7 +517,7 @@ function GameClient(port) {
             gameLoop();
         }, 1000 / FRAME_RATE);
         setInterval(function () {
-            sendPing();
+            //sendPing();
         }, 3000 / FRAME_RATE);
     };
     
