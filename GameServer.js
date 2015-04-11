@@ -51,7 +51,7 @@ function GameServer(gport) {
             // Workaround to get delay
             for (var p in players) {
                 if (players[p].pid == id) {
-                    setTimeout(unicast, players[p].getDelay(), sockets[id], msg);
+                    setTimeout(unicast, 0, sockets[id], msg);
                     //setTimeout(unicast, 500, sockets[id],msg);
                     break;
                 }
