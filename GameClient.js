@@ -21,7 +21,8 @@ function GameClient(port) {
     var delay;
     var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
     var loopID =0;
-
+    var audioCollide = new Audio('./audio/pacman_collide.wav');
+    var audioDeath = new Audio('./audio/pacman_death.wav');
 
     var sendPing = function () {
         var startTime = Date.now();
@@ -594,6 +595,7 @@ function GameClient(port) {
                     {
                         // Check If same State
                         if (pacman[i].isBeast() === pacman[j].isBeast()) {
+                            audioCollide.play();
                             pacman[i].enableBlinkAnim();
                             pacman[i].moveBack();
                             pacman[j].enableBlinkAnim();
@@ -601,6 +603,7 @@ function GameClient(port) {
                         } else if (pacman[i].isBeast() === true && pacman[j].isBeast() == false) {
                             // pacman i eat pacman j
                             if (!pacman[j].isDead()) {
+                                audioDeath.play();
                                 pacman[i].enableBlinkAnim();
                                 pacman[i].kill();
                                 pacman[j].died();
@@ -608,6 +611,7 @@ function GameClient(port) {
                         } else {
                             // pacman j eat pacman i
                             if (!pacman[i].isDead()) {
+                                audioDeath.play();
                                 pacman[j].enableBlinkAnim();
                                 pacman[j].kill();
                                 pacman[i].died();

@@ -96,6 +96,7 @@ function Pacman(map, isPlayer) {
     var dead = false;  // For holding Pacman in Position while animation is played
     this.deadUpdated = false;
 
+
     // Public Method
     // Accessors
     this.getScore = function(){
@@ -259,6 +260,7 @@ function Pacman(map, isPlayer) {
                 //clear the item on map
                 score += point;
                 map.eatAt(gridX, gridY);
+
             }
 
             //check for wall
