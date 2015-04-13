@@ -255,7 +255,11 @@ function Pacman(map, isPlayer) {
                 var point = Starvrun.PELLET_SCORE;
                 if (mapItem === Starvrun.POWERUP) {
                     point = Starvrun.POWERUP_SCORE;
-                    this.enableBeastMode();
+                    if (map.isServer()) {
+                        this.enableBeastMode();
+                    } else {
+                        //HOLD AND WAIT
+                    }
                 }
                 //clear the item on map
                 score += point;
