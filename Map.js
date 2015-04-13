@@ -14,6 +14,10 @@ function Map(isServer) {
     var changes = {};
     var localEat = {};
 
+    this.isServer = function() {
+        return isServer;
+    }
+
     this.getPelletNumber = function() {
     	return pelletNumber;
     }
