@@ -394,8 +394,8 @@ function Pacman(map, isPlayer) {
             //console.log("Lives Remaining = " + lives);
         }else{
             dead= true;
-            posX = map.gridToPx(map.getWidth()+1);
-            posY = map.gridToPx(map.getHeight()+1);
+            posX = map.gridToPx(map.getWidth()+2);
+            posY = map.gridToPx(map.getHeight()+2);
             me.stop();
             //console.log("No more Lives");
         }
@@ -432,9 +432,7 @@ function Pacman(map, isPlayer) {
     }
 
     this.render = function(context) {
-        if(lives <= 0){
-            return;
-        }
+        if(!this.isDead()){
         this.animate();
         var radius = WIDTH / 2;
             //console.log("rendering at " + this.posX + " , " + this.posY);
@@ -451,6 +449,7 @@ function Pacman(map, isPlayer) {
             context.lineTo(posX,posY);
             context.closePath();
             context.fill();
+        }
     } 
 
     this.blinkAnimation = function()

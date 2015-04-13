@@ -286,7 +286,21 @@ function GameServer(gport) {
         sendPeriodicUpdate();
         sendMapChanges();
         sendStateChanges();
+        checkEndGame();
 
+    }
+    
+    var checkEndGame = function(){
+        var toEnd = 0;
+        for(var p in pacman){
+            if(!pacman[p].isDead()){
+                toEnd ++;
+            }
+        }
+        
+        if(toEnd == 1){
+            endGame();
+        }
     }
 
     var sendStateChanges = function () {
