@@ -173,19 +173,20 @@ function GameClient(port) {
         var context = playArea.getContext("2d");
         context.font = "48px serif";    
         context.strokeStyle = "yellow";
-        var text = "The Game has Ended \n";
+        var text; //= "The Game has Ended \n";
         if (winner.length == 1) {
             if (winner[0] == player) {
-                text += "Congratuations ! You Have Won \n"
+                text = "Winner"
             } else {
-                text += "Winner : Player " + winner[0] +"\n";
+                text = "Better Luck Next Time";
             }
         }else{
-            text += "We have a Tie! \n"
-            text += "Winners : Players";
             for(var p in winner){
-                text += " " + winner[p] 
+                if (winner[p] == player) {
+                text = "Draw"
+                }
             }
+            text = "Better Luck Next Time"
         }
         
         context.strokeText(text, 0, playArea.height/2);
@@ -384,6 +385,7 @@ function GameClient(port) {
         document.addEventListener("keydown", function (e) {
             //console.log("KeyPressed "  + e );
             onKeyPress(e);
+            e.preventDefault();
         }, false);
 
             //document.getElementById("canvas-container").addEventListener("touchend", onTouchEnd);
@@ -429,6 +431,7 @@ function GameClient(port) {
          */
         var message = {
         }
+        if(!pacman[player].isDead())
         switch (e.keyCode)
         {
 
@@ -520,7 +523,7 @@ function GameClient(port) {
     var fastForward = function (t)
     {
         var x = Math.round(t/(1000/Starvrun.FRAME_RATE));
-        for (i = 0; i < x; i++) {
+        for (var i = 0; i < x; i++) {
             pacman[player].move();
             checkCollision(numberOfPacman);
         }

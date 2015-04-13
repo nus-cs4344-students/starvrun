@@ -11,7 +11,7 @@ function GameServer(gport) {
     // Server Variables
     var port = gport;         // Game port 
     var IP;           // Game IP
-    var count;        // Keeps track how many people are connected to server 
+    var count = 0;        // Keeps track how many people are connected to server 
     var availablePIDs = [3, 2, 1, 0]; // In reverse order to allow easy popping
     var nextPID;      // PID to assign to next connected player (i.e. which player slot is open) 
     var gameInterval; // Interval variable used for gameLoop 
@@ -127,7 +127,6 @@ function GameServer(gport) {
                 // When the client send something to the server.
                 conn.on('data', function (data) {
                     var message = JSON.parse(data);
-                    console.log(message);
                     var p = players[conn.id];
 
                     if (p === undefined) {
@@ -149,7 +148,8 @@ function GameServer(gport) {
                             var pid = p.pid; // get player sending the update
                             var pm = pacman[pid];
                             var direction = message.direction;
-                            if (started) {
+                            
+                            if (started && !pm.isDead()) {
                                 switch (direction) {
                                     case Starvrun.UP:
                                         if (!pm.isStunned())
@@ -519,7 +519,7 @@ function GameServer(gport) {
                 playerCount++;
             }
         }
-        return playerCount;
+        return playerNumber;
     }
 }
 //

@@ -16,7 +16,7 @@ function GameLobby() {
     var players;      // Associative array for players, indexed via socket ID
 
     var gameServers = {};
-    var numServers = 4;
+    var numServers = 9;
 
     // Network 
 
@@ -49,9 +49,6 @@ function GameLobby() {
     }
 
     var newPlayer = function (conn) {
-        // Send message to new player (the current client)
-        unicast(conn, {type: "message", content: "You are Player " + nextPID + ". You are waiting for Game"});
-
         // Create player object and insert into players with key = conn.id
         players[conn.id] = new Player(conn.id, nextPID);
         sockets[nextPID] = conn;
@@ -75,14 +72,14 @@ function GameLobby() {
             sock.on('connection', function (conn) {
                 console.log("connected");
                 // Sends to client
-                broadcast({type: "message", content: "There is now " + players.length + " players waiting."});
+                //broadcast({type: "message", content: "There is now " + players.length + " players waiting."});
                 newPlayer(conn);
 
                 // When the client closes the connection to the server/closes the window
                 conn.on('close', function () {
                     var p = players[conn.id];
                     // Cleanup
-                    broadcast({type: "message", content: "There is now " + players.length + " players waiting."});
+                    //broadcast({type: "message", content: "There is now " + players.length + " players waiting."});
                     delete sockets[p.pid];
                     delete players[conn.id];
                 });
