@@ -19,6 +19,7 @@ function GameServer(gport) {
     var players = {};      // Associative array for players, indexed via socket ID
     var started = false; 
     var playerNumber = []; //Winning player or players
+    var lastUpdatedDir = 0;
 
     /*Game Variables*/
     var levelMap;
@@ -60,12 +61,9 @@ function GameServer(gport) {
             for (var p in players) {
                 if (players[p].pid == id) {
                     setTimeout(unicast, 0, sockets[id], msg);
-                    //setTimeout(unicast, 500, sockets[id],msg);
                     break;
                 }
             }
-            //setTimeout(unicast, p.getDelay() ,sockets[id], msg);
-            //setTimeout(unicast, 0 ,sockets[id], msg);
         }
     }
 
@@ -145,6 +143,11 @@ function GameServer(gport) {
                             console.log("Game Started");
                             break;
                         case "changeDirection":
+                            if(lastUpdatedDir > message.timestamp){
+                                // Outdated Update
+                                return; 
+                            }
+                            lastUpdatedDir  = message.timestamp;
                             var pid = p.pid; // get player sending the update
                             var pm = pacman[pid];
                             var direction = message.direction;

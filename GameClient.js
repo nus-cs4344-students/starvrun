@@ -19,6 +19,7 @@ function GameClient(port) {
     var started = false;
     var player = 0;
     var delay;
+    var lastUpdated = 0;
     var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
     var loopID =0;
     var audioCollide = new Audio('./audio/pacman_collide.wav');
@@ -80,6 +81,12 @@ function GameClient(port) {
                         sendToServer({type: "delay", delay: delay});
                         break;
                     case "periodic":
+                        if(lastUpdated > message.timestamp){
+                            // Outdated message ignore
+                            return;
+                        }
+                        lastUpdated = message.timestamp;
+                        
                         for (var j = 0; j < numberOfPacman; j++)
                         {
                             if (j == player) {
@@ -441,7 +448,6 @@ function GameClient(port) {
                 sendToServer(message);
                 if (!pacman[player].isStunned())
                     setTimeout(pacman[player].directionWatcher.setLeft, delay);
-                //setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                 break;
             case 38: // Up
                 message.type = "changeDirection";
@@ -449,7 +455,6 @@ function GameClient(port) {
                 sendToServer(message);
                 if (!pacman[player].isStunned())
                     setTimeout(pacman[player].directionWatcher.setUp, delay);
-                //setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                 break;
             case 39: // Right
                 message.type = "changeDirection";
@@ -457,7 +462,6 @@ function GameClient(port) {
                 sendToServer(message);
                 if (!pacman[player].isStunned())
                     setTimeout(pacman[player].directionWatcher.setRight, delay);
-                //setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                 break;
             case 40: // Down
                 message.type = "changeDirection";
@@ -465,7 +469,6 @@ function GameClient(port) {
                 sendToServer(message);
                 if (!pacman[player].isStunned())
                     setTimeout(pacman[player].directionWatcher.setDown, delay);
-                //setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                 break;
             case 32: // 'Space'
                 message.type = "startGame";
