@@ -5,6 +5,10 @@ function GameLobbyClient() {
     var gameClient = null;
     var playingGame = false;
 
+    var setMessage = function (location, msg){
+        document.getElementById(location).innerHTML = msg;
+    }
+
     var sendPing = function () {
         var startTime = Date.now();
         var message = {};
@@ -45,16 +49,16 @@ function GameLobbyClient() {
                         break;
                     case  "gameToJoin":
                         if (message.port == -1) {
-                            appendMessage("serverMsg", "No available game");
+                            setMessage("gameState", "No Game Available");
                         } else if (gameClient == null) {
                             gameClient = new GameClient(message.port);
+                            setMessage("gameState", "Found Game");
                             gameClient.start();
                         } else {
-                            appendMessage("serverMsg", "Already in a game");
                         }
                         break;
                     default:
-                        appendMessage("serverMsg", "unhandled meesage type " + message.type);
+                        //appendMessage("serverMsg", "unhandled meesage type " + message.type);
                 }
             }
 
@@ -100,10 +104,12 @@ function GameLobbyClient() {
             if(gameClient != null){
                 if(gameClient.isStarted() && !playingGame ){
                     playingGame = true;
+                    
                 }else if(!gameClient.isStarted() && playingGame){
                     // Game Ended Reset Game
                     gameClient = null;
                     playingGame = false;
+                    setMessage("gameState", "Available")
                 }
             }
         }, 1000);
@@ -113,6 +119,7 @@ function GameLobbyClient() {
         var msg = {};
         msg.type = "joinGame";
         sendToServer(msg);
+        setMessage("gameState", "Looking For Game");
     }
 }
 

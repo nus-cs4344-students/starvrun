@@ -20,7 +20,7 @@ function GameServer(gport) {
     var players = {};      // Associative array for players, indexed via socket ID
     var started = false; 
     var playerNumber = []; //Winning player or players
-    var lastUpdatedDir = 0;
+    var lastUpdatedDir = [0,0,0,0];
 
     /*Game Variables*/
     var levelMap;
@@ -44,12 +44,12 @@ function GameServer(gport) {
     }
     
     var endGame = function(){
-        console.log("Game Ended");
+        //console.log("Game Ended");
         var msg = {};
         msg.type = "endGame";
         msg.winner = maxScorePlayerCount();
         broadcast(msg);
-        clearInterval(loopID);
+        loopID.stop = true;
 
         setTimeout(reset, 500);
         
@@ -79,7 +79,6 @@ function GameServer(gport) {
         count++;
 
         if (availablePIDs.length <= 0) {
-            unicast(conn, {type: "message", content: "Server Full"});
             conn.close();
             return;
         } else {
@@ -108,9 +107,6 @@ function GameServer(gport) {
             // Upon connection established from a client socket
             sock.on('connection', function (conn) {
                 console.log("connected");
-                // Sends to client
-                broadcast({type: "message", content: "There is now " + count + " players"});
-
                 // create a new player
                 newPlayer(conn);
 
@@ -143,17 +139,17 @@ function GameServer(gport) {
                                 started = true;
                                 startGame();
                             }
-                            broadcast({type: "message", content: "Game Started"});
-                            console.log("Game Started");
                             break;
                         case "changeDirection":
-                            if(lastUpdatedDir > message.timestamp){
+                            
+                            var pid = p.pid; // get player sending the update
+                            var pm = pacman[pid];
+                            if(lastUpdatedDir[pid] > message.timestamp){
                                 // Outdated Update
                                 return; 
                             }
-                            lastUpdatedDir  = message.timestamp;
-                            var pid = p.pid; // get player sending the update
-                            var pm = pacman[pid];
+                            lastUpdatedDir[pid]  = message.timestamp;
+
                             var direction = message.direction;
                             
                             if (started && !pm.isDead()) {
@@ -207,7 +203,7 @@ function GameServer(gport) {
             console.log("Server running on http://" + IP + ":" +
                     port + "\n");
             console.log("Visit http://" + IP + ":" + port +
-                    "/index_net.html in your browser to start the game");
+                    "/index.html in your browser to start the game");
 
         } catch (e) {
             console.log("Cannot listen to " + port);

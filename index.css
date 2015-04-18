@@ -11,22 +11,7 @@ body,html{
     width: 100%;
 }
 
-.fit{
-    max-height: 100vh;
-    max-width: 100%;
-}
-
 body{
-    min-height: 100%;
-    min-width : 100%;
-}
-
-#cover{
-    z-index: 1;
-    color: yellow;
-    position: absolute;
-    vertical-align: central;
-    font-size : 30px;
     min-height: 100%;
     min-width : 100%;
 }
@@ -56,15 +41,6 @@ body{
     max-width: 100%;
 }
 
-#serverMsg {
-    height : 50%;
-    vertical-align : bottom;
-    max-height: 50%;
-    max-width: 100%;
-    overflow : hidden;
-/*    overflow:scroll;*/
-    
-}
 
 #canvas-container{
     

@@ -38,6 +38,10 @@ function GameClient(port) {
         var prev_msgs = document.getElementById(location).innerHTML;
         document.getElementById(location).innerHTML = "[" + new Date().toString() + "] " + msg + "<br />" + prev_msgs;
     }
+    
+    var setMessage = function (location, msg){
+        document.getElementById(location).innerHTML = msg;
+    }
 
     var sendToServer = function (msg) {
         var date = new Date();
@@ -63,8 +67,7 @@ function GameClient(port) {
                         break;
                     case "player":
                         player = message.player;
-                        appendMessage("serverMsg", "You are Player " + (player + 1));
-                        //console.log(player);
+                        setMessage("player", "Player : " + (player+1));
                         break;
                     case "startGame":
                         startGame();
@@ -78,7 +81,6 @@ function GameClient(port) {
                         } else {
                             delay = RTT;
                         }
-                        //console.log(delay);
                         sendToServer({type: "delay", delay: delay});
                         break;
                     case "periodic":
@@ -137,8 +139,6 @@ function GameClient(port) {
                         var winner = message.winner;
                         renderEndGame(winner);
                         endGame();
-                        clearInterval(loopID);
-                        
                         break;
                     default:
                         appendMessage("serverMsg", "unhandled meesage type " + message.type);
@@ -167,8 +167,6 @@ function GameClient(port) {
         // Get context
         var context = playArea.getContext("2d");
 
-        // Render Walls (Should I re-render this?)
-        //renderWalls(context);
         renderGameContent(context);
         // Render Pacmans
         renderPacmans(context);
@@ -197,8 +195,9 @@ function GameClient(port) {
                 }
             }
             text = "Better Luck Next Time"
+            
         }
-        
+        setMessage("gameState", "Game Ended")
         context.strokeText(text, 0, playArea.height/2);
         
     }
@@ -500,6 +499,7 @@ function GameClient(port) {
         if (started || ended)
             return;
         started = true;
+        setMessage("gameState", "Playing");
     }
     
 
@@ -518,6 +518,7 @@ function GameClient(port) {
         console.log("end game");
         started = false;
         ended = true;
+        loopID.stop = true;
     }
 
     // Where the game starts to be played
@@ -572,7 +573,7 @@ function GameClient(port) {
             gameLoop();
         }, 1000 / FRAME_RATE);
         // Send Ping once to initialize delay
-        new CorrectingInterval(sendPing, 500);
+        setTimeout(sendPing, 500);
     };
     
     this.isStarted = function(){
@@ -654,6 +655,3 @@ function GameClient(port) {
         }
     }
 }
-
-//var client = new GameClient(4344);
-//client.start();
