@@ -396,13 +396,14 @@ function GameClient(port) {
             e.preventDefault();
         }, false);
 
-            //document.getElementById("canvas-container").addEventListener("touchend", onTouchEnd);
-            //document.getElementById("body").addEventListener("devicemotion", deviceMotionHandler);
+        document.getElementById("playArea").addEventListener("touchstart", onTouchEnd,false);  //Now touch Works
+        document.getElementById("playArea").addEventListener("devicemotion", deviceMotionHandler, false);
     }
 
     // Touch handler
     var onTouchEnd = function(e)
     {
+        e.preventDefault();
         var message = {};
         message.type = "startGame";
         sendToServer(message);
