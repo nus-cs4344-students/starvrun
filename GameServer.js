@@ -79,7 +79,6 @@ function GameServer(gport) {
         count++;
 
         if (availablePIDs.length <= 0) {
-            unicast(conn, {type: "message", content: "Server Full"});
             conn.close();
             return;
         } else {
@@ -108,9 +107,6 @@ function GameServer(gport) {
             // Upon connection established from a client socket
             sock.on('connection', function (conn) {
                 console.log("connected");
-                // Sends to client
-                broadcast({type: "message", content: "There is now " + count + " players"});
-
                 // create a new player
                 newPlayer(conn);
 
@@ -143,8 +139,6 @@ function GameServer(gport) {
                                 started = true;
                                 startGame();
                             }
-                            broadcast({type: "message", content: "Game Started"});
-                            console.log("Game Started");
                             break;
                         case "changeDirection":
                             if(lastUpdatedDir > message.timestamp){
