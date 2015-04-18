@@ -75,7 +75,7 @@ function Pacman(map, isPlayer) {
     this.blinkUpdate = false;
         
     // Movement Variables
-    var speed = 4;
+    var speed = 14;
 
     var curDirection = startDir;
     var dirX = 0;
@@ -386,23 +386,24 @@ function Pacman(map, isPlayer) {
 
     this.respawn = function() {
         var me = this;
-        if(lives > 0){
-            dead = false;
-            posX = map.gridToPx(startX);
-            posY = map.gridToPx(startY);
-            me.setDirection(startDir);
-            me.stop();
-            stuckX = 0;
-            stuckY = 0;
-            lives --;
-            //console.log("Lives Remaining = " + lives);
-        }else{
-            dead= true;
-            posX = map.gridToPx(map.getWidth()+2);
-            posY = map.gridToPx(map.getHeight()+2);
-            me.stop();
-            //console.log("No more Lives");
-        }
+        if(dead)
+            if (lives > 0) {
+                dead = false;
+                posX = map.gridToPx(startX);
+                posY = map.gridToPx(startY);
+                me.setDirection(startDir);
+                me.stop();
+                stuckX = 0;
+                stuckY = 0;
+                lives--;
+                //console.log("Lives Remaining = " + lives);
+            } else {
+                dead = true;
+                posX = map.gridToPx(map.getWidth() + 2);
+                posY = map.gridToPx(map.getHeight() + 2);
+                me.stop();
+                //console.log("No more Lives");
+            }
     }
         
     this.reset = function(){
