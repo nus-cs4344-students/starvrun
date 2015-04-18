@@ -203,6 +203,7 @@ function GameClient(port) {
             
         }
         setMessage("gameState", "Game Ended")
+        context.clearRect(0, playArea.height/2-48, playArea.width, 64);
         context.strokeText(text, 0, playArea.height/2);
         
     }
