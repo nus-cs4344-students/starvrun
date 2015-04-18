@@ -44,12 +44,12 @@ function GameServer(gport) {
     }
     
     var endGame = function(){
-        console.log("Game Ended");
+        //console.log("Game Ended");
         var msg = {};
         msg.type = "endGame";
         msg.winner = maxScorePlayerCount();
         broadcast(msg);
-        clearInterval(loopID);
+        loopID.stop = true;
 
         setTimeout(reset, 500);
         

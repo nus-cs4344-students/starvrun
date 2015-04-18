@@ -139,7 +139,6 @@ function GameClient(port) {
                         var winner = message.winner;
                         renderEndGame(winner);
                         endGame();
-                        clearInterval(loopID);
                         break;
                     default:
                         appendMessage("serverMsg", "unhandled meesage type " + message.type);
@@ -519,6 +518,7 @@ function GameClient(port) {
         console.log("end game");
         started = false;
         ended = true;
+        loopID.stop = true;
     }
 
     // Where the game starts to be played
@@ -573,7 +573,7 @@ function GameClient(port) {
             gameLoop();
         }, 1000 / FRAME_RATE);
         // Send Ping once to initialize delay
-        new CorrectingInterval(sendPing, 500);
+        setTimeout(sendPing, 500);
     };
     
     this.isStarted = function(){

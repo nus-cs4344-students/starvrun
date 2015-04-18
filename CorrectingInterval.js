@@ -1,5 +1,6 @@
 function CorrectingInterval(func, delay) {
   var instance = this;
+  this.stop = false;
 
   function tick(func, delay) {
     if (!instance.started) {
@@ -9,6 +10,7 @@ function CorrectingInterval(func, delay) {
       instance.target = delay;
       instance.started = true;
 
+    if(!instance.stop)
       setTimeout(tick, delay);
     } else {
       var elapsed = new Date().valueOf() - instance.startTime,
@@ -16,7 +18,8 @@ function CorrectingInterval(func, delay) {
 
       instance.func();
       instance.target += instance.delay;
-
+      
+    if(!instance.stop)
       setTimeout(tick, instance.delay + adjust);
     }
   };
