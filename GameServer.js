@@ -20,7 +20,7 @@ function GameServer(gport) {
     var players = {};      // Associative array for players, indexed via socket ID
     var started = false; 
     var playerNumber = []; //Winning player or players
-    var lastUpdatedDir = 0;
+    var lastUpdatedDir = [0,0,0,0];
 
     /*Game Variables*/
     var levelMap;
@@ -141,13 +141,15 @@ function GameServer(gport) {
                             }
                             break;
                         case "changeDirection":
-                            if(lastUpdatedDir > message.timestamp){
+                            
+                            var pid = p.pid; // get player sending the update
+                            var pm = pacman[pid];
+                            if(lastUpdatedDir[pid] > message.timestamp){
                                 // Outdated Update
                                 return; 
                             }
-                            lastUpdatedDir  = message.timestamp;
-                            var pid = p.pid; // get player sending the update
-                            var pm = pacman[pid];
+                            lastUpdatedDir[pid]  = message.timestamp;
+
                             var direction = message.direction;
                             
                             if (started && !pm.isDead()) {
