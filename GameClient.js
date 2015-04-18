@@ -565,11 +565,11 @@ function GameClient(port) {
         initGUI();
         initNetwork();
         // Start drawing 
-        loopID = setCorrectingInterval(function () {
+        loopID = new CorrectingInterval(function () {
             gameLoop();
         }, 1000 / FRAME_RATE);
         // Send Ping once to initialize delay
-        setCorrectingInterval(sendPing, 500);
+        new CorrectingInterval(sendPing, 500);
     };
     
     this.isStarted = function(){

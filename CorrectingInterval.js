@@ -1,5 +1,5 @@
-setCorrectingInterval = (function(func, delay) {
-  var instance = { };
+function CorrectingInterval(func, delay) {
+  var instance = this;
 
   function tick(func, delay) {
     if (!instance.started) {
@@ -21,7 +21,7 @@ setCorrectingInterval = (function(func, delay) {
     }
   };
 
-  return tick(func, delay);
-});
+  tick(func, delay);
+}
 
-global.setCorrectingInterval = setCorrectingInterval;
+global.CorrectingInterval = CorrectingInterval;

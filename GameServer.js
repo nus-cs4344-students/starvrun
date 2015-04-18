@@ -398,7 +398,7 @@ function GameServer(gport) {
         // To update on the player side
         setTimeout(broadcast, 0, message);
 
-        loopID = setCorrectingInterval(function () {
+        loopID = new CorrectingInterval(function () {
             gameLoop();
         }, 1000 / FRAME_RATE);
     };

@@ -96,7 +96,7 @@ function GameLobbyClient() {
         initNetwork();
         // Wait for a while for the network to initialize
         setTimeout(sendPing, 500);
-        setCorrectingInterval(function(){
+        new CorrectingInterval(function(){
             if(gameClient != null){
                 if(gameClient.isStarted() && !playingGame ){
                     playingGame = true;
