@@ -1,9 +1,6 @@
 function GameLobbyClient() {
     // Network Variables
     var socket;         // socket used to connect to server 
-
-    var playArea;
-    var player = 0;
     var delay;
     var gameClient = null;
     var playingGame = false;
@@ -14,11 +11,6 @@ function GameLobbyClient() {
         message.type = "ping";
         message.startTime = startTime;
         sendToServer(message);
-    }
-
-    var appendMessage = function (location, msg) {
-        var prev_msgs = document.getElementById(location).innerHTML;
-        document.getElementById(location).innerHTML = "[" + new Date().toString() + "] " + msg + "<br />" + prev_msgs;
     }
 
     var sendToServer = function (msg) {
@@ -32,7 +24,6 @@ function GameLobbyClient() {
         // Attempts to connect to game server
         try {
 
-            //var url= "http://" + Starvrun.SERVER_NAME + ":" + Starvrun.PORT + "/starvrun";
             var url = "http://" + Starvrun.SERVER_IP + ":" + Starvrun.PORT + "/lobby";
             console.log("Trying to connect to " + url);
             socket = new SockJS(url);
@@ -40,12 +31,6 @@ function GameLobbyClient() {
             socket.onmessage = function (e) {
                 var message = JSON.parse(e.data);
                 switch (message.type) {
-                    case "message":
-                        appendMessage("serverMsg", message.content);
-                        break;
-                    case "player":
-                        player = message.player;
-                        break;
                     case "pong":
                         var RTT = Date.now() - message.startTime;
                         RTT /= 2;
@@ -76,7 +61,6 @@ function GameLobbyClient() {
             socket.onclose = function () {
                 console.log("Connection Closed");
             }
-
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME + ":" + Starvrun.PORT);
         }
@@ -90,20 +74,13 @@ function GameLobbyClient() {
     var initGUI = function ()
     {
         //Create Button under player-details which says look for game
-        createLFGButton();
+        addControls();
     }
-
-    var createLFGButton = function () {
-        var pd = document.getElementById("player_details");
-        pd.innerHTML = "<button id='LFG'> Look For Game </button>";
+    
+    var addControls = function(){
+        // Button Listeners for LFG 
         document.getElementById("LFG").addEventListener("click", lookForGame);
-        document.getElementById("LFG").addEventListener("touchstart", onTouchEnd);
-    }
-
-    var onTouchEnd = function(e) {
-        var msg = {};
-        msg.type = "joinGame";
-        sendToServer(msg);
+        document.getElementById("LFG").addEventListener("touchend", lookForGame, false);
     }
 
     /*
@@ -117,6 +94,7 @@ function GameLobbyClient() {
     {
         initGUI();
         initNetwork();
+        // Wait for a while for the network to initialize
         setTimeout(sendPing, 500);
         setCorrectingInterval(function(){
             if(gameClient != null){
