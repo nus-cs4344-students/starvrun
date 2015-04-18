@@ -390,116 +390,18 @@ function GameClient(port) {
         render();
 
         // Add event handlers
-        document.addEventListener("keydown", function (e) {
-            //console.log("KeyPressed "  + e );
-            onKeyPress(e);
-            e.preventDefault();
-        }, false);
-        
-        
-
         createControls();
-        document.getElementById("playArea").addEventListener("touchstart", onTouchEnd,false);  //Now touch Works
-        window.addEventListener("deviceorientation", deviceMotionHandler, false);
+        
+        window.addEventListener("deviceorientation", deviceOrientationHandler, false);
     }
     
-    var createControls = function(){
-         var pd = document.getElementById("controls");
-        pd.innerHTML = "<button id='Left'> Left </button>";
-        pd.innerHTML += "<button id='Right'> Right </button>";
-        pd.innerHTML += "<button id='Up'> Up </button>";
-        pd.innerHTML += "<button id='Down'> Down </button>";
-        
-        document.getElementById("Left").addEventListener("touchstart", function(){
-                var message = {};
-                message.type = "changeDirection";
-                message.direction = Starvrun.LEFT;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setLeft, delay);
-        }, false);
-        document.getElementById("Right").addEventListener("touchstart", function(){
-                var message = {};
-                message.type = "changeDirection";
-                message.direction = Starvrun.RIGHT;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setRight, delay);
-        }, false);
-        document.getElementById("Up").addEventListener("touchstart", function(){
-                var message = {};
-                message.type = "changeDirection";
-                message.direction = Starvrun.UP;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setUp, delay);
-        }, false);
-        document.getElementById("Down").addEventListener("touchstart", function(){
-                var message = {};
-                message.type = "changeDirection";
-                message.direction = Starvrun.DOWN;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setDown, delay);
-        }, false);        
-        
-        document.getElementById("Left").addEventListener("click", function(){
-                var message = {};
-                message.type = "changeDirection";
-                message.direction = Starvrun.LEFT;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setLeft, delay);
-        }, false);
-        document.getElementById("Right").addEventListener("click", function(){
-                var message = {};
-                message.type = "changeDirection";
-                message.direction = Starvrun.RIGHT;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setRight, delay);
-        }, false);
-        document.getElementById("Up").addEventListener("click", function(){
-                var message = {};
-                message.type = "changeDirection";
-                message.direction = Starvrun.UP;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setUp, delay);
-        }, false);
-        document.getElementById("Down").addEventListener("click", function(){
-                var message = {};
-                message.type = "changeDirection";
-                message.direction = Starvrun.DOWN;
-                console.log(message);
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setDown, delay);
-        }, false);        
-    }
-    
-
-    // Touch handler
-    var onTouchEnd = function(e)
+      // Device motion handler
+    function deviceOrientationHandler(eventData) 
     {
-        e.preventDefault();
-        var message = {};
-        message.type = "startGame";
-        sendToServer(message);
-    }
-
-    // Device motion handler
-    function deviceMotionHandler(eventData) 
-    {
-
+        // TODO HERE
 //        var info, xyz = "[X, Y, Z]";
-//        
         // Grab the rotation rate from the results
         //var rotation = eventData.rotationRate;
-       
-//        console.log(info);       
-        
-
         var message = {};
         message.type = "log";
 //        message.rotation =  info;
@@ -510,7 +412,59 @@ function GameClient(port) {
         sendToServer(message);
         
     }
+    
+    var sendChangeDirection = function(dir, e){
+        var message = {};
+        message.type = "changeDirection";
+        message.direction = dir;
+        sendToServer(message);
+        if (!pacman[player].isStunned())
+            switch(dir){
+                case Starvrun.LEFT:
+                    setTimeout(pacman[player].directionWatcher.setLeft, delay);
+                    break;
+                case Starvrun.RIGHT:
+                    setTimeout(pacman[player].directionWatcher.setRight, delay);
+                    break;
+                case Starvrun.UP:
+                    setTimeout(pacman[player].directionWatcher.setUp, delay);
+                    break;
+                case Starvrun.DOWN:
+                    setTimeout(pacman[player].directionWatcher.setDown, delay);
+                    break;    
+            }
+        e.preventDefault();
+    }
+    
+    var createControls = function(){
+        document.addEventListener("keydown", function (e) {onKeyPress(e); e.preventDefault(); }, false);
+        
+        // Mobile Controls
+        // Start Button = canvas
+        document.getElementById("playArea").addEventListener("touchend", function(e){startGameButton(e); },false);  
+        document.getElementById("playArea").addEventListener("click", function(e){startGameButton(e); },false);  
 
+        // Navigation Controls
+        document.getElementById("Left").addEventListener("touchend", function(e){sendChangeDirection(Starvrun.LEFT, e)}, false);
+        document.getElementById("Left").addEventListener("click", function(e){sendChangeDirection(Starvrun.LEFT, e)}, false);
+        document.getElementById("Right").addEventListener("touchend", function(e){sendChangeDirection(Starvrun.RIGHT, e)}, false);
+        document.getElementById("Right").addEventListener("click", function(e){sendChangeDirection(Starvrun.RIGHT, e)}, false);
+        document.getElementById("Up").addEventListener("touchend", function(e){sendChangeDirection(Starvrun.UP, e)}, false);
+        document.getElementById("Up").addEventListener("click", function(e){sendChangeDirection(Starvrun.UP, e)}, false);
+        document.getElementById("Down").addEventListener("touchend", function(e){sendChangeDirection(Starvrun.DOWN, e)}, false);
+        document.getElementById("Down").addEventListener("click", function(e){sendChangeDirection(Starvrun.DOWN, e)}, false);
+        
+    }
+    
+    var startGameButton = function(e){
+        if(started) return;
+        e.preventDefault();
+        var message = {};
+        message.type = "startGame";
+        sendToServer(message);
+        startGame();
+    }
+    
     /*
      * private method: onKeyPress
      *
@@ -519,57 +473,27 @@ function GameClient(port) {
      */
     var onKeyPress = function (e)
     {
-        /*
-         keyCode represents keyboard button
-         38: up arrow
-         40: down arrow
-         37: left arrow
-         39: right arrow
-         */
-        var message = {
-        }
-        if(!pacman[player].isDead())
-        switch (e.keyCode)
-        {
-
-            case 37: // Left 
-                message.type = "changeDirection";
-                message.direction = Starvrun.LEFT;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setLeft, delay);
-                break;
-            case 38: // Up
-                message.type = "changeDirection";
-                message.direction = Starvrun.UP;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setUp, delay);
-                break;
-            case 39: // Right
-                message.type = "changeDirection";
-                message.direction = Starvrun.RIGHT;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setRight, delay);
-                break;
-            case 40: // Down
-                message.type = "changeDirection";
-                message.direction = Starvrun.DOWN;
-                sendToServer(message);
-                if (!pacman[player].isStunned())
-                    setTimeout(pacman[player].directionWatcher.setDown, delay);
-                break;
-            case 32: // 'Space'
-                message.type = "startGame";
-                sendToServer(message);
-                //FOR TESTING ONLY!
-                //levelMap.spawnPelletAndPowerupBetween(pacman[0].getGridPosX(), pacman[0].getGridPosY(), pacman[1].getGridPosX(), pacman[1].getGridPosY());
-                break;
-        }
-
+        if (!pacman[player].isDead())
+            switch (e.keyCode)
+            {
+                case 37: // Left Arrow
+                    sendChangeDirection(Starvrun.LEFT, e);
+                    break;
+                case 38: // Up Arrow
+                    sendChangeDirection(Starvrun.UP, e);
+                    break;
+                case 39: // Right Arrow
+                    sendChangeDirection(Starvrun.RIGHT, e);
+                    break;
+                case 40: // Down Arrow
+                    sendChangeDirection(Starvrun.DOWN, e);
+                    break;
+                case 32: // 'Space'
+                    startGameButton(e);
+                    break;
+            }
     }
-
+    
     var startGame = function () {
         if (started)
             return;
@@ -581,8 +505,7 @@ function GameClient(port) {
         if (gameTimer > 0) {
             gameTimer--;
         }
-
-        if(gameTimer==0)
+        if (gameTimer == 0)
         {
             //Stop the game
             endGame();
@@ -597,7 +520,6 @@ function GameClient(port) {
     // Where the game starts to be played
     var gameLoop = function ()
     {
-
         if (started) {
             // Moves the pacman on the map always (from start to stop)
             var i;
@@ -646,9 +568,9 @@ function GameClient(port) {
         loopID = setInterval(function () {
             gameLoop();
         }, 1000 / FRAME_RATE);
-        setInterval(function () {
-            //sendPing();
-        }, 3000 / FRAME_RATE);
+        
+        // Send Ping once to initialize delay
+        setTimeout(sendPing, 500);
     };
     
     this.isStarted = function(){
