@@ -25,6 +25,7 @@ function GameClient(port) {
     var loopID =0;
     var audioCollide = new Audio('./audio/pacman_collide.wav');
     var audioDeath = new Audio('./audio/pacman_death.wav');
+    var mobileThreshold = 12;
 
     var sendPing = function () {
         var startTime = Date.now();
@@ -189,6 +190,7 @@ function GameClient(port) {
         var text; //= "The Game has Ended \n";
         if (winner.length == 1) {
             if (winner[0] == player) {
+                context.strokeStyle = pacman[player].getColor();
                 text = "Winner"
             } else {
                 text = "Better Luck Next Time";
@@ -196,6 +198,7 @@ function GameClient(port) {
         }else{
             for(var p in winner){
                 if (winner[p] == player) {
+                context.strokeStyle = pacman[player].getColor();
                 text = "Draw"
                 }
             }
@@ -203,6 +206,7 @@ function GameClient(port) {
             
         }
         setMessage("gameState", "Game Ended")
+        context.clearRect(0, playArea.height/2-48, playArea.width, 64);
         context.strokeText(text, 0, playArea.height/2);
         
     }
@@ -416,6 +420,57 @@ function GameClient(port) {
         message.gamma = eventData.gamma;
 //        if (window.DeviceMotionEvent) message.problem = true;
         sendToServer(message);
+
+        //RIGHT: 0,UP: 1,LEFT: 2,DOWN: 3,
+
+        var toDirection;        
+
+        if(eventData.beta>=mobileThreshold)
+        {
+            switch(pacman[player].getDirection().name)
+            {
+                case "up": 
+                    toDirection = 0;
+                    break;
+                case "down":
+                    toDirection = 2;
+                    break;
+                case "left":
+                    toDirection = 1;
+                    break;
+                case "right":
+                    toDirection = 3;
+                    break;
+                default:
+                    toDirection = 0;
+                    break;
+            }
+
+            sendChangeDirection(toDirection, eventData);
+        }
+        else if(eventData.beta<=(-1*mobileThreshold))
+        {
+            switch(pacman[player].getDirection().name)
+            {
+                case "up": 
+                    toDirection = 2;
+                    break;
+                case "down":
+                    toDirection = 0;
+                    break;
+                case "left":
+                    toDirection = 3;
+                    break;
+                case "right":
+                    toDirection = 1;
+                    break;
+                default:
+                    toDirection = 0;
+                    break;
+            }
+
+            sendChangeDirection(toDirection, eventData);
+        }
 
     }
     
