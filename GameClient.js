@@ -115,13 +115,11 @@ function GameClient(port) {
                         levelMap.flushChanges();
                         break;
                     case "kill":
-                        if (message.killer==player) {
-                            pacman[player].unhold();
-                            //fastForward(delay);
-                        }
+                        if (message.killer==player) pacman[player].unhold();
                         if (message.killed==player) pacman[player].unhold();
                         pacman[message.killer].kill();
                         pacman[message.killed].died();
+                        if (message.killer==player) fastForward(delay);
                         break;
                     case "moveBack":
                         if (message.move1==player) pacman[player].unhold();
