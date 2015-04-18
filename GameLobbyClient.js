@@ -49,7 +49,7 @@ function GameLobbyClient() {
                         break;
                     case  "gameToJoin":
                         if (message.port == -1) {
-                            appendMessage("gameState", "No Game Available");
+                            setMessage("gameState", "No Game Available");
                         } else if (gameClient == null) {
                             gameClient = new GameClient(message.port);
                             setMessage("gameState", "Found Game");
