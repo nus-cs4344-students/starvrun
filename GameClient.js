@@ -115,14 +115,14 @@ function GameClient(port) {
                         levelMap.flushChanges();
                         break;
                     case "kill":
-                        pacman[message.killer].unhold();
-                        pacman[message.killed].unhold();
+                        if (message.killer==player) pacman[message.killer].unhold();
+                        if (message.killed==player) pacman[message.killed].unhold();
                         pacman[message.killer].kill();
                         pacman[message.killed].died();
                         break;
                     case "moveBack":
-                        pacman[message.move1].unhold();
-                        pacman[message.move2].unhold();
+                        if (message.killer==move1) pacman[message.move1].unhold();
+                        if (message.killer==move2) pacman[message.move2].unhold();
                         pacman[message.move1].moveBack();
                         pacman[message.move2].moveBack();
                         break;
@@ -620,8 +620,8 @@ function GameClient(port) {
                     {
                         // Check If same State
                         if (pacman[i].isBeast() === pacman[j].isBeast()) {
-                            pacman[i].hold();
-                            pacman[j].hold();
+                            if (i==player) pacman[i].hold();
+                            if (j==player) pacman[j].hold();
                             // audioCollide.play();
                             // pacman[i].enableBlinkAnim();
                             // pacman[i].moveBack();
@@ -630,8 +630,8 @@ function GameClient(port) {
                         } else if (pacman[i].isBeast() === true && pacman[j].isBeast() == false) {
                             // pacman i eat pacman j
                             if (!pacman[j].isDead()) {
-                                pacman[i].hold();
-                                pacman[j].hold();
+                                if (i==player) pacman[i].hold();
+                                if (j==player) pacman[j].hold();
                                 // audioDeath.play();
                                 // pacman[i].enableBlinkAnim();
                                 // pacman[i].kill();
@@ -640,8 +640,8 @@ function GameClient(port) {
                         } else {
                             // pacman j eat pacman i
                             if (!pacman[i].isDead()) {
-                                pacman[i].hold();
-                                pacman[j].hold();
+                                if (i==player) pacman[i].hold();
+                                if (j==player) pacman[j].hold();
                                 // audioDeath.play();
                                 // pacman[j].enableBlinkAnim();
                                 // pacman[j].kill();
