@@ -623,18 +623,18 @@ function GameClient(port) {
                         if (pacman[i].isBeast() === pacman[j].isBeast()) {
                             if (i==player) pacman[player].hold();
                             if (j==player) pacman[player].hold();
-                            // audioCollide.play();
-                            // pacman[i].enableBlinkAnim();
+                            audioCollide.play();
+                            pacman[i].enableBlinkAnim();
                             // pacman[i].moveBack();
-                            // pacman[j].enableBlinkAnim();
+                            pacman[j].enableBlinkAnim();
                             // pacman[j].moveBack();
                         } else if (pacman[i].isBeast() === true && pacman[j].isBeast() == false) {
                             // pacman i eat pacman j
                             if (!pacman[j].isDead()) {
                                 if (i==player) pacman[player].hold();
                                 if (j==player) pacman[player].hold();
-                                // audioDeath.play();
-                                // pacman[i].enableBlinkAnim();
+                                audioDeath.play();
+                                pacman[i].enableBlinkAnim();
                                 // pacman[i].kill();
                                 // pacman[j].died();
                             }
@@ -644,7 +644,7 @@ function GameClient(port) {
                                 if (i==player) pacman[player].hold();
                                 if (j==player) pacman[player].hold();
                                 // audioDeath.play();
-                                // pacman[j].enableBlinkAnim();
+                                pacman[j].enableBlinkAnim();
                                 // pacman[j].kill();
                                 // pacman[i].died();
                             }
