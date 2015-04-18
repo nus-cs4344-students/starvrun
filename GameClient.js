@@ -145,6 +145,7 @@ function GameClient(port) {
 
             socket.onclose = function () {
                 console.log("socket closed");
+                started = false;
             }
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME + ":" + Starvrun.PORT);
