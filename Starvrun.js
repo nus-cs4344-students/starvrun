@@ -24,7 +24,7 @@ var Starvrun = {
     HOLD_AND_WAIT_DESYNC_TIME: 0.50, // time in seconds until hold and wait is void
     PELLET_SCORE: 10,
     POWERUP_SCORE: 50,
-    LIVES: 3,
+    LIVES: 1,
     RIGHT: 0,
     UP: 1,
     LEFT: 2,
