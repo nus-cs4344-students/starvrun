@@ -28,7 +28,7 @@ function GameClient(port) {
     var mobileThreshold = 12;
     var holdAndWaitTimer = 0;
     var holdAndWaitDesync = false;
-    var mobileThreshold = 8;
+    var mobileThreshold = 12;
     var recentChange = false;
 
     var sendPing = function () {
@@ -413,7 +413,7 @@ function GameClient(port) {
       // Device motion handler
     function deviceOrientationHandler(eventData) 
     {
-        // TODO HERE
+        
 //        var info, xyz = "[X, Y, Z]";
         // Grab the rotation rate from the results
         //var rotation = eventData.rotationRate;
