@@ -643,10 +643,10 @@ function GameClient(port) {
         initGUI();
         initNetwork();
         // Start drawing 
-        loopID = setInterval(function () {
+        loopID = setCorrectingInterval(function () {
             gameLoop();
         }, 1000 / FRAME_RATE);
-        setInterval(function () {
+        setCorrectingInterval(function () {
             //sendPing();
         }, 3000 / FRAME_RATE);
     };

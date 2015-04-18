@@ -1,6 +1,7 @@
 "use strict";
 
 var LIB_PATH = "./";
+require(LIB_PATH + "CorrectingInterval.js");
 require(LIB_PATH + "Starvrun.js");
 require(LIB_PATH + "Map.js");
 require(LIB_PATH + "Pacman.js");
@@ -396,7 +397,7 @@ function GameServer(gport) {
         // To update on the player side
         setTimeout(broadcast, 0, message);
 
-        loopID = setInterval(function () {
+        loopID = setCorrectingInterval(function () {
             gameLoop();
         }, 1000 / FRAME_RATE);
     };

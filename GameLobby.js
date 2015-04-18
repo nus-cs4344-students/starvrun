@@ -1,6 +1,7 @@
 "use strict";
 
 var LIB_PATH = "./";
+require(LIB_PATH + "CorrectingInterval.js");
 require(LIB_PATH + "Starvrun.js");
 require(LIB_PATH + "Player.js");
 require(LIB_PATH + "GameServer.js");
