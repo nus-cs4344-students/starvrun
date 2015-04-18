@@ -22,3 +22,6 @@ Connects to the server with a modern browser, at the URL ```http://server:port/i
 
 The ```server``` and ```port``` can be configured in ```Starvrun.js```.
 
+Press spacebar to start the game!
+
+Video demo can be found at: https://www.youtube.com/watch?v=m-2fOGmcEJU
