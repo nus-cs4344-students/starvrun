@@ -21,6 +21,7 @@ var Starvrun = {
     BEAST_TIME: 3, // time in seconds pacman in beast
     STUN_TIME: 0.5,
     BLINK_TIME: 1, // time in seconds
+    HOLD_AND_WAIT_DESYNC_TIME: 1.5, // time in seconds until hold and wait is void
     PELLET_SCORE: 10,
     POWERUP_SCORE: 50,
     LIVES: 3,
