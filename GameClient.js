@@ -47,7 +47,7 @@ function GameClient(port) {
         var date = new Date();
         var currentTime = date.getTime();
         msg["timestamp"] = currentTime;
-        socket.send(JSON.stringify(msg));
+        setTimeout(function() {socket.send(JSON.stringify(msg));}, 0);
     }
 
     var initNetwork = function () {
@@ -115,10 +115,14 @@ function GameClient(port) {
                         levelMap.flushChanges();
                         break;
                     case "kill":
+                        pacman[message.killer].unhold();
+                        pacman[message.killed].unhold();
                         pacman[message.killer].kill();
                         pacman[message.killed].died();
                         break;
                     case "moveBack":
+                        pacman[message.move1].unhold();
+                        pacman[message.move2].unhold();
                         pacman[message.move1].moveBack();
                         pacman[message.move2].moveBack();
                         break;
@@ -616,6 +620,8 @@ function GameClient(port) {
                     {
                         // Check If same State
                         if (pacman[i].isBeast() === pacman[j].isBeast()) {
+                            pacman[i].hold();
+                            pacman[j].hold();
                             // audioCollide.play();
                             // pacman[i].enableBlinkAnim();
                             // pacman[i].moveBack();
@@ -624,6 +630,8 @@ function GameClient(port) {
                         } else if (pacman[i].isBeast() === true && pacman[j].isBeast() == false) {
                             // pacman i eat pacman j
                             if (!pacman[j].isDead()) {
+                                pacman[i].hold();
+                                pacman[j].hold();
                                 // audioDeath.play();
                                 // pacman[i].enableBlinkAnim();
                                 // pacman[i].kill();
@@ -632,6 +640,8 @@ function GameClient(port) {
                         } else {
                             // pacman j eat pacman i
                             if (!pacman[i].isDead()) {
+                                pacman[i].hold();
+                                pacman[j].hold();
                                 // audioDeath.play();
                                 // pacman[j].enableBlinkAnim();
                                 // pacman[j].kill();
