@@ -203,7 +203,7 @@ function GameServer(gport) {
             console.log("Server running on http://" + IP + ":" +
                     port + "\n");
             console.log("Visit http://" + IP + ":" + port +
-                    "/index_net.html in your browser to start the game");
+                    "/index.html in your browser to start the game");
 
         } catch (e) {
             console.log("Cannot listen to " + port);
