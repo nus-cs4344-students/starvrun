@@ -19,6 +19,7 @@ function GameClient(port) {
     var started = false;
     var player = 0;
     var delay;
+    var lastUpdated = 0;
     var gameTimer = Starvrun.FRAME_RATE * Starvrun.GAME_TIMER;
     var loopID =0;
     var audioCollide = new Audio('./audio/pacman_collide.wav');
@@ -80,6 +81,12 @@ function GameClient(port) {
                         sendToServer({type: "delay", delay: delay});
                         break;
                     case "periodic":
+                        if(lastUpdated > message.timestamp){
+                            // Outdated message ignore
+                            return;
+                        }
+                        lastUpdated = message.timestamp;
+                        
                         for (var j = 0; j < numberOfPacman; j++)
                         {
                             if (j == player) {
@@ -138,6 +145,7 @@ function GameClient(port) {
 
             socket.onclose = function () {
                 console.log("socket closed");
+                started = false;
             }
         } catch (e) {
             console.log("Failed to connect to " + "http://" + Starvrun.SERVER_NAME + ":" + Starvrun.PORT);
@@ -387,14 +395,94 @@ function GameClient(port) {
             onKeyPress(e);
             e.preventDefault();
         }, false);
+        
+        
 
-            //document.getElementById("canvas-container").addEventListener("touchend", onTouchEnd);
-            //document.getElementById("body").addEventListener("devicemotion", deviceMotionHandler);
+        createControls();
+        document.getElementById("playArea").addEventListener("touchstart", onTouchEnd,false);  //Now touch Works
+        window.addEventListener("deviceorientation", deviceMotionHandler, false);
     }
+    
+    var createControls = function(){
+         var pd = document.getElementById("controls");
+        pd.innerHTML = "<button id='Left'> Left </button>";
+        pd.innerHTML += "<button id='Right'> Right </button>";
+        pd.innerHTML += "<button id='Up'> Up </button>";
+        pd.innerHTML += "<button id='Down'> Down </button>";
+        
+        document.getElementById("Left").addEventListener("touchstart", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.LEFT;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setLeft, delay);
+        }, false);
+        document.getElementById("Right").addEventListener("touchstart", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.RIGHT;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setRight, delay);
+        }, false);
+        document.getElementById("Up").addEventListener("touchstart", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.UP;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setUp, delay);
+        }, false);
+        document.getElementById("Down").addEventListener("touchstart", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.DOWN;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setDown, delay);
+        }, false);        
+        
+        document.getElementById("Left").addEventListener("click", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.LEFT;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setLeft, delay);
+        }, false);
+        document.getElementById("Right").addEventListener("click", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.RIGHT;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setRight, delay);
+        }, false);
+        document.getElementById("Up").addEventListener("click", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.UP;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setUp, delay);
+        }, false);
+        document.getElementById("Down").addEventListener("click", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.DOWN;
+                console.log(message);
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setDown, delay);
+        }, false);        
+    }
+    
 
     // Touch handler
     var onTouchEnd = function(e)
     {
+        e.preventDefault();
         var message = {};
         message.type = "startGame";
         sendToServer(message);
@@ -404,14 +492,23 @@ function GameClient(port) {
     function deviceMotionHandler(eventData) 
     {
 
-        var info, xyz = "[X, Y, Z]";
-        
+//        var info, xyz = "[X, Y, Z]";
+//        
         // Grab the rotation rate from the results
-        var rotation = eventData.rotationRate;
-        info = xyz.replace("X", rotation.alpha);
-        info = info.replace("Y", rotation.beta);
-        info = info.replace("Z", rotation.gamma);
-        console.log(info);       
+        //var rotation = eventData.rotationRate;
+       
+//        console.log(info);       
+        
+
+        var message = {};
+        message.type = "log";
+//        message.rotation =  info;
+        message.alpha = eventData.alpha;
+        message.beta = eventData.beta;
+        message.gamma = eventData.gamma;
+//        if (window.DeviceMotionEvent) message.problem = true;
+        sendToServer(message);
+        
     }
 
     /*
@@ -441,7 +538,6 @@ function GameClient(port) {
                 sendToServer(message);
                 if (!pacman[player].isStunned())
                     setTimeout(pacman[player].directionWatcher.setLeft, delay);
-                //setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                 break;
             case 38: // Up
                 message.type = "changeDirection";
@@ -449,7 +545,6 @@ function GameClient(port) {
                 sendToServer(message);
                 if (!pacman[player].isStunned())
                     setTimeout(pacman[player].directionWatcher.setUp, delay);
-                //setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                 break;
             case 39: // Right
                 message.type = "changeDirection";
@@ -457,7 +552,6 @@ function GameClient(port) {
                 sendToServer(message);
                 if (!pacman[player].isStunned())
                     setTimeout(pacman[player].directionWatcher.setRight, delay);
-                //setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                 break;
             case 40: // Down
                 message.type = "changeDirection";
@@ -465,7 +559,6 @@ function GameClient(port) {
                 sendToServer(message);
                 if (!pacman[player].isStunned())
                     setTimeout(pacman[player].directionWatcher.setDown, delay);
-                //setTimeout(function() {pacman[player].setPositionPx(message.posX[player], message.posY[player])}, 200);
                 break;
             case 32: // 'Space'
                 message.type = "startGame";

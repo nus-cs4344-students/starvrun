@@ -97,7 +97,7 @@ function GameLobbyClient() {
         var pd = document.getElementById("player_details");
         pd.innerHTML = "<button id='LFG'> Look For Game </button>";
         document.getElementById("LFG").addEventListener("click", lookForGame);
-        document.getElementById("LFG").addEventListener("touchend", onTouchEnd);
+        document.getElementById("LFG").addEventListener("touchstart", onTouchEnd);
     }
 
     var onTouchEnd = function(e) {
@@ -117,10 +117,7 @@ function GameLobbyClient() {
     {
         initGUI();
         initNetwork();
-        setInterval(function () {
-            //sendPing();
-        }, 3000 / Starvrun.FRAME_RATE);
-//        setTimeout(function(){lookForGame();}, 500);
+        setTimeout(sendPing, 500);
         setInterval(function(){
             if(gameClient != null){
                 if(gameClient.isStarted() && !playingGame ){
