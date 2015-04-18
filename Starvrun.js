@@ -3,7 +3,7 @@
  =====================================================*/
 var Starvrun = {
     SERVER_NAME: "localhost", // server name of Starvrun game
-    SERVER_IP: "172.23.64.199",
+    SERVER_IP: "127.0.0.1",
     PORT: 4344, // port of Starvrun game
 
     FRAME_RATE: 30, // frame rate of Starvrun game
@@ -21,7 +21,7 @@ var Starvrun = {
     BEAST_TIME: 3, // time in seconds pacman in beast
     STUN_TIME: 0.5,
     BLINK_TIME: 1, // time in seconds
-    HOLD_AND_WAIT_DESYNC_TIME: 1.5, // time in seconds until hold and wait is void
+    HOLD_AND_WAIT_DESYNC_TIME: 0.50, // time in seconds until hold and wait is void
     PELLET_SCORE: 10,
     POWERUP_SCORE: 50,
     LIVES: 3,

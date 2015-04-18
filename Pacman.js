@@ -100,14 +100,10 @@ function Pacman(map, isPlayer) {
 
     // Public Method
     // Accessors
-    this.hold = function() {
-        isHold = true;
+    this.isHolding = function() {
+        return isHold;
     }
-
-    this.unhold = function() {
-        isHold = false;
-    }  
-
+    
     this.getScore = function(){
         return score;
     }
@@ -148,6 +144,14 @@ function Pacman(map, isPlayer) {
     }
 
     // Mutators
+    this.hold = function() {
+        isHold = true;
+    }
+
+    this.unhold = function() {
+        isHold = false;
+    }  
+
     this.setPositionPx = function(x, y) {
         posX = x;
         posY = y;

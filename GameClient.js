@@ -26,6 +26,8 @@ function GameClient(port) {
     var audioCollide = new Audio('./audio/pacman_collide.wav');
     var audioDeath = new Audio('./audio/pacman_death.wav');
     var mobileThreshold = 12;
+    var holdAndWaitTimer = 0;
+    var holdAndWaitDesync = false;
 
     var sendPing = function () {
         var startTime = Date.now();
@@ -96,10 +98,11 @@ function GameClient(port) {
                             if (j == player) {
                                 //var dist = levelMap.getDistance(pacman[j].getGridPosX(), pacman[j].getGridPosY(), levelMap.pxToGrid(message.posX[j]), levelMap.pxToGrid(message.posY[j]));
                                 var dist = Math.abs(pacman[j].getGridPosX() - levelMap.pxToGrid(message.posX[j])) + Math.abs(pacman[j].getGridPosY() - levelMap.pxToGrid(message.posY[j]));
-                                if (dist > Starvrun.DR_THRESHOLD) { //dead reckoning
+                                if ((dist > Starvrun.DR_THRESHOLD) || (holdAndWaitDesync)) { //dead reckoning
                                     pacman[j].setPositionPx(message.posX[j], message.posY[j]);
                                     pacman[j].setDirection(message.direction[j]);
                                     pacman[j].setSpeed(message.speed[j]);
+                                    if (holdAndWaitDesync) stopHold();
                                     fastForward(delay);
                                 }
                             } else {
@@ -591,6 +594,15 @@ function GameClient(port) {
             {
                 pacman[i].move();
             }
+            
+            //Hold and wait handling
+            if (pacman[player].isHolding()) {
+                holdAndWaitTimer--;
+                if (holdAndWaitTimer <= 0) {
+                    holdAndWaitDesync = true;
+                }
+            }
+            
             // To check if the pacmans are colliding
             checkCollision(numberOfPacman);
             render();
@@ -601,10 +613,13 @@ function GameClient(port) {
 
     var startHold = function() {
         pacman[player].hold();
+        holdAndWaitTimer = Math.round(Starvrun.FRAME_RATE * Starvrun.HOLD_AND_WAIT_DESYNC_TIME);
     }
 
     var stopHold = function() {
         pacman[player].unhold();
+        holdAndWaitTimer = 0;
+        holdAndWaitDesync = false;
     }
 
     var fastForward = function (t)
