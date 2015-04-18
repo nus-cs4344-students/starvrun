@@ -75,7 +75,7 @@ function Pacman(map, isPlayer) {
     this.blinkUpdate = false;
         
     // Movement Variables
-    var speed = 14;
+    var speed = 4;
 
     var curDirection = startDir;
     var dirX = 0;
