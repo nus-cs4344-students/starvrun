@@ -25,7 +25,7 @@ function GameClient(port) {
     var loopID =0;
     var audioCollide = new Audio('./audio/pacman_collide.wav');
     var audioDeath = new Audio('./audio/pacman_death.wav');
-    var mobileThreshold = 12;
+    var mobileThreshold = 8;
     var recentChange = false;
 
     var sendPing = function () {
@@ -443,7 +443,7 @@ function GameClient(port) {
                 }
                 recentChange =true;
                 sendChangeDirection(toDirection, eventData);
-                setTimeout(function(){recentChange = false;}, 500);
+                setTimeout(function(){recentChange = false;}, 250);
             }
             else if (eventData.beta <= (-1 * mobileThreshold))
             {
@@ -467,7 +467,7 @@ function GameClient(port) {
                 }
                 recentChange =true;
                 sendChangeDirection(toDirection, eventData);
-                setTimeout(function(){recentChange = false;}, 500);
+                setTimeout(function(){recentChange = false;}, 250);
             }
         }
 
