@@ -134,6 +134,8 @@ function GameServer(gport) {
                     }
 
                     switch (message.type) {
+                        case "log":
+                            console.log(message);
                         case "startGame":
                             if (!started) {
                                 started = true;

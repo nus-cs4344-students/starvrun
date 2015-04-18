@@ -395,10 +395,12 @@ function GameClient(port) {
             onKeyPress(e);
             e.preventDefault();
         }, false);
+        
+        
 
         createControls();
         document.getElementById("playArea").addEventListener("touchstart", onTouchEnd,false);  //Now touch Works
-        document.getElementById("playArea").addEventListener("devicemotion", deviceMotionHandler, false);
+        window.addEventListener("deviceorientation", deviceMotionHandler, false);
     }
     
     var createControls = function(){
@@ -490,14 +492,23 @@ function GameClient(port) {
     function deviceMotionHandler(eventData) 
     {
 
-        var info, xyz = "[X, Y, Z]";
-        
+//        var info, xyz = "[X, Y, Z]";
+//        
         // Grab the rotation rate from the results
-        var rotation = eventData.rotationRate;
-        info = xyz.replace("X", rotation.alpha);
-        info = info.replace("Y", rotation.beta);
-        info = info.replace("Z", rotation.gamma);
-        console.log(info);       
+        //var rotation = eventData.rotationRate;
+       
+//        console.log(info);       
+        
+
+        var message = {};
+        message.type = "log";
+//        message.rotation =  info;
+        message.alpha = eventData.alpha;
+        message.beta = eventData.beta;
+        message.gamma = eventData.gamma;
+//        if (window.DeviceMotionEvent) message.problem = true;
+        sendToServer(message);
+        
     }
 
     /*
