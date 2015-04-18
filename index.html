@@ -5,13 +5,38 @@
         <!-- Import Style Sheet-->
         <link rel="stylesheet" type="text/css" href="./index.css">
 
+<!--        Force into Landscape Mode-->
+        <style type="text/css">
+            
+        #container { display:block; }
+        @media only screen and (orientation:portrait){
+           #container {  
+                 -webkit-transform: rotate(90deg);
+                 -moz-transform: rotate(90deg);
+                 -o-transform: rotate(90deg);
+                 -ms-transform: rotate(90deg);
+                 transform: rotate(90deg);
+                }
+
+        }
+        @media only screen and (orientation:landscape){
+           #container {  
+                 -webkit-transform: rotate(0deg);
+                 -moz-transform: rotate(0deg);
+                 -o-transform: rotate(0deg);
+                 -ms-transform: rotate(0deg);
+                 transform: rotate(0deg);
+                }
+        }
+        </style>
+        
         <script type="text/javascript">
             var global = {}; // For node.js require 
         </script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
     </head>
-    <body>
+    <body id="container">
         
 
         

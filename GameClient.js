@@ -447,7 +447,7 @@ function GameClient(port) {
                 }
                 recentChange =true;
                 sendChangeDirection(toDirection, eventData);
-                setTimeout(function(){recentChange = false;}, 250);
+                setTimeout(function(){recentChange = false;}, 500);
             }
             else if (eventData.beta <= (-1 * mobileThreshold))
             {
@@ -471,7 +471,7 @@ function GameClient(port) {
                 }
                 recentChange =true;
                 sendChangeDirection(toDirection, eventData);
-                setTimeout(function(){recentChange = false;}, 250);
+                setTimeout(function(){recentChange = false;}, 500);
             }
         }
 
