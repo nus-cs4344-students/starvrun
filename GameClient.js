@@ -17,6 +17,7 @@ function GameClient(port) {
     var FRAME_RATE = 35;
     var numberOfPacman = 4;
     var started = false;
+    var ended = false;
     var player = 0;
     var delay;
     var lastUpdated = 0;
@@ -135,6 +136,7 @@ function GameClient(port) {
                     case "endGame":
                         var winner = message.winner;
                         renderEndGame(winner);
+                        endGame();
                         clearInterval(loopID);
                         
                         break;
@@ -410,7 +412,7 @@ function GameClient(port) {
         message.gamma = eventData.gamma;
 //        if (window.DeviceMotionEvent) message.problem = true;
         sendToServer(message);
-        
+
     }
     
     var sendChangeDirection = function(dir, e){
@@ -457,7 +459,7 @@ function GameClient(port) {
     }
     
     var startGameButton = function(e){
-        if(started) return;
+        if(started || ended) return;
         e.preventDefault();
         var message = {};
         message.type = "startGame";
@@ -495,7 +497,7 @@ function GameClient(port) {
     }
     
     var startGame = function () {
-        if (started)
+        if (started || ended)
             return;
         started = true;
     }
@@ -515,6 +517,7 @@ function GameClient(port) {
     var endGame = function(){
         console.log("end game");
         started = false;
+        ended = true;
     }
 
     // Where the game starts to be played
