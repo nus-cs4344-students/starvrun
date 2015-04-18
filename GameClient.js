@@ -396,9 +396,86 @@ function GameClient(port) {
             e.preventDefault();
         }, false);
 
+        createControls();
         document.getElementById("playArea").addEventListener("touchstart", onTouchEnd,false);  //Now touch Works
         document.getElementById("playArea").addEventListener("devicemotion", deviceMotionHandler, false);
     }
+    
+    var createControls = function(){
+         var pd = document.getElementById("controls");
+        pd.innerHTML = "<button id='Left'> Left </button>";
+        pd.innerHTML += "<button id='Right'> Right </button>";
+        pd.innerHTML += "<button id='Up'> Up </button>";
+        pd.innerHTML += "<button id='Down'> Down </button>";
+        
+        document.getElementById("Left").addEventListener("touchstart", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.LEFT;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setLeft, delay);
+        }, false);
+        document.getElementById("Right").addEventListener("touchstart", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.RIGHT;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setRight, delay);
+        }, false);
+        document.getElementById("Up").addEventListener("touchstart", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.UP;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setUp, delay);
+        }, false);
+        document.getElementById("Down").addEventListener("touchstart", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.DOWN;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setDown, delay);
+        }, false);        
+        
+        document.getElementById("Left").addEventListener("click", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.LEFT;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setLeft, delay);
+        }, false);
+        document.getElementById("Right").addEventListener("click", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.RIGHT;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setRight, delay);
+        }, false);
+        document.getElementById("Up").addEventListener("click", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.UP;
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setUp, delay);
+        }, false);
+        document.getElementById("Down").addEventListener("click", function(){
+                var message = {};
+                message.type = "changeDirection";
+                message.direction = Starvrun.DOWN;
+                console.log(message);
+                sendToServer(message);
+                if (!pacman[player].isStunned())
+                    setTimeout(pacman[player].directionWatcher.setDown, delay);
+        }, false);        
+    }
+    
 
     // Touch handler
     var onTouchEnd = function(e)
