@@ -96,9 +96,18 @@ function Pacman(map, isPlayer) {
     var dead = false;  // For holding Pacman in Position while animation is played
     this.deadUpdated = false;
 
+    var isHold = false;
 
     // Public Method
     // Accessors
+    this.hold = function() {
+        isHold = true;
+    }
+
+    this.unhold = function() {
+        isHold = false;
+    }  
+
     this.getScore = function(){
         return score;
     }
@@ -310,6 +319,8 @@ function Pacman(map, isPlayer) {
     }
 
     this.move = function() {
+        if (isHold) return;
+
         // Game Loop
         this.checkDirectionChange();
         this.checkCollision();

@@ -1,6 +1,6 @@
 function CorrectingInterval(func, delay) {
   var instance = this;
-
+  
   function tick(func, delay) {
     if (!instance.started) {
       instance.func = func;
