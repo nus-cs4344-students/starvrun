@@ -189,6 +189,7 @@ function GameClient(port) {
         var text; //= "The Game has Ended \n";
         if (winner.length == 1) {
             if (winner[0] == player) {
+                context.strokeStyle = pacman[player].getColor();
                 text = "Winner"
             } else {
                 text = "Better Luck Next Time";
@@ -196,6 +197,7 @@ function GameClient(port) {
         }else{
             for(var p in winner){
                 if (winner[p] == player) {
+                context.strokeStyle = pacman[player].getColor();
                 text = "Draw"
                 }
             }
