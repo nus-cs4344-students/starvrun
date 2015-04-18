@@ -58,4 +58,9 @@ body{
     height : 100%;
 }
 
+.controls{
+    min-height: 50px;
+    min-width: 50px;
+}
+
 
